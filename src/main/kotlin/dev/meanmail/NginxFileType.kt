@@ -16,7 +16,7 @@ object NginxFileType : LanguageFileType(NginxLanguage) {
     }
 
     override fun getDescription(): String {
-        return "Nginx configuration files"
+        return "Nginx configuration file"
     }
 
     override fun getDefaultExtension(): String {

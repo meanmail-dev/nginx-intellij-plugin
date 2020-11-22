@@ -11,17 +11,17 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType implementationClass="dev.meanmail.NginxFileType"
-                  language="Nginx configuration"
+                  language="Nginx Configuration"
                   order="first"
-                  name="Nginx configuration"
+                  name="Nginx Configuration"
                   fileNames="nginx.conf"
                   patterns="*.conf"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">
-        <parserDefinition language="Nginx configuration"
+        <parserDefinition language="Nginx Configuration"
                           implementationClass="dev.meanmail.NginxParserDefinition"/>
-        <syntaxHighlighterFactory language="Nginx configuration"
+        <syntaxHighlighterFactory language="Nginx Configuration"
                                   implementationClass="dev.meanmail.NginxSyntaxHighlighterFactory"/>
     </extensions>
 

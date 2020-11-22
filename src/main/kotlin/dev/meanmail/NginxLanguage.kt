@@ -2,4 +2,4 @@ package dev.meanmail
 
 import com.intellij.lang.Language
 
-object NginxLanguage : Language("Nginx configuration")
+object NginxLanguage : Language("Nginx Configuration")
