@@ -1,0 +1,28 @@
+<idea-plugin>
+    <id>dev.meanmail.plugin.nginx-intellij-plugin</id>
+    <name>Nginx Configuration</name>
+    <version>SNAPSHOT</version>
+    <idea-version since-build="173"/>
+    <vendor email="plugin@meanmail.ru" url="https://meanmail.dev">meanmail</vendor>
+    <description></description>
+    <change-notes></change-notes>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType implementationClass="dev.meanmail.NginxFileType"
+                  language="Nginx configuration"
+                  order="first"
+                  name="Nginx configuration"
+                  fileNames="nginx.conf"
+                  patterns="*.conf"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij.lang">
+        <parserDefinition language="Nginx configuration"
+                          implementationClass="dev.meanmail.NginxParserDefinition"/>
+        <syntaxHighlighterFactory language="Nginx configuration"
+                                  implementationClass="dev.meanmail.NginxSyntaxHighlighterFactory"/>
+    </extensions>
+
+</idea-plugin>
