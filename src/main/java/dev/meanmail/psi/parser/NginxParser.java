@@ -45,7 +45,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // name_stmt wsps values_stmt? wsps (SEMICOLON | block_stmt)
+    // name_stmt wsps value_stmt* wsps (SEMICOLON | block_stmt)
     public static boolean directive_stmt(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "directive_stmt")) return false;
         if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -61,10 +61,14 @@ public class NginxParser implements PsiParser, LightPsiParser {
         return r || p;
     }
 
-    // values_stmt?
+    // value_stmt*
     private static boolean directive_stmt_2(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "directive_stmt_2")) return false;
-        values_stmt(b, l + 1);
+        while (true) {
+            int c = current_position_(b);
+            if (!value_stmt(b, l + 1)) break;
+            if (!empty_element_parsed_guard_(b, "directive_stmt_2", c)) break;
+        }
         return true;
     }
 
@@ -102,47 +106,25 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // (wsps stmts wsps COMMENT? (EOL | <<eof>>)) | EOL
+    // wsps stmts wsps COMMENT?
     static boolean statements(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "statements")) return false;
-        boolean r;
-        Marker m = enter_section_(b);
-        r = statements_0(b, l + 1);
-        if (!r) r = consumeToken(b, EOL);
-        exit_section_(b, m, null, r);
-        return r;
-    }
-
-    // wsps stmts wsps COMMENT? (EOL | <<eof>>)
-    private static boolean statements_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "statements_0")) return false;
+        if (!nextTokenIs(b, "", IDENTIFIER, WHITE_SPACE)) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = wsps(b, l + 1);
         r = r && stmts(b, l + 1);
         r = r && wsps(b, l + 1);
-        r = r && statements_0_3(b, l + 1);
-        r = r && statements_0_4(b, l + 1);
+        r = r && statements_3(b, l + 1);
         exit_section_(b, m, null, r);
         return r;
     }
 
     // COMMENT?
-    private static boolean statements_0_3(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "statements_0_3")) return false;
+    private static boolean statements_3(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "statements_3")) return false;
         consumeToken(b, COMMENT);
         return true;
-    }
-
-    // EOL | <<eof>>
-    private static boolean statements_0_4(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "statements_0_4")) return false;
-        boolean r;
-        Marker m = enter_section_(b);
-        r = consumeToken(b, EOL);
-        if (!r) r = eof(b, l + 1);
-        exit_section_(b, m, null, r);
-        return r;
     }
 
     /* ********************************************************** */
@@ -160,78 +142,37 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
+    // QUOTE STRING QUOTE
+    public static boolean string_stmt(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "string_stmt")) return false;
+        if (!nextTokenIs(b, QUOTE)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeTokens(b, 0, QUOTE, STRING, QUOTE);
+        exit_section_(b, m, STRING_STMT, r);
+        return r;
+    }
+
+    /* ********************************************************** */
     // IDENTIFIER
-    //                    | VALUE
+    //                | VALUE
+    //                | string_stmt
     public static boolean value_stmt(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "value_stmt")) return false;
-        if (!nextTokenIs(b, "<value stmt>", IDENTIFIER, VALUE)) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, VALUE_STMT, "<value stmt>");
         r = consumeToken(b, IDENTIFIER);
         if (!r) r = consumeToken(b, VALUE);
+        if (!r) r = string_stmt(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
     }
 
     /* ********************************************************** */
-    // value_stmt (WHITE_SPACE+ value_stmt)*
-    public static boolean values_stmt(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "values_stmt")) return false;
-        if (!nextTokenIs(b, "<values stmt>", IDENTIFIER, VALUE)) return false;
-        boolean r;
-        Marker m = enter_section_(b, l, _NONE_, VALUES_STMT, "<values stmt>");
-        r = value_stmt(b, l + 1);
-        r = r && values_stmt_1(b, l + 1);
-        exit_section_(b, l, m, r, false, null);
-        return r;
-    }
-
-    // (WHITE_SPACE+ value_stmt)*
-    private static boolean values_stmt_1(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "values_stmt_1")) return false;
-        while (true) {
-            int c = current_position_(b);
-            if (!values_stmt_1_0(b, l + 1)) break;
-            if (!empty_element_parsed_guard_(b, "values_stmt_1", c)) break;
-        }
-        return true;
-    }
-
-    // WHITE_SPACE+ value_stmt
-    private static boolean values_stmt_1_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "values_stmt_1_0")) return false;
-        boolean r;
-        Marker m = enter_section_(b);
-        r = values_stmt_1_0_0(b, l + 1);
-        r = r && value_stmt(b, l + 1);
-        exit_section_(b, m, null, r);
-        return r;
-    }
-
-    // WHITE_SPACE+
-    private static boolean values_stmt_1_0_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "values_stmt_1_0_0")) return false;
-        boolean r;
-        Marker m = enter_section_(b);
-        r = consumeToken(b, WHITE_SPACE);
-        while (r) {
-            int c = current_position_(b);
-            if (!consumeToken(b, WHITE_SPACE)) break;
-            if (!empty_element_parsed_guard_(b, "values_stmt_1_0_0", c)) break;
-        }
-        exit_section_(b, m, null, r);
-        return r;
-    }
-
-    /* ********************************************************** */
-    // WHITE_SPACE*
+    // WHITE_SPACE?
     static boolean wsps(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "wsps")) return false;
-        while (true) {
-            int c = current_position_(b);
-            if (!consumeToken(b, WHITE_SPACE)) break;
-            if (!empty_element_parsed_guard_(b, "wsps", c)) break;
-        }
+        consumeToken(b, WHITE_SPACE);
         return true;
     }
 

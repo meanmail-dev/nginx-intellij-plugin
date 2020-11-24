@@ -18,16 +18,16 @@
 
 nginxFile ::= statements*
 
-private statements ::= (wsps stmts wsps COMMENT? (EOL | <<eof>>)) | EOL
-private wsps  ::= WHITE_SPACE*
+private statements ::= wsps stmts wsps COMMENT?
+private wsps ::= WHITE_SPACE?
 private stmts ::= (
                    directive_stmt
                    )
-name_stmt      ::= IDENTIFIER
-value_stmt     ::= (
-                   IDENTIFIER
-                   | VALUE
-                   )
-block_stmt     ::= LBRACE statements* RBRACE {pin=1}
-values_stmt    ::= value_stmt (WHITE_SPACE+ value_stmt)*
-directive_stmt ::= name_stmt wsps values_stmt? wsps (SEMICOLON | block_stmt) {pin=1}
+name_stmt ::= IDENTIFIER
+string_stmt ::= QUOTE STRING QUOTE
+value_stmt ::= IDENTIFIER
+               | VALUE
+               | string_stmt
+
+block_stmt ::= LBRACE statements* RBRACE {pin=1}
+directive_stmt ::= name_stmt wsps value_stmt* wsps (SEMICOLON | block_stmt) {pin=1}

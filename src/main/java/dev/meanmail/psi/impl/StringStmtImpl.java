@@ -4,33 +4,23 @@ package dev.meanmail.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import dev.meanmail.psi.ValueStmt;
-import dev.meanmail.psi.ValuesStmt;
+import dev.meanmail.psi.StringStmt;
 import dev.meanmail.psi.Visitor;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+public class StringStmtImpl extends ASTWrapperPsiElement implements StringStmt {
 
-public class ValuesStmtImpl extends ASTWrapperPsiElement implements ValuesStmt {
-
-    public ValuesStmtImpl(@NotNull ASTNode node) {
+    public StringStmtImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     public void accept(@NotNull Visitor visitor) {
-        visitor.visitValuesStmt(this);
+        visitor.visitStringStmt(this);
     }
 
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof Visitor) accept((Visitor) visitor);
         else super.accept(visitor);
-    }
-
-    @Override
-    @NotNull
-    public List<ValueStmt> getValueStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, ValueStmt.class);
     }
 
 }

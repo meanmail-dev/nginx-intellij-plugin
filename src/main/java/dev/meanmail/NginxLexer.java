@@ -27,6 +27,7 @@ public class NginxLexer implements FlexLexer {
      * lexical states
      */
     public static final int YYINITIAL = 0;
+    public static final int STRING_STATE = 2;
     /* The ZZ_CMAP_Z table has 68 entries */
     static final char ZZ_CMAP_Z[] = zzUnpackCMap(
             "\1\0\103\200");
@@ -35,9 +36,9 @@ public class NginxLexer implements FlexLexer {
             "\1\0\1\1\53\2\1\3\22\2\1\4\37\2\1\3\237\2");
     /* The ZZ_CMAP_A table has 640 entries */
     static final char ZZ_CMAP_A[] = zzUnpackCMap(
-            "\11\3\1\0\1\6\2\11\1\6\22\3\1\0\2\3\1\5\14\3\12\2\1\3\1\4\5\3\32\1\4\3\1\1" +
-                    "\1\3\32\1\1\7\1\3\1\10\7\3\1\11\32\3\1\0\337\3\1\0\177\3\13\0\35\3\2\11\5" +
-                    "\3\1\0\57\3\1\0\40\3");
+            "\11\0\1\3\1\5\2\13\1\5\22\0\1\3\2\0\1\7\3\0\1\10\10\0\12\2\1\0\1\6\5\0\32" +
+                    "\1\4\0\1\1\1\0\32\1\1\11\1\4\1\12\7\0\1\13\32\0\1\3\337\0\1\3\177\0\13\3\35" +
+                    "\0\2\13\5\0\1\3\57\0\1\3\40\0");
     /**
      * initial size of the lookahead buffer
      */
@@ -49,27 +50,30 @@ public class NginxLexer implements FlexLexer {
      * l is of the form l = 2*k, k a non negative integer
      */
     private static final int ZZ_LEXSTATE[] = {
-            0, 0
+            0, 0, 1, 1
     };
     private static final String ZZ_ACTION_PACKED_0 =
-            "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7" +
-                    "\1\10";
+            "\2\0\1\1\1\2\1\3\1\4\1\1\1\5\1\6" +
+                    "\1\7\1\10\1\11\1\0\3\12";
     /**
      * Translates DFA states to action switch labels.
      */
     private static final int[] ZZ_ACTION = zzUnpackAction();
     private static final String ZZ_ROWMAP_PACKED_0 =
-            "\0\0\0\12\0\24\0\36\0\50\0\62\0\50\0\36" +
-                    "\0\36";
+            "\0\0\0\14\0\30\0\44\0\60\0\74\0\110\0\74" +
+                    "\0\30\0\30\0\124\0\74\0\140\0\110\0\74\0\140";
     /**
      * Translates a state to a row index in the transition table
      */
     private static final int[] ZZ_ROWMAP = zzUnpackRowMap();
     private static final String ZZ_TRANS_PACKED_0 =
-            "\1\2\1\3\2\4\1\5\1\6\1\7\1\10\1\11" +
-                    "\2\2\10\0\1\2\1\0\2\3\1\4\1\0\1\4" +
-                    "\1\0\2\4\2\0\3\4\1\0\1\4\1\0\2\4" +
-                    "\13\0\6\6\1\0\2\6\1\0";
+            "\1\3\1\4\1\3\1\5\1\3\1\5\1\6\1\7" +
+                    "\1\10\1\11\1\12\1\5\10\13\1\14\3\13\3\3" +
+                    "\1\0\1\3\2\0\1\3\1\0\2\3\1\0\1\3" +
+                    "\2\4\1\0\1\3\2\0\1\3\1\0\2\3\4\0" +
+                    "\1\5\1\0\1\5\5\0\1\5\14\0\3\7\1\15" +
+                    "\1\16\1\17\1\15\1\7\1\15\2\7\1\0\10\13" +
+                    "\1\0\3\13\4\15\1\20\1\17\5\15\1\0";
     /**
      * The transition table of the DFA
      */
@@ -85,7 +89,8 @@ public class NginxLexer implements FlexLexer {
             "Error: pushback value was too large"
     };
     private static final String ZZ_ATTRIBUTE_PACKED_0 =
-            "\1\0\3\1\1\11\1\1\1\11\2\1";
+            "\2\0\3\1\1\11\1\1\1\11\3\1\1\11\1\0" +
+                    "\1\1\1\11\1\1";
     /**
      * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>
      */
@@ -162,7 +167,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackAction() {
-        int[] result = new int[9];
+        int[] result = new int[16];
         int offset = 0;
         offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
         return result;
@@ -181,7 +186,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackRowMap() {
-        int[] result = new int[9];
+        int[] result = new int[16];
         int offset = 0;
         offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
         return result;
@@ -199,7 +204,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackTrans() {
-        int[] result = new int[60];
+        int[] result = new int[108];
         int offset = 0;
         offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
         return result;
@@ -219,7 +224,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackAttribute() {
-        int[] result = new int[9];
+        int[] result = new int[16];
         int offset = 0;
         offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
         return result;
@@ -506,53 +511,66 @@ public class NginxLexer implements FlexLexer {
             } else {
                 switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
                     case 1: {
-                        return WHITE_SPACE;
-                    }
-                    // fall through
-                    case 9:
-                        break;
-                    case 2: {
-                        return IDENTIFIER;
-                    }
-                    // fall through
-                    case 10:
-                        break;
-                    case 3: {
                         return VALUE;
                     }
                     // fall through
                     case 11:
                         break;
-                    case 4: {
-                        return SEMICOLON;
+                    case 2: {
+                        return IDENTIFIER;
                     }
                     // fall through
                     case 12:
                         break;
-                    case 5: {
-                        return COMMENT;
+                    case 3: {
+                        return WHITE_SPACE;
                     }
                     // fall through
                     case 13:
                         break;
-                    case 6: {
-                        yyinitial();
-                        return EOL;
+                    case 4: {
+                        return SEMICOLON;
                     }
                     // fall through
                     case 14:
                         break;
-                    case 7: {
-                        return LBRACE;
+                    case 5: {
+                        yypush(STRING_STATE);
+                        return QUOTE;
                     }
                     // fall through
                     case 15:
                         break;
-                    case 8: {
-                        return RBRACE;
+                    case 6: {
+                        return LBRACE;
                     }
                     // fall through
                     case 16:
+                        break;
+                    case 7: {
+                        return RBRACE;
+                    }
+                    // fall through
+                    case 17:
+                        break;
+                    case 8: {
+                        return STRING;
+                    }
+                    // fall through
+                    case 18:
+                        break;
+                    case 9: {
+                        yypop();
+                        return QUOTE;
+                    }
+                    // fall through
+                    case 19:
+                        break;
+                    case 10: {
+                        return COMMENT;
+                    }
+                    // fall through
+                    case 20:
                         break;
                     default:
                         zzScanError(ZZ_NO_MATCH);

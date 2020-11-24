@@ -4,9 +4,12 @@ package dev.meanmail.psi.impl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
 import dev.meanmail.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class DirectiveStmtImpl extends ASTWrapperPsiElement implements DirectiveStmt {
 
@@ -36,9 +39,9 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
     }
 
     @Override
-    @Nullable
-    public ValuesStmt getValuesStmt() {
-        return findChildByClass(ValuesStmt.class);
+    @NotNull
+    public List<ValueStmt> getValueStmtList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ValueStmt.class);
     }
 
 }

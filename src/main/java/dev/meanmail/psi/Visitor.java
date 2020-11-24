@@ -19,11 +19,11 @@ public class Visitor extends PsiElementVisitor {
         visitPsiElement(o);
     }
 
-    public void visitValueStmt(@NotNull ValueStmt o) {
+    public void visitStringStmt(@NotNull StringStmt o) {
         visitPsiElement(o);
     }
 
-    public void visitValuesStmt(@NotNull ValuesStmt o) {
+    public void visitValueStmt(@NotNull ValueStmt o) {
         visitPsiElement(o);
     }
 

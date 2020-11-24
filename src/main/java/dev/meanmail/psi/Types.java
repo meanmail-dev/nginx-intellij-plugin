@@ -11,15 +11,16 @@ public interface Types {
     IElementType BLOCK_STMT = new NginxElementType("BLOCK_STMT");
     IElementType DIRECTIVE_STMT = new NginxElementType("DIRECTIVE_STMT");
     IElementType NAME_STMT = new NginxElementType("NAME_STMT");
-    IElementType VALUES_STMT = new NginxElementType("VALUES_STMT");
+    IElementType STRING_STMT = new NginxElementType("STRING_STMT");
     IElementType VALUE_STMT = new NginxElementType("VALUE_STMT");
 
     IElementType COMMENT = new NginxTokenType("COMMENT");
-    IElementType EOL = new NginxTokenType("EOL");
     IElementType IDENTIFIER = new NginxTokenType("IDENTIFIER");
     IElementType LBRACE = new NginxTokenType("LBRACE");
+    IElementType QUOTE = new NginxTokenType("QUOTE");
     IElementType RBRACE = new NginxTokenType("RBRACE");
     IElementType SEMICOLON = new NginxTokenType("SEMICOLON");
+    IElementType STRING = new NginxTokenType("STRING");
     IElementType VALUE = new NginxTokenType("VALUE");
     IElementType WHITE_SPACE = new NginxTokenType("WHITE_SPACE");
 
@@ -32,8 +33,8 @@ public interface Types {
                 return new DirectiveStmtImpl(node);
             } else if (type == NAME_STMT) {
                 return new NameStmtImpl(node);
-            } else if (type == VALUES_STMT) {
-                return new ValuesStmtImpl(node);
+            } else if (type == STRING_STMT) {
+                return new StringStmtImpl(node);
             } else if (type == VALUE_STMT) {
                 return new ValueStmtImpl(node);
             }

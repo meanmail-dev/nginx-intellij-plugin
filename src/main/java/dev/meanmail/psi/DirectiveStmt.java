@@ -5,6 +5,8 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public interface DirectiveStmt extends PsiElement {
 
     @Nullable
@@ -13,7 +15,7 @@ public interface DirectiveStmt extends PsiElement {
     @NotNull
     NameStmt getNameStmt();
 
-    @Nullable
-    ValuesStmt getValuesStmt();
+    @NotNull
+    List<ValueStmt> getValueStmtList();
 
 }

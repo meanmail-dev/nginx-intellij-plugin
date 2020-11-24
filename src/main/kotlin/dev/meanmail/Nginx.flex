@@ -58,18 +58,22 @@ import static dev.meanmail.psi.Types.*;
 LETTER=[a-zA-Z]
 DIGIT=[0-9]
 UNDERSCORE="_"
-WHITE_SPACE=[^\S\r\n]+
+WHITE_SPACE=\s+
+EOL=[\n|\r|\r\n]
 IDENTIFIER=({LETTER} | {UNDERSCORE}) ({LETTER} | {DIGIT} | {UNDERSCORE})*
 SEMICOLON=";"
 SHARP="#"
-VALUE=[^\s;]
+VALUE=[^\s;']
+STRING=[^']+
 
 LBRACE="{"
 RBRACE="}"
 
-COMMENT={SHARP}.*
-EOL=[\n|\r|\r\n]
+QUOTE="'"
 
+COMMENT={SHARP}.*{EOL}
+
+%state STRING_STATE
 %%
 
 <YYINITIAL> {
@@ -78,11 +82,16 @@ EOL=[\n|\r|\r\n]
     {COMMENT}                { return COMMENT; }
     {LBRACE}                 { return LBRACE; }
     {RBRACE}                 { return RBRACE; }
+    "'"                      { yypush(STRING_STATE); return QUOTE; }
     ({VALUE}{IDENTIFIER}?)+  { return VALUE; }
+}
+
+<STRING_STATE> {
+    "'"                      { yypop(); return QUOTE;}
+    {STRING}                 { return STRING; }
 }
 
 
 {WHITE_SPACE}                { return WHITE_SPACE; }
-{EOL}                        { yyinitial(); return EOL; }
 
 [^]                          { yyinitial(); return BAD_CHARACTER; }
