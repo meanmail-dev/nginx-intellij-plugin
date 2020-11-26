@@ -22,7 +22,6 @@ public interface Types {
     IElementType SEMICOLON = new NginxTokenType("SEMICOLON");
     IElementType STRING = new NginxTokenType("STRING");
     IElementType VALUE = new NginxTokenType("VALUE");
-    IElementType WHITE_SPACE = new NginxTokenType("WHITE_SPACE");
 
     class Factory {
         public static PsiElement createElement(ASTNode node) {
