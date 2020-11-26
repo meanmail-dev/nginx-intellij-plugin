@@ -15,4 +15,4 @@ Your ratings and feedback are very important. The feature will appear the faster
 
 ## Features
 
-* Highlighting and Syntax check for nginx configuration files in IDE
+* Highlighting for nginx configuration files in IDE
