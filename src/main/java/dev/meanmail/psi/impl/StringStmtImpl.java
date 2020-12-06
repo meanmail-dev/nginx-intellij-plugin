@@ -18,6 +18,7 @@ public class StringStmtImpl extends ASTWrapperPsiElement implements StringStmt {
         visitor.visitStringStmt(this);
     }
 
+    @Override
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof Visitor) accept((Visitor) visitor);
         else super.accept(visitor);

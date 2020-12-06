@@ -14,6 +14,8 @@
   tokenTypeClass="dev.meanmail.psi.NginxTokenType"
 
   psiImplUtilClass="dev.meanmail.psi.PsiImplUtil"
+
+  implements("directive_stmt")="dev.meanmail.psi.NamedElement"
 }
 
 nginxFile ::= statement*

@@ -20,6 +20,7 @@ public class ValueStmtImpl extends ASTWrapperPsiElement implements ValueStmt {
         visitor.visitValueStmt(this);
     }
 
+    @Override
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof Visitor) accept((Visitor) visitor);
         else super.accept(visitor);

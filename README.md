@@ -17,3 +17,4 @@ Your ratings and feedback are very important. The feature will appear the faster
 
 * Highlighting for nginx configuration files in IDE
 * Comment with Line Comment action
+* Structure view

@@ -22,6 +22,7 @@ public class BlockStmtImpl extends ASTWrapperPsiElement implements BlockStmt {
         visitor.visitBlockStmt(this);
     }
 
+    @Override
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof Visitor) accept((Visitor) visitor);
         else super.accept(visitor);
