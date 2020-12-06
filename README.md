@@ -4,7 +4,7 @@
 
 https://plugins.jetbrains.com/plugin/15461
 
-https://meanmail.dev
+https://meanmail.dev/plugin/7
 
 Your ratings and feedback are very important. The feature will appear the faster the more people request it.
 
@@ -16,3 +16,4 @@ Your ratings and feedback are very important. The feature will appear the faster
 ## Features
 
 * Highlighting for nginx configuration files in IDE
+* Comment with Line Comment action

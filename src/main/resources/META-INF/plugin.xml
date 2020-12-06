@@ -23,6 +23,8 @@
                           implementationClass="dev.meanmail.NginxParserDefinition"/>
         <syntaxHighlighterFactory language="Nginx Configuration"
                                   implementationClass="dev.meanmail.NginxSyntaxHighlighterFactory"/>
+        <commenter language="Nginx Configuration"
+                   implementationClass="dev.meanmail.NginxCommenter"/>
     </extensions>
 
 </idea-plugin>
