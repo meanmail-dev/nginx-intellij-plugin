@@ -23,6 +23,10 @@
                           implementationClass="dev.meanmail.NginxParserDefinition"/>
         <syntaxHighlighterFactory language="Nginx Configuration"
                                   implementationClass="dev.meanmail.NginxSyntaxHighlighterFactory"/>
+        <psiStructureViewFactory language="Nginx Configuration"
+                                 implementationClass="dev.meanmail.structure.NginxStructureViewFactory"/>
+        <commenter language="Nginx Configuration"
+                   implementationClass="dev.meanmail.NginxCommenter"/>
     </extensions>
 
 </idea-plugin>

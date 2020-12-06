@@ -3,8 +3,11 @@ package dev.meanmail.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.NlsSafe;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.IncorrectOperationException;
 import dev.meanmail.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +24,7 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
         visitor.visitDirectiveStmt(this);
     }
 
+    @Override
     public void accept(@NotNull PsiElementVisitor visitor) {
         if (visitor instanceof Visitor) accept((Visitor) visitor);
         else super.accept(visitor);
@@ -44,4 +48,18 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ValueStmt.class);
     }
 
+    @Override
+    public String getName() {
+        return getNameIdentifier().getText();
+    }
+
+    @Override
+    public @NotNull PsiElement getNameIdentifier() {
+        return getNameStmt();
+    }
+
+    @Override
+    public PsiElement setName(@NlsSafe @NotNull String name) throws IncorrectOperationException {
+        return this;
+    }
 }

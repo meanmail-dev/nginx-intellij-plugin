@@ -12,7 +12,7 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitDirectiveStmt(@NotNull DirectiveStmt o) {
-        visitPsiElement(o);
+        visitNamedElement(o);
     }
 
     public void visitNameStmt(@NotNull NameStmt o) {
@@ -25,6 +25,10 @@ public class Visitor extends PsiElementVisitor {
 
     public void visitValueStmt(@NotNull ValueStmt o) {
         visitPsiElement(o);
+    }
+
+    public void visitNamedElement(@NotNull NamedElement o) {
+        visitElement(o);
     }
 
     public void visitPsiElement(@NotNull PsiElement o) {
