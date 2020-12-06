@@ -3,7 +3,6 @@ package dev.meanmail.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.NlsSafe;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -59,7 +58,7 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
     }
 
     @Override
-    public PsiElement setName(@NlsSafe @NotNull String name) throws IncorrectOperationException {
+    public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
         return this;
     }
 }
