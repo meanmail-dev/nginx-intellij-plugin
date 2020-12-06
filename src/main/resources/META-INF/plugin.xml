@@ -1,4 +1,4 @@
-<idea-plugin>
+<idea-plugin url="https://meanmail.dev/plugin/7">
     <id>dev.meanmail.plugin.nginx-intellij-plugin</id>
     <name>Nginx Configuration</name>
     <version>SNAPSHOT</version>
