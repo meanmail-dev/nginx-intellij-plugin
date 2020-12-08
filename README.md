@@ -11,7 +11,7 @@ Your ratings and feedback are very important. The feature will appear the faster
 ## Supported versions of Intellij:
 
 *Supported Products*
-- All intellij based IDEs 2020.1 — 2020.3
+- All intellij based IDEs 2020.2 — 2020.3
 
 ## Features
 
