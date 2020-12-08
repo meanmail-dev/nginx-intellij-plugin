@@ -15,7 +15,7 @@
                   order="first"
                   name="Nginx Configuration"
                   fileNames="nginx.conf"
-                  patterns="*.conf"/>
+                  extensions="conf;nginx"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">
