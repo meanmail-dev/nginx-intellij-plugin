@@ -1,6 +1,7 @@
 ## 2021.1 (April, 11, 2021)
 
 + Support a block folding
+* Better strings handling (@Athorcis)
 
 ## 2020.2.1 (December, 8, 2020)
 
