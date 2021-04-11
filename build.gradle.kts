@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
-    kotlin("jvm") version "1.4.20"
-    id("org.jetbrains.intellij") version "0.6.5"
+    kotlin("jvm") version "1.4.30"
+    id("org.jetbrains.intellij") version "0.7.2"
 }
 
 group = "dev.meanmail"
@@ -16,7 +16,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    testImplementation("junit:junit:4.13")
+    testImplementation("junit:junit:4.13.2")
 }
 
 configure<JavaPluginConvention> {
@@ -45,6 +45,7 @@ intellij {
     } else {
         project.properties["IdeVersion"].toString()
     }
+    type = project.properties["ideType"].toString()
 }
 
 fun readChangeNotes(pathname: String): String {
@@ -68,8 +69,11 @@ fun readChangeNotes(pathname: String): String {
         }
     }
 
-    return notes.joinToString("</p><br><p>", prefix = "<p>",
-            postfix = "</p><br>") {
+    return notes.joinToString(
+        "</p><br><p>",
+        prefix = "<p>",
+        postfix = "</p><br>"
+    ) {
         it.joinToString("<br>")
     } +
             "See the full change notes on the <a href='" +
