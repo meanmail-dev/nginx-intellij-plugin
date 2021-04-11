@@ -22,7 +22,7 @@ nginxFile ::= statement*
 
 private statement ::= directive_stmt [COMMENT]
 
-string_stmt ::= QUOTE [STRING] QUOTE
+string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE)
 name_stmt ::= IDENTIFIER
               | VALUE
               | string_stmt

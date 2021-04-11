@@ -14,6 +14,23 @@ import static dev.meanmail.psi.Types.*;
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class NginxParser implements PsiParser, LightPsiParser {
 
+    public ASTNode parse(IElementType t, PsiBuilder b) {
+        parseLight(t, b);
+        return b.getTreeBuilt();
+    }
+
+    public void parseLight(IElementType t, PsiBuilder b) {
+        boolean r;
+        b = adapt_builder_(t, b, this, null);
+        Marker m = enter_section_(b, 0, _COLLAPSE_, null);
+        r = parse_root_(t, b);
+        exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
+    }
+
+    protected boolean parse_root_(IElementType t, PsiBuilder b) {
+        return parse_root_(t, b, 0);
+    }
+
     static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
         return nginxFile(b, l + 1);
     }
@@ -125,23 +142,53 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // QUOTE [STRING] QUOTE
+    // (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE)
     public static boolean string_stmt(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "string_stmt")) return false;
-        if (!nextTokenIs(b, QUOTE)) return false;
+        if (!nextTokenIs(b, "<string stmt>", DQUOTE, QUOTE)) return false;
+        boolean r;
+        Marker m = enter_section_(b, l, _NONE_, STRING_STMT, "<string stmt>");
+        r = string_stmt_0(b, l + 1);
+        if (!r) r = string_stmt_1(b, l + 1);
+        exit_section_(b, l, m, r, false, null);
+        return r;
+    }
+
+    // QUOTE [STRING] QUOTE
+    private static boolean string_stmt_0(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "string_stmt_0")) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = consumeToken(b, QUOTE);
-        r = r && string_stmt_1(b, l + 1);
+        r = r && string_stmt_0_1(b, l + 1);
         r = r && consumeToken(b, QUOTE);
-        exit_section_(b, m, STRING_STMT, r);
+        exit_section_(b, m, null, r);
         return r;
     }
 
     // [STRING]
+    private static boolean string_stmt_0_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "string_stmt_0_1")) return false;
+        consumeToken(b, STRING);
+        return true;
+    }
+
+    // DQUOTE [DQSTRING] DQUOTE
     private static boolean string_stmt_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "string_stmt_1")) return false;
-        consumeToken(b, STRING);
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, DQUOTE);
+        r = r && string_stmt_1_1(b, l + 1);
+        r = r && consumeToken(b, DQUOTE);
+        exit_section_(b, m, null, r);
+        return r;
+    }
+
+    // [DQSTRING]
+    private static boolean string_stmt_1_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "string_stmt_1_1")) return false;
+        consumeToken(b, DQSTRING);
         return true;
     }
 
@@ -158,23 +205,6 @@ public class NginxParser implements PsiParser, LightPsiParser {
         if (!r) r = string_stmt(b, l + 1);
         exit_section_(b, l, m, r, false, null);
         return r;
-    }
-
-    public ASTNode parse(IElementType t, PsiBuilder b) {
-        parseLight(t, b);
-        return b.getTreeBuilt();
-    }
-
-    public void parseLight(IElementType t, PsiBuilder b) {
-        boolean r;
-        b = adapt_builder_(t, b, this, null);
-        Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-        r = parse_root_(t, b);
-        exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
-    }
-
-    protected boolean parse_root_(IElementType t, PsiBuilder b) {
-        return parse_root_(t, b, 0);
     }
 
 }

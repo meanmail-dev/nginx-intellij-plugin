@@ -15,6 +15,8 @@ public interface Types {
     IElementType VALUE_STMT = new NginxElementType("VALUE_STMT");
 
     IElementType COMMENT = new NginxTokenType("COMMENT");
+    IElementType DQSTRING = new NginxTokenType("DQSTRING");
+    IElementType DQUOTE = new NginxTokenType("DQUOTE");
     IElementType IDENTIFIER = new NginxTokenType("IDENTIFIER");
     IElementType LBRACE = new NginxTokenType("LBRACE");
     IElementType QUOTE = new NginxTokenType("QUOTE");
