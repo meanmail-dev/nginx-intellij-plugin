@@ -27,6 +27,9 @@
                                  implementationClass="dev.meanmail.structure.NginxStructureViewFactory"/>
         <commenter language="Nginx Configuration"
                    implementationClass="dev.meanmail.NginxCommenter"/>
+        <foldingBuilder language="Nginx Configuration"
+                        implementationClass="dev.meanmail.folding.NginxFoldingBuilder"/>
+
     </extensions>
 
 </idea-plugin>

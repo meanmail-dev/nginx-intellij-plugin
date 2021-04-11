@@ -1,3 +1,7 @@
+## 2021.1 (April, 11, 2021)
+
++ Support a block folding
+
 ## 2020.2.1 (December, 8, 2020)
 
 + Support nginx file extension
