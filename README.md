@@ -1,7 +1,7 @@
 # Nginx intellij plugin
-![JetBrains IntelliJ Plugins](https://img.shields.io/jetbrains/plugin/r/stars/15461?label=JetBrans%20Marketplace)
-![JetBrains IntelliJ plugins](https://img.shields.io/jetbrains/plugin/d/15461)
-![Twitter Follow](https://img.shields.io/twitter/follow/meanmaildev?style=plastic)
+[![JetBrains IntelliJ Plugins](https://img.shields.io/jetbrains/plugin/r/stars/15461?label=JetBrans%20Marketplace)](https://plugins.jetbrains.com/plugin/15461)
+[![JetBrains IntelliJ plugins](https://img.shields.io/jetbrains/plugin/d/15461)](https://plugins.jetbrains.com/plugin/15461)
+[![Twitter Follow](https://img.shields.io/twitter/follow/meanmaildev?style=plastic)](https://twitter.com/meanmaildev)
 
 https://plugins.jetbrains.com/plugin/15461
 
