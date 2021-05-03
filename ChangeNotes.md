@@ -1,3 +1,6 @@
+## 2021.2 (May, 3, 2021)
++ Support include directive
+
 ## 2021.1 (April, 11, 2021)
 
 + Support a block folding

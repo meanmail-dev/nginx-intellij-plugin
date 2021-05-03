@@ -9,6 +9,7 @@ import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import dev.meanmail.psi.BlockStmt
 import dev.meanmail.psi.DirectiveStmt
+import dev.meanmail.psi.IncludeDirectiveStmt
 
 class NginxStructureViewElement(private val element: NavigatablePsiElement) : StructureViewTreeElement,
     SortableTreeElement {
@@ -45,12 +46,18 @@ class NginxStructureViewElement(private val element: NavigatablePsiElement) : St
         if (element is DirectiveStmt) {
             return PsiTreeUtil.getChildrenOfTypeAsList(element, BlockStmt::class.java)
                 .flatMap { block_stmt ->
-                    PsiTreeUtil.getChildrenOfTypeAsList(block_stmt, DirectiveStmt::class.java)
+                    PsiTreeUtil.getChildrenOfAnyType(
+                        block_stmt,
+                        DirectiveStmt::class.java, IncludeDirectiveStmt::class.java
+                    )
                         .map { NginxStructureViewElement(it as NavigatablePsiElement) }
                 }
                 .toTypedArray()
         }
-        return PsiTreeUtil.getChildrenOfTypeAsList(element, DirectiveStmt::class.java)
+        return PsiTreeUtil.getChildrenOfAnyType(
+            element,
+            DirectiveStmt::class.java, IncludeDirectiveStmt::class.java
+        )
             .map { NginxStructureViewElement(it as NavigatablePsiElement) }
             .toTypedArray()
     }

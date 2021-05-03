@@ -20,6 +20,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
         return when (tokenType) {
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
             Types.COMMENT -> COMMENT_KEYS
+            Types.INCLUDE -> INCLUDE_KEYS
             Types.IDENTIFIER -> IDENTIFIER_KEYS
             Types.SEMICOLON -> SEMICOLON_KEYS
             else -> EMPTY_KEYS
@@ -27,14 +28,16 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
     }
 
     companion object {
-        private val BAD_CHARACTER = createTextAttributesKey("REQUIREMENTS_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
-        private val COMMENT = createTextAttributesKey("REQUIREMENTS_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
-        private val IDENTIFIER = createTextAttributesKey("IDENTIFIER", DefaultLanguageHighlighterColors.KEYWORD)
-        private val SEMICOLON = createTextAttributesKey("REQUIREMENTS_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON)
+        private val BAD_CHARACTER = createTextAttributesKey("NGINX_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
+        private val COMMENT = createTextAttributesKey("NGINX_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
+        private val INCLUDE = createTextAttributesKey("NGINX_INCLUDE", DefaultLanguageHighlighterColors.KEYWORD)
+        private val IDENTIFIER = createTextAttributesKey("NGINX_IDENTIFIER", DefaultLanguageHighlighterColors.KEYWORD)
+        private val SEMICOLON = createTextAttributesKey("NGINX_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON)
 
         private val BAD_CHAR_KEYS = arrayOf(BAD_CHARACTER)
         private val COMMENT_KEYS = arrayOf(COMMENT)
         private val EMPTY_KEYS = emptyArray<TextAttributesKey>()
+        private val INCLUDE_KEYS = arrayOf(INCLUDE)
         private val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
         private val SEMICOLON_KEYS = arrayOf(SEMICOLON)
     }
