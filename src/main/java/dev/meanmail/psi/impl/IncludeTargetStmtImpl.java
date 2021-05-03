@@ -3,7 +3,6 @@ package dev.meanmail.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.NlsSafe;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
@@ -47,7 +46,7 @@ public class IncludeTargetStmtImpl extends ASTWrapperPsiElement implements Inclu
     }
 
     @Override
-    public PsiElement setName(@NlsSafe @NotNull String name) throws IncorrectOperationException {
+    public PsiElement setName(@NotNull String name) throws IncorrectOperationException {
         PsiReference reference = getReference();
         if (reference == null) {
             throw new IncorrectOperationException();
