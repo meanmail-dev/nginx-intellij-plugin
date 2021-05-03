@@ -78,9 +78,11 @@ COMMENT={SHARP}.*{EOL}
 
 %state STRING_STATE
 %state DQSTRING_STATE
+%state INCLUDE_STATE
 %%
 
 <YYINITIAL> {
+    include                  { yypush(INCLUDE_STATE); return INCLUDE; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {SEMICOLON}              { return SEMICOLON; }
     {COMMENT}                { return COMMENT; }
@@ -99,6 +101,12 @@ COMMENT={SHARP}.*{EOL}
 <DQSTRING_STATE> {
     {DQUOTE}                 { yypop(); return DQUOTE; }
     {DQSTRING}               { return DQSTRING; }
+}
+
+<INCLUDE_STATE> {
+    {WHITE_SPACE}            { return WHITE_SPACE; }
+    [^;\s]+                  { return INCLUDE_TARGET; }
+    ;                        { yypop(); return SEMICOLON; }
 }
 
 {WHITE_SPACE}                { return WHITE_SPACE; }
