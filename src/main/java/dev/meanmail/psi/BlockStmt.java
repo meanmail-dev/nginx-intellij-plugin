@@ -11,4 +11,7 @@ public interface BlockStmt extends PsiElement {
     @NotNull
     List<DirectiveStmt> getDirectiveStmtList();
 
+    @NotNull
+    List<IncludeDirectiveStmt> getIncludeDirectiveStmtList();
+
 }

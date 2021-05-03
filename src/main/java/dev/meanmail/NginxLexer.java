@@ -8,6 +8,7 @@ import com.intellij.psi.tree.IElementType;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
 import static dev.meanmail.psi.Types.*;
 
@@ -28,6 +29,8 @@ public class NginxLexer implements FlexLexer {
      */
     public static final int YYINITIAL = 0;
     public static final int STRING_STATE = 2;
+    public static final int DQSTRING_STATE = 4;
+    public static final int INCLUDE_STATE = 6;
     /* The ZZ_CMAP_Z table has 68 entries */
     static final char ZZ_CMAP_Z[] = zzUnpackCMap(
             "\1\0\103\200");
@@ -36,9 +39,10 @@ public class NginxLexer implements FlexLexer {
             "\1\0\1\1\53\2\1\3\22\2\1\4\37\2\1\3\237\2");
     /* The ZZ_CMAP_A table has 640 entries */
     static final char ZZ_CMAP_A[] = zzUnpackCMap(
-            "\11\0\1\3\1\5\2\13\1\5\22\0\1\3\2\0\1\7\3\0\1\10\10\0\12\2\1\0\1\6\5\0\32" +
-                    "\1\4\0\1\1\1\0\32\1\1\11\1\4\1\12\7\0\1\13\32\0\1\3\337\0\1\3\177\0\13\3\35" +
-                    "\0\2\13\5\0\1\3\57\0\1\3\40\0");
+            "\11\0\1\3\1\5\2\12\1\5\22\0\1\3\1\0\1\10\1\7\3\0\1\13\10\0\12\2\1\0\1\6\5" +
+                    "\0\32\1\1\0\1\11\2\0\1\1\1\0\2\1\1\20\1\23\1\24\3\1\1\16\2\1\1\21\1\1\1\17" +
+                    "\6\1\1\22\5\1\1\14\1\4\1\15\7\0\1\12\32\0\1\3\337\0\1\3\177\0\13\3\35\0\2" +
+                    "\12\5\0\1\3\57\0\1\3\40\0");
     /**
      * initial size of the lookahead buffer
      */
@@ -50,30 +54,51 @@ public class NginxLexer implements FlexLexer {
      * l is of the form l = 2*k, k a non negative integer
      */
     private static final int ZZ_LEXSTATE[] = {
-            0, 0, 1, 1
+            0, 0, 1, 1, 2, 2, 3, 3
     };
     private static final String ZZ_ACTION_PACKED_0 =
-            "\2\0\1\1\1\2\1\3\1\4\1\1\1\5\1\6" +
-                    "\1\7\1\10\1\11\1\0\3\12";
+            "\4\0\1\1\1\2\1\3\1\4\1\1\1\5\1\6" +
+                    "\1\7\1\10\1\2\1\11\1\12\1\13\1\14\1\15" +
+                    "\1\12\1\16\1\17\1\0\2\20\1\2\2\0\1\20" +
+                    "\4\2\1\21";
     /**
      * Translates DFA states to action switch labels.
      */
     private static final int[] ZZ_ACTION = zzUnpackAction();
     private static final String ZZ_ROWMAP_PACKED_0 =
-            "\0\0\0\14\0\30\0\44\0\60\0\74\0\110\0\74" +
-                    "\0\30\0\30\0\124\0\74\0\140\0\110\0\74\0\140";
+            "\0\0\0\25\0\52\0\77\0\124\0\151\0\176\0\223" +
+                    "\0\250\0\223\0\223\0\124\0\124\0\275\0\322\0\347" +
+                    "\0\223\0\374\0\223\0\u0111\0\u0126\0\223\0\u013b\0\250" +
+                    "\0\223\0\u0150\0\347\0\u0111\0\u013b\0\u0165\0\u017a\0\u018f" +
+                    "\0\u01a4\0\151";
     /**
      * Translates a state to a row index in the transition table
      */
     private static final int[] ZZ_ROWMAP = zzUnpackRowMap();
     private static final String ZZ_TRANS_PACKED_0 =
-            "\1\3\1\4\1\3\1\5\1\3\1\5\1\6\1\7" +
-                    "\1\10\1\11\1\12\1\5\10\13\1\14\3\13\3\3" +
-                    "\1\0\1\3\2\0\1\3\1\0\2\3\1\0\1\3" +
-                    "\2\4\1\0\1\3\2\0\1\3\1\0\2\3\4\0" +
-                    "\1\5\1\0\1\5\5\0\1\5\14\0\3\7\1\15" +
-                    "\1\16\1\17\1\15\1\7\1\15\2\7\1\0\10\13" +
-                    "\1\0\3\13\4\15\1\20\1\17\5\15\1\0";
+            "\1\5\1\6\1\5\1\7\1\5\1\7\1\10\1\11" +
+                    "\1\12\1\5\1\7\1\13\1\14\1\15\1\16\6\6" +
+                    "\11\17\1\20\1\17\1\21\11\17\10\22\1\23\1\24" +
+                    "\13\22\3\25\1\7\1\25\1\7\1\26\3\25\1\7" +
+                    "\12\25\3\5\1\0\1\5\2\0\1\5\1\0\1\5" +
+                    "\2\0\12\5\2\6\1\0\1\5\2\0\1\5\1\0" +
+                    "\1\5\2\0\2\5\7\6\3\0\1\7\1\0\1\7" +
+                    "\4\0\1\7\37\0\3\11\1\27\1\30\1\31\1\27" +
+                    "\1\11\1\27\1\11\1\0\1\27\11\11\1\5\2\6" +
+                    "\1\0\1\5\2\0\1\5\1\0\1\5\2\0\2\5" +
+                    "\1\6\1\32\5\6\11\17\1\33\1\17\1\0\16\17" +
+                    "\1\0\4\17\1\0\12\17\10\22\1\0\1\34\20\22" +
+                    "\1\0\4\22\1\0\12\22\3\25\1\0\1\25\2\0" +
+                    "\3\25\1\0\12\25\4\27\1\35\1\31\4\27\1\0" +
+                    "\12\27\1\5\2\6\1\0\1\5\2\0\1\5\1\0" +
+                    "\1\5\2\0\2\5\2\6\1\36\4\6\1\5\2\6" +
+                    "\1\0\1\5\2\0\1\5\1\0\1\5\2\0\2\5" +
+                    "\3\6\1\37\3\6\1\5\2\6\1\0\1\5\2\0" +
+                    "\1\5\1\0\1\5\2\0\2\5\4\6\1\40\2\6" +
+                    "\1\5\2\6\1\0\1\5\2\0\1\5\1\0\1\5" +
+                    "\2\0\2\5\5\6\1\41\1\6\1\5\2\6\1\0" +
+                    "\1\5\2\0\1\5\1\0\1\5\2\0\2\5\6\6" +
+                    "\1\42";
     /**
      * The transition table of the DFA
      */
@@ -89,8 +114,9 @@ public class NginxLexer implements FlexLexer {
             "Error: pushback value was too large"
     };
     private static final String ZZ_ATTRIBUTE_PACKED_0 =
-            "\2\0\3\1\1\11\1\1\1\11\3\1\1\11\1\0" +
-                    "\1\1\1\11\1\1";
+            "\4\0\3\1\1\11\1\1\2\11\5\1\1\11\1\1" +
+                    "\1\11\2\1\1\11\1\0\1\1\1\11\1\1\2\0" +
+                    "\6\1";
     /**
      * ZZ_ATTRIBUTE[aState] contains the attributes of state <code>aState</code>
      */
@@ -167,7 +193,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackAction() {
-        int[] result = new int[16];
+        int[] result = new int[34];
         int offset = 0;
         offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
         return result;
@@ -186,7 +212,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackRowMap() {
-        int[] result = new int[16];
+        int[] result = new int[34];
         int offset = 0;
         offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
         return result;
@@ -204,7 +230,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackTrans() {
-        int[] result = new int[108];
+        int[] result = new int[441];
         int offset = 0;
         offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
         return result;
@@ -224,7 +250,7 @@ public class NginxLexer implements FlexLexer {
     }
 
     private static int[] zzUnpackAttribute() {
-        int[] result = new int[16];
+        int[] result = new int[34];
         int offset = 0;
         offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
         return result;
@@ -311,7 +337,7 @@ public class NginxLexer implements FlexLexer {
     /**
      * Refills the input buffer.
      *
-     * @return <code>false</code>, iff there was new input.
+     * @return {@code false}, iff there was new input.
      * @throws java.io.IOException if any I/O-Error occurs
      */
     private boolean zzRefill() throws java.io.IOException {
@@ -346,7 +372,7 @@ public class NginxLexer implements FlexLexer {
 
 
     /**
-     * Returns the character at position <tt>pos</tt> from the
+     * Returns the character at position {@code pos} from the
      * matched text.
      * <p>
      * It is equivalent to yytext().charAt(pos), but faster
@@ -514,63 +540,110 @@ public class NginxLexer implements FlexLexer {
                         return VALUE;
                     }
                     // fall through
-                    case 11:
+                    case 18:
                         break;
                     case 2: {
                         return IDENTIFIER;
                     }
                     // fall through
-                    case 12:
+                    case 19:
                         break;
                     case 3: {
                         return WHITE_SPACE;
                     }
                     // fall through
-                    case 13:
+                    case 20:
                         break;
                     case 4: {
                         return SEMICOLON;
                     }
                     // fall through
-                    case 14:
+                    case 21:
                         break;
                     case 5: {
+                        yypush(DQSTRING_STATE);
+                        return DQUOTE;
+                    }
+                    // fall through
+                    case 22:
+                        break;
+                    case 6: {
                         yypush(STRING_STATE);
                         return QUOTE;
                     }
                     // fall through
-                    case 15:
+                    case 23:
                         break;
-                    case 6: {
+                    case 7: {
                         return LBRACE;
                     }
                     // fall through
-                    case 16:
+                    case 24:
                         break;
-                    case 7: {
+                    case 8: {
                         return RBRACE;
                     }
                     // fall through
-                    case 17:
+                    case 25:
                         break;
-                    case 8: {
+                    case 9: {
                         return STRING;
                     }
                     // fall through
-                    case 18:
+                    case 26:
                         break;
-                    case 9: {
+                    case 10: {
+                        yyinitial();
+                        return BAD_CHARACTER;
+                    }
+                    // fall through
+                    case 27:
+                        break;
+                    case 11: {
                         yypop();
                         return QUOTE;
                     }
                     // fall through
-                    case 19:
+                    case 28:
                         break;
-                    case 10: {
+                    case 12: {
+                        return DQSTRING;
+                    }
+                    // fall through
+                    case 29:
+                        break;
+                    case 13: {
+                        yypop();
+                        return DQUOTE;
+                    }
+                    // fall through
+                    case 30:
+                        break;
+                    case 14: {
+                        return INCLUDE_TARGET;
+                    }
+                    // fall through
+                    case 31:
+                        break;
+                    case 15: {
+                        yypop();
+                        return SEMICOLON;
+                    }
+                    // fall through
+                    case 32:
+                        break;
+                    case 16: {
                         return COMMENT;
                     }
                     // fall through
-                    case 20:
+                    case 33:
+                        break;
+                    case 17: {
+                        yypush(INCLUDE_STATE);
+                        return INCLUDE;
+                    }
+                    // fall through
+                    case 34:
                         break;
                     default:
                         zzScanError(ZZ_NO_MATCH);

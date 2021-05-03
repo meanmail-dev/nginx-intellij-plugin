@@ -10,12 +10,19 @@ public interface Types {
 
     IElementType BLOCK_STMT = new NginxElementType("BLOCK_STMT");
     IElementType DIRECTIVE_STMT = new NginxElementType("DIRECTIVE_STMT");
+    IElementType INCLUDE_DIRECTIVE_STMT = new NginxElementType("INCLUDE_DIRECTIVE_STMT");
+    IElementType INCLUDE_STMT = new NginxElementType("INCLUDE_STMT");
+    IElementType INCLUDE_TARGET_STMT = new NginxElementType("INCLUDE_TARGET_STMT");
     IElementType NAME_STMT = new NginxElementType("NAME_STMT");
     IElementType STRING_STMT = new NginxElementType("STRING_STMT");
     IElementType VALUE_STMT = new NginxElementType("VALUE_STMT");
 
     IElementType COMMENT = new NginxTokenType("COMMENT");
+    IElementType DQSTRING = new NginxTokenType("DQSTRING");
+    IElementType DQUOTE = new NginxTokenType("DQUOTE");
     IElementType IDENTIFIER = new NginxTokenType("IDENTIFIER");
+    IElementType INCLUDE = new NginxTokenType("INCLUDE");
+    IElementType INCLUDE_TARGET = new NginxTokenType("INCLUDE_TARGET");
     IElementType LBRACE = new NginxTokenType("LBRACE");
     IElementType QUOTE = new NginxTokenType("QUOTE");
     IElementType RBRACE = new NginxTokenType("RBRACE");
@@ -30,6 +37,12 @@ public interface Types {
                 return new BlockStmtImpl(node);
             } else if (type == DIRECTIVE_STMT) {
                 return new DirectiveStmtImpl(node);
+            } else if (type == INCLUDE_DIRECTIVE_STMT) {
+                return new IncludeDirectiveStmtImpl(node);
+            } else if (type == INCLUDE_STMT) {
+                return new IncludeStmtImpl(node);
+            } else if (type == INCLUDE_TARGET_STMT) {
+                return new IncludeTargetStmtImpl(node);
             } else if (type == NAME_STMT) {
                 return new NameStmtImpl(node);
             } else if (type == STRING_STMT) {

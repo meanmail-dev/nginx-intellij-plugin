@@ -16,13 +16,15 @@
   psiImplUtilClass="dev.meanmail.psi.PsiImplUtil"
 
   implements("directive_stmt")="dev.meanmail.psi.NamedElement"
+  implements("include_directive_stmt")="dev.meanmail.psi.NamedElement"
+  implements("include_target_stmt")="dev.meanmail.psi.ReferenceElement"
 }
 
 nginxFile ::= statement*
 
-private statement ::= directive_stmt [COMMENT]
+private statement ::= (include_directive_stmt | directive_stmt) [COMMENT]
 
-string_stmt ::= QUOTE [STRING] QUOTE
+string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE)
 name_stmt ::= IDENTIFIER
               | VALUE
               | string_stmt
@@ -30,5 +32,8 @@ value_stmt ::= IDENTIFIER
                | VALUE
                | string_stmt
 
+include_stmt ::= INCLUDE
+include_target_stmt ::= INCLUDE_TARGET
+include_directive_stmt ::= include_stmt include_target_stmt SEMICOLON {pin=1}
 block_stmt ::= LBRACE statement* RBRACE {pin=1}
 directive_stmt ::= name_stmt value_stmt* (SEMICOLON | block_stmt) {pin=1}

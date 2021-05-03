@@ -63,34 +63,51 @@ EOL=[\n|\r|\r\n]
 IDENTIFIER=({LETTER} | {UNDERSCORE}) ({LETTER} | {DIGIT} | {UNDERSCORE})*
 SEMICOLON=";"
 SHARP="#"
-VALUE=[^\s;']
-STRING=[^']+
+VALUE=[^\s;'\"]
+ESCAPE=\\.
+STRING=([^'\\]+|{ESCAPE})+
+DQSTRING=([^\"\\]+|{ESCAPE})+
 
 LBRACE="{"
 RBRACE="}"
 
 QUOTE="'"
+DQUOTE="\""
 
 COMMENT={SHARP}.*{EOL}
 
 %state STRING_STATE
+%state DQSTRING_STATE
+%state INCLUDE_STATE
 %%
 
 <YYINITIAL> {
+    include                  { yypush(INCLUDE_STATE); return INCLUDE; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {SEMICOLON}              { return SEMICOLON; }
     {COMMENT}                { return COMMENT; }
     {LBRACE}                 { return LBRACE; }
     {RBRACE}                 { return RBRACE; }
-    "'"                      { yypush(STRING_STATE); return QUOTE; }
+    {QUOTE}                  { yypush(STRING_STATE); return QUOTE; }
+    {DQUOTE}                 { yypush(DQSTRING_STATE); return DQUOTE; }
     ({VALUE}{IDENTIFIER}?)+  { return VALUE; }
 }
 
 <STRING_STATE> {
-    "'"                      { yypop(); return QUOTE;}
+    {QUOTE}                  { yypop(); return QUOTE; }
     {STRING}                 { return STRING; }
 }
 
+<DQSTRING_STATE> {
+    {DQUOTE}                 { yypop(); return DQUOTE; }
+    {DQSTRING}               { return DQSTRING; }
+}
+
+<INCLUDE_STATE> {
+    {WHITE_SPACE}            { return WHITE_SPACE; }
+    [^;\s]+                  { return INCLUDE_TARGET; }
+    ;                        { yypop(); return SEMICOLON; }
+}
 
 {WHITE_SPACE}                { return WHITE_SPACE; }
 
