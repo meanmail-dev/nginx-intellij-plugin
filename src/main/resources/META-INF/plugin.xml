@@ -9,6 +9,7 @@
 
     <depends>com.intellij.modules.lang</depends>
 
+
     <extensions defaultExtensionNs="com.intellij">
         <fileType implementationClass="dev.meanmail.NginxFileType"
                   language="Nginx Configuration"
@@ -16,6 +17,10 @@
                   name="Nginx Configuration"
                   fileNames="nginx.conf"
                   extensions="conf;nginx"/>
+        <languageInjectionContributor
+                implementationClass="dev.meanmail.lang.injection.NginxConfigInjector"
+                language="Nginx Configuration"
+        />
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">

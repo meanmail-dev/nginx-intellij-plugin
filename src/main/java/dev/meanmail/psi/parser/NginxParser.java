@@ -19,6 +19,20 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
+    // ACCESS_BY_LUA_BLOCK lua_block_stmt
+    public static boolean access_by_lua_block_stmt(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "access_by_lua_block_stmt")) return false;
+        if (!nextTokenIs(b, ACCESS_BY_LUA_BLOCK)) return false;
+        boolean r, p;
+        Marker m = enter_section_(b, l, _NONE_, ACCESS_BY_LUA_BLOCK_STMT, null);
+        r = consumeToken(b, ACCESS_BY_LUA_BLOCK);
+        p = r; // pin = 1
+        r = r && lua_block_stmt(b, l + 1);
+        exit_section_(b, l, m, r, p, null);
+        return r || p;
+    }
+
+    /* ********************************************************** */
     // LBRACE statement* RBRACE
     public static boolean block_stmt(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "block_stmt")) return false;
@@ -42,6 +56,20 @@ public class NginxParser implements PsiParser, LightPsiParser {
             if (!empty_element_parsed_guard_(b, "block_stmt_1", c)) break;
         }
         return true;
+    }
+
+    /* ********************************************************** */
+    // CONTENT_BY_LUA_BLOCK lua_block_stmt
+    public static boolean content_by_lua_block_stmt(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "content_by_lua_block_stmt")) return false;
+        if (!nextTokenIs(b, CONTENT_BY_LUA_BLOCK)) return false;
+        boolean r, p;
+        Marker m = enter_section_(b, l, _NONE_, CONTENT_BY_LUA_BLOCK_STMT, null);
+        r = consumeToken(b, CONTENT_BY_LUA_BLOCK);
+        p = r; // pin = 1
+        r = r && lua_block_stmt(b, l + 1);
+        exit_section_(b, l, m, r, p, null);
+        return r || p;
     }
 
     /* ********************************************************** */
@@ -118,6 +146,33 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
+    // LBRACE lua_stmt RBRACE
+    public static boolean lua_block_stmt(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "lua_block_stmt")) return false;
+        if (!nextTokenIs(b, LBRACE)) return false;
+        boolean r, p;
+        Marker m = enter_section_(b, l, _NONE_, LUA_BLOCK_STMT, null);
+        r = consumeToken(b, LBRACE);
+        p = r; // pin = 1
+        r = r && report_error_(b, lua_stmt(b, l + 1));
+        r = p && consumeToken(b, RBRACE) && r;
+        exit_section_(b, l, m, r, p, null);
+        return r || p;
+    }
+
+    /* ********************************************************** */
+    // LUA
+    public static boolean lua_stmt(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "lua_stmt")) return false;
+        if (!nextTokenIs(b, LUA)) return false;
+        boolean r;
+        Marker m = enter_section_(b);
+        r = consumeToken(b, LUA);
+        exit_section_(b, m, LUA_STMT, r);
+        return r;
+    }
+
+    /* ********************************************************** */
     // IDENTIFIER
     //               | VALUE
     //               | string_stmt
@@ -145,7 +200,27 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // (include_directive_stmt | directive_stmt) [COMMENT]
+    // REWRITE_BY_LUA_BLOCK lua_block_stmt
+    public static boolean rewrite_by_lua_block_stmt(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "rewrite_by_lua_block_stmt")) return false;
+        if (!nextTokenIs(b, REWRITE_BY_LUA_BLOCK)) return false;
+        boolean r, p;
+        Marker m = enter_section_(b, l, _NONE_, REWRITE_BY_LUA_BLOCK_STMT, null);
+        r = consumeToken(b, REWRITE_BY_LUA_BLOCK);
+        p = r; // pin = 1
+        r = r && lua_block_stmt(b, l + 1);
+        exit_section_(b, l, m, r, p, null);
+        return r || p;
+    }
+
+    /* ********************************************************** */
+    // (
+    //                        include_directive_stmt
+    //                        | directive_stmt
+    //                        | content_by_lua_block_stmt
+    //                        | rewrite_by_lua_block_stmt
+    //                        | access_by_lua_block_stmt
+    //                       ) [COMMENT]
     static boolean statement(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "statement")) return false;
         boolean r;
@@ -156,12 +231,19 @@ public class NginxParser implements PsiParser, LightPsiParser {
         return r;
     }
 
-    // include_directive_stmt | directive_stmt
+    // include_directive_stmt
+    //                        | directive_stmt
+    //                        | content_by_lua_block_stmt
+    //                        | rewrite_by_lua_block_stmt
+    //                        | access_by_lua_block_stmt
     private static boolean statement_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "statement_0")) return false;
         boolean r;
         r = include_directive_stmt(b, l + 1);
         if (!r) r = directive_stmt(b, l + 1);
+        if (!r) r = content_by_lua_block_stmt(b, l + 1);
+        if (!r) r = rewrite_by_lua_block_stmt(b, l + 1);
+        if (!r) r = access_by_lua_block_stmt(b, l + 1);
         return r;
     }
 

@@ -7,7 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class Visitor extends PsiElementVisitor {
 
+    public void visitAccessByLuaBlockStmt(@NotNull AccessByLuaBlockStmt o) {
+        visitPsiElement(o);
+    }
+
     public void visitBlockStmt(@NotNull BlockStmt o) {
+        visitPsiElement(o);
+    }
+
+    public void visitContentByLuaBlockStmt(@NotNull ContentByLuaBlockStmt o) {
         visitPsiElement(o);
     }
 
@@ -24,10 +32,22 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitIncludeTargetStmt(@NotNull IncludeTargetStmt o) {
-        visitReference(o);
+        visitReferenceElement(o);
+    }
+
+    public void visitLuaBlockStmt(@NotNull LuaBlockStmt o) {
+        visitPsiElement(o);
+    }
+
+    public void visitLuaStmt(@NotNull LuaStmt o) {
+        visitPsiElement(o);
     }
 
     public void visitNameStmt(@NotNull NameStmt o) {
+        visitPsiElement(o);
+    }
+
+    public void visitRewriteByLuaBlockStmt(@NotNull RewriteByLuaBlockStmt o) {
         visitPsiElement(o);
     }
 
@@ -43,7 +63,7 @@ public class Visitor extends PsiElementVisitor {
         visitElement(o);
     }
 
-    public void visitReference(@NotNull ReferenceElement o) {
+    public void visitReferenceElement(@NotNull ReferenceElement o) {
         visitElement(o);
     }
 

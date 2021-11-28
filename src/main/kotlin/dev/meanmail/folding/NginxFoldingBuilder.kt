@@ -9,6 +9,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import dev.meanmail.psi.BlockStmt
+import dev.meanmail.psi.LuaBlockStmt
 
 
 class NginxFoldingBuilder : FoldingBuilderEx(), DumbAware {
@@ -18,9 +19,10 @@ class NginxFoldingBuilder : FoldingBuilderEx(), DumbAware {
         quick: Boolean
     ): Array<FoldingDescriptor> {
         val descriptors: MutableList<FoldingDescriptor> = ArrayList()
-        val blocks = PsiTreeUtil.findChildrenOfType(
+        val blocks = PsiTreeUtil.findChildrenOfAnyType(
             root,
-            BlockStmt::class.java
+            BlockStmt::class.java,
+            LuaBlockStmt::class.java
         )
         for (block in blocks) {
             descriptors.add(

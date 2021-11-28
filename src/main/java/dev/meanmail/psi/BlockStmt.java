@@ -9,9 +9,18 @@ import java.util.List;
 public interface BlockStmt extends PsiElement {
 
     @NotNull
+    List<AccessByLuaBlockStmt> getAccessByLuaBlockStmtList();
+
+    @NotNull
+    List<ContentByLuaBlockStmt> getContentByLuaBlockStmtList();
+
+    @NotNull
     List<DirectiveStmt> getDirectiveStmtList();
 
     @NotNull
     List<IncludeDirectiveStmt> getIncludeDirectiveStmtList();
+
+    @NotNull
+    List<RewriteByLuaBlockStmt> getRewriteByLuaBlockStmtList();
 
 }
