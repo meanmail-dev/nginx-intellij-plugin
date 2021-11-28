@@ -36,7 +36,8 @@ intellij {
         if (plugin.isEmpty()) {
             continue
         }
-        if (plugin == "python") {
+        val (name, version) = plugin.split(':')
+        if (name == "python") {
             when (type.get()) {
                 "PY" -> {
                     plugins.add("python")
@@ -45,7 +46,7 @@ intellij {
                     plugins.add("PythonCore")
                 }
                 else -> {
-                    plugins.add("PythonCore:${config("python")}")
+                    plugins.add("PythonCore:${version}")
                 }
             }
         } else {
