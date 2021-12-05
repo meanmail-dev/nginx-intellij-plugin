@@ -1,3 +1,6 @@
+## 2021.3 (December, 5, 2021)
++ Support access_by_lua_block, content_by_lua_block, rewrite_by_lua_block (needs any Lua Language plugin)
+
 ## 2021.2 (May, 3, 2021)
 + Support include directive
 

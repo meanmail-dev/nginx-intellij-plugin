@@ -79,10 +79,15 @@ COMMENT={SHARP}.*{EOL}
 %state STRING_STATE
 %state DQSTRING_STATE
 %state INCLUDE_STATE
+%state LUA_BLOCK_STATE
+%state LUA_STATE
 %%
 
 <YYINITIAL> {
     include                  { yypush(INCLUDE_STATE); return INCLUDE; }
+    content_by_lua_block     { yypush(LUA_BLOCK_STATE); return CONTENT_BY_LUA_BLOCK; }
+    rewrite_by_lua_block     { yypush(LUA_BLOCK_STATE); return REWRITE_BY_LUA_BLOCK; }
+    access_by_lua_block      { yypush(LUA_BLOCK_STATE); return ACCESS_BY_LUA_BLOCK; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {SEMICOLON}              { return SEMICOLON; }
     {COMMENT}                { return COMMENT; }
@@ -91,6 +96,17 @@ COMMENT={SHARP}.*{EOL}
     {QUOTE}                  { yypush(STRING_STATE); return QUOTE; }
     {DQUOTE}                 { yypush(DQSTRING_STATE); return DQUOTE; }
     ({VALUE}{IDENTIFIER}?)+  { return VALUE; }
+}
+
+<LUA_BLOCK_STATE> {
+    {LBRACE}                  { yypush(LUA_STATE); return LBRACE; }
+    {WHITE_SPACE}             { return WHITE_SPACE; }
+    [^]                       { yypop(); return BAD_CHARACTER; }
+}
+
+<LUA_STATE> {
+    {RBRACE}                  { yypop(); yypop(); return RBRACE; }
+    [^}]+                     { return LUA; }
 }
 
 <STRING_STATE> {

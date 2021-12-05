@@ -16,13 +16,23 @@
   psiImplUtilClass="dev.meanmail.psi.PsiImplUtil"
 
   implements("directive_stmt")="dev.meanmail.psi.NamedElement"
+  implements("content_by_lua_block_stmt")="dev.meanmail.psi.NamedElement"
+  implements("rewrite_by_lua_block_stmt")="dev.meanmail.psi.NamedElement"
+  implements("access_by_lua_block_stmt")="dev.meanmail.psi.NamedElement"
   implements("include_directive_stmt")="dev.meanmail.psi.NamedElement"
   implements("include_target_stmt")="dev.meanmail.psi.ReferenceElement"
+  implements("lua_stmt")="com.intellij.psi.PsiLanguageInjectionHost"
 }
 
 nginxFile ::= statement*
 
-private statement ::= (include_directive_stmt | directive_stmt) [COMMENT]
+private statement ::= (
+                       include_directive_stmt
+                       | directive_stmt
+                       | content_by_lua_block_stmt
+                       | rewrite_by_lua_block_stmt
+                       | access_by_lua_block_stmt
+                      ) [COMMENT]
 
 string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE)
 name_stmt ::= IDENTIFIER
@@ -37,3 +47,8 @@ include_target_stmt ::= INCLUDE_TARGET
 include_directive_stmt ::= include_stmt include_target_stmt SEMICOLON {pin=1}
 block_stmt ::= LBRACE statement* RBRACE {pin=1}
 directive_stmt ::= name_stmt value_stmt* (SEMICOLON | block_stmt) {pin=1}
+lua_stmt ::= LUA
+lua_block_stmt ::= LBRACE lua_stmt RBRACE {pin=1}
+access_by_lua_block_stmt ::= ACCESS_BY_LUA_BLOCK lua_block_stmt {pin=1}
+content_by_lua_block_stmt ::= CONTENT_BY_LUA_BLOCK lua_block_stmt {pin=1}
+rewrite_by_lua_block_stmt ::= REWRITE_BY_LUA_BLOCK lua_block_stmt {pin=1}
