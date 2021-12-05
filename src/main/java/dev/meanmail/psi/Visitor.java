@@ -3,12 +3,13 @@ package dev.meanmail.psi;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiLanguageInjectionHost;
 import org.jetbrains.annotations.NotNull;
 
 public class Visitor extends PsiElementVisitor {
 
     public void visitAccessByLuaBlockStmt(@NotNull AccessByLuaBlockStmt o) {
-        visitPsiElement(o);
+        visitNamedElement(o);
     }
 
     public void visitBlockStmt(@NotNull BlockStmt o) {
@@ -16,7 +17,7 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitContentByLuaBlockStmt(@NotNull ContentByLuaBlockStmt o) {
-        visitPsiElement(o);
+        visitNamedElement(o);
     }
 
     public void visitDirectiveStmt(@NotNull DirectiveStmt o) {
@@ -40,7 +41,7 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitLuaStmt(@NotNull LuaStmt o) {
-        visitPsiElement(o);
+        visitPsiLanguageInjectionHost(o);
     }
 
     public void visitNameStmt(@NotNull NameStmt o) {
@@ -48,7 +49,7 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitRewriteByLuaBlockStmt(@NotNull RewriteByLuaBlockStmt o) {
-        visitPsiElement(o);
+        visitNamedElement(o);
     }
 
     public void visitStringStmt(@NotNull StringStmt o) {
@@ -57,6 +58,10 @@ public class Visitor extends PsiElementVisitor {
 
     public void visitValueStmt(@NotNull ValueStmt o) {
         visitPsiElement(o);
+    }
+
+    public void visitPsiLanguageInjectionHost(@NotNull PsiLanguageInjectionHost o) {
+        visitElement(o);
     }
 
     public void visitNamedElement(@NotNull NamedElement o) {

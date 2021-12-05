@@ -17,10 +17,7 @@
                   name="Nginx Configuration"
                   fileNames="nginx.conf"
                   extensions="conf;nginx"/>
-        <languageInjectionContributor
-                implementationClass="dev.meanmail.lang.injection.NginxConfigInjector"
-                language="Nginx Configuration"
-        />
+        <multiHostInjector implementation="dev.meanmail.lang.injection.NginxLuaInjector"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">

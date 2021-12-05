@@ -3,7 +3,9 @@ package dev.meanmail.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.LiteralTextEscaper;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiLanguageInjectionHost;
 import dev.meanmail.psi.LuaStmt;
 import dev.meanmail.psi.Visitor;
 import org.jetbrains.annotations.NotNull;
@@ -24,4 +26,19 @@ public class LuaStmtImpl extends ASTWrapperPsiElement implements LuaStmt {
         else super.accept(visitor);
     }
 
+    @Override
+    public boolean isValidHost() {
+        return true;
+    }
+
+    @Override
+    public PsiLanguageInjectionHost updateText(@NotNull String text) {
+        return this;
+    }
+
+    @Override
+    public @NotNull
+    LiteralTextEscaper<? extends PsiLanguageInjectionHost> createLiteralTextEscaper() {
+        return LiteralTextEscaper.createSimple(this);
+    }
 }

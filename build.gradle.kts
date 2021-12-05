@@ -16,7 +16,6 @@ group = config("group")
 version = "${config("version")}-${config("platformVersion")}"
 
 dependencies {
-    compileOnly("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10")
     testImplementation("junit:junit:4.13.2")
 }
 

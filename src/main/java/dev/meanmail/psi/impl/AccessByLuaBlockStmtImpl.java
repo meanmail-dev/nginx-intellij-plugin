@@ -3,7 +3,10 @@ package dev.meanmail.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.NlsSafe;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.util.IncorrectOperationException;
 import dev.meanmail.psi.AccessByLuaBlockStmt;
 import dev.meanmail.psi.LuaBlockStmt;
 import dev.meanmail.psi.Visitor;
@@ -32,4 +35,19 @@ public class AccessByLuaBlockStmtImpl extends ASTWrapperPsiElement implements Ac
         return findChildByClass(LuaBlockStmt.class);
     }
 
+    @Override
+    public String getName() {
+        return getNameIdentifier().getText();
+    }
+
+    @Override
+    public @NotNull
+    PsiElement getNameIdentifier() {
+        return this.getFirstChild();
+    }
+
+    @Override
+    public PsiElement setName(@NlsSafe @NotNull String name) throws IncorrectOperationException {
+        return this;
+    }
 }
