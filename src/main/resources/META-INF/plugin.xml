@@ -18,6 +18,8 @@
                   fileNames="nginx.conf"
                   extensions="conf;nginx"/>
         <multiHostInjector implementation="dev.meanmail.lang.injection.NginxLuaInjector"/>
+        <completion.contributor language="Nginx Configuration"
+                                implementationClass="dev.meanmail.codeInsight.completion.NginxCompletionContributor"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">

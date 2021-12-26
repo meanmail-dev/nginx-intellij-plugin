@@ -268,7 +268,7 @@ public class NginxLexer implements FlexLexer {
      */
     private boolean zzAtEOF;
     /**
-     * denotes if the user-EOF-code has already been executed
+     * denotes location_if the user-EOF-code has already been executed
      */
     private boolean zzEOFDone;
 
@@ -441,7 +441,7 @@ public class NginxLexer implements FlexLexer {
      * Refills the input buffer.
      *
      * @return {@code false}, iff there was new input.
-     * @throws java.io.IOException if any I/O-Error occurs
+     * @throws java.io.IOException location_if any I/O-Error occurs
      */
     private boolean zzRefill() throws java.io.IOException {
         return true;
@@ -556,7 +556,7 @@ public class NginxLexer implements FlexLexer {
      * the end of input is encountered or an I/O-Error occurs.
      *
      * @return the next token
-     * @throws java.io.IOException if any I/O-Error occurs
+     * @throws java.io.IOException location_if any I/O-Error occurs
      */
     public IElementType advance() throws java.io.IOException {
         int zzInput;
