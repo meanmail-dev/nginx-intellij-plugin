@@ -1,11 +1,11 @@
 <idea-plugin url="https://meanmail.dev/plugin/7">
-    <id>dev.meanmail.plugin.nginx-intellij-plugin</id>
+    <id>dev.meanmail.plugin.nginx-my-intellij-plugin</id>
     <name>Nginx Configuration</name>
     <version>SNAPSHOT</version>
-    <idea-version since-build="173"/>
+    <idea-version since-build="174"/>
     <vendor email="plugin@meanmail.ru" url="https://meanmail.dev">meanmail</vendor>
-    <description></description>
-    <change-notes></change-notes>
+    <description>nginx plugin nginx plugin nginx plugin nginx plugin nginx plugin nginx plugin nginx plugin nginx plugin </description>
+    <change-notes>updrade 1</change-notes>
 
     <depends>com.intellij.modules.lang</depends>
 
