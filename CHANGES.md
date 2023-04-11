@@ -1,7 +1,13 @@
+## 2022.1 (October, 9, 2022)
+
+* Update dependencies
+
 ## 2021.3 (December, 5, 2021)
+
 + Support access_by_lua_block, content_by_lua_block, rewrite_by_lua_block (needs any Lua Language plugin)
 
 ## 2021.2 (May, 3, 2021)
+
 + Support include directive
 
 ## 2021.1 (April, 11, 2021)

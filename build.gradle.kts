@@ -8,15 +8,17 @@ repositories {
 
 plugins {
     java
+// https://plugins.jetbrains.com/docs/intellij/using-kotlin.html#kotlin-standard-library
     kotlin("jvm") version "1.7.10"
-    id("org.jetbrains.intellij") version "1.3.0"
+    id("org.jetbrains.intellij") version "1.9.0"
 }
 
 group = config("group")
-version = "${config("version")}-${config("platformVersion")}"
+version = config("version")
 
 dependencies {
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
 }
 
 intellij {
@@ -29,6 +31,7 @@ intellij {
         }
     )
     type.set(config("platformType"))
+    updateSinceUntilBuild.set(false)
 
     val usePlugins = config("usePlugins").split(',')
     for (plugin in usePlugins) {
@@ -41,9 +44,11 @@ intellij {
                 "PY" -> {
                     plugins.add("python")
                 }
+
                 "PC" -> {
                     plugins.add("PythonCore")
                 }
+
                 else -> {
                     plugins.add("PythonCore:${version}")
                 }
@@ -113,13 +118,15 @@ tasks {
         version.set(project.version.toString())
         pluginDescription.set(file("description.html").readText())
         changeNotes.set(readChangeNotes("CHANGES.md"))
+        sinceBuild.set(config("platformSinceBuild"))
     }
 
     publishPlugin {
         dependsOn("buildPlugin")
-        token.set(System.getenv("PUBLISH_TOKEN"))
+        token.set(file("token.txt").readLines()[0])
         channels.set(listOf(config("publishChannel")))
     }
+
     buildSearchableOptions {
         enabled = false
     }

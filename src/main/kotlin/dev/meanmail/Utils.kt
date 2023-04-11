@@ -12,3 +12,6 @@ fun resolveFile(filepath: String, base: VirtualFile): VirtualFile? {
         base.findFileByRelativePath(filepath)
     }
 }
+
+
+fun getNginxVersion(): String = "1.21.4"
