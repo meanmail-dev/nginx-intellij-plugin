@@ -9,8 +9,8 @@ repositories {
 plugins {
     java
 // https://plugins.jetbrains.com/docs/intellij/using-kotlin.html#kotlin-standard-library
-    kotlin("jvm") version "1.7.10"
-    id("org.jetbrains.intellij") version "1.9.0"
+    id("org.jetbrains.kotlin.jvm") version "1.8.20"
+    id("org.jetbrains.intellij") version "1.13.3"
 }
 
 group = config("group")
@@ -31,7 +31,6 @@ intellij {
         }
     )
     type.set(config("platformType"))
-    updateSinceUntilBuild.set(false)
 
     val usePlugins = config("usePlugins").split(',')
     for (plugin in usePlugins) {
@@ -111,7 +110,7 @@ tasks {
     test {
         useJUnit()
 
-        maxHeapSize = "1G"
+        maxHeapSize = "2G"
     }
 
     patchPluginXml {
@@ -119,11 +118,12 @@ tasks {
         pluginDescription.set(file("description.html").readText())
         changeNotes.set(readChangeNotes("CHANGES.md"))
         sinceBuild.set(config("platformSinceBuild"))
+        untilBuild.set(config("platformUntilBuild"))
     }
 
     publishPlugin {
         dependsOn("buildPlugin")
-        token.set(file("token.txt").readLines()[0])
+//        token.set(file("token.txt").readLines()[0])
         channels.set(listOf(config("publishChannel")))
     }
 
