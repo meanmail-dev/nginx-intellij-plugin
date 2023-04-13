@@ -1,1 +1,1 @@
-rootProject.name = "nginx-my-intellij-plugin"
+rootProject.name = "nginx-intellij-plugin"
