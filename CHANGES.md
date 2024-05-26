@@ -1,3 +1,7 @@
+## 2024.1 ( May, 26, 2024)
+
+* Update dependencies
+
 ## 2022.1 (October, 9, 2022)
 
 * Update dependencies

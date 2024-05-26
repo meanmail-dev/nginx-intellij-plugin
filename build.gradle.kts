@@ -9,8 +9,8 @@ repositories {
 plugins {
     java
 // https://plugins.jetbrains.com/docs/intellij/using-kotlin.html#kotlin-standard-library
-    kotlin("jvm") version "1.5.10"
-    id("org.jetbrains.intellij") version "1.9.0"
+    kotlin("jvm") version "1.9.22"
+    id("org.jetbrains.intellij") version "1.17.3"
 }
 
 group = config("group")
@@ -18,7 +18,7 @@ version = config("version")
 
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.0-M1")
 }
 
 intellij {
