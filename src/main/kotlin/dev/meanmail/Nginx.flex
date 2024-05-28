@@ -1,7 +1,7 @@
 package dev.meanmail;
 
-import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -88,6 +88,8 @@ COMMENT={SHARP}.*{EOL}
     content_by_lua_block     { yypush(LUA_BLOCK_STATE); return CONTENT_BY_LUA_BLOCK; }
     rewrite_by_lua_block     { yypush(LUA_BLOCK_STATE); return REWRITE_BY_LUA_BLOCK; }
     access_by_lua_block      { yypush(LUA_BLOCK_STATE); return ACCESS_BY_LUA_BLOCK; }
+    ssl_certificate_by_lua_block { yypush(LUA_BLOCK_STATE); return SSL_CERTIFICATE_BY_LUA_BLOCK; }
+    set_by_lua_block         { yypush(LUA_BLOCK_STATE); return SET_BY_LUA_BLOCK; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {SEMICOLON}              { return SEMICOLON; }
     {COMMENT}                { return COMMENT; }

@@ -1,3 +1,7 @@
+## 2024.1.1 (May, 28, 2024)
+
+* Update icon
+
 ## 2024.1 ( May, 26, 2024)
 
 * Update dependencies
@@ -17,11 +21,13 @@
 ## 2021.1 (April, 11, 2021)
 
 + Support a block folding
+
 * Better strings handling (@Athorcis)
 
 ## 2020.2.1 (December, 8, 2020)
 
 + Support nginx file extension
+
 * Update file icon
 
 ## 2020.2 (December, 6, 2020)

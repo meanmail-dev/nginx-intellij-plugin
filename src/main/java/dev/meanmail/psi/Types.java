@@ -19,6 +19,8 @@ public interface Types {
     IElementType LUA_STMT = new NginxElementType("LUA_STMT");
     IElementType NAME_STMT = new NginxElementType("NAME_STMT");
     IElementType REWRITE_BY_LUA_BLOCK_STMT = new NginxElementType("REWRITE_BY_LUA_BLOCK_STMT");
+    IElementType SET_BY_LUA_BLOCK_STMT = new NginxElementType("SET_BY_LUA_BLOCK_STMT");
+    IElementType SSL_CERTIFICATE_BY_LUA_BLOCK_STMT = new NginxElementType("SSL_CERTIFICATE_BY_LUA_BLOCK_STMT");
     IElementType STRING_STMT = new NginxElementType("STRING_STMT");
     IElementType VALUE_STMT = new NginxElementType("VALUE_STMT");
 
@@ -36,6 +38,8 @@ public interface Types {
     IElementType RBRACE = new NginxTokenType("RBRACE");
     IElementType REWRITE_BY_LUA_BLOCK = new NginxTokenType("REWRITE_BY_LUA_BLOCK");
     IElementType SEMICOLON = new NginxTokenType("SEMICOLON");
+    IElementType SET_BY_LUA_BLOCK = new NginxTokenType("SET_BY_LUA_BLOCK");
+    IElementType SSL_CERTIFICATE_BY_LUA_BLOCK = new NginxTokenType("SSL_CERTIFICATE_BY_LUA_BLOCK");
     IElementType STRING = new NginxTokenType("STRING");
     IElementType VALUE = new NginxTokenType("VALUE");
 
@@ -64,6 +68,10 @@ public interface Types {
                 return new NameStmtImpl(node);
             } else if (type == REWRITE_BY_LUA_BLOCK_STMT) {
                 return new RewriteByLuaBlockStmtImpl(node);
+            } else if (type == SET_BY_LUA_BLOCK_STMT) {
+                return new SetByLuaBlockStmtImpl(node);
+            } else if (type == SSL_CERTIFICATE_BY_LUA_BLOCK_STMT) {
+                return new SslCertificateByLuaBlockStmtImpl(node);
             } else if (type == STRING_STMT) {
                 return new StringStmtImpl(node);
             } else if (type == VALUE_STMT) {

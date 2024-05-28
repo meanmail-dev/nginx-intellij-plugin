@@ -56,4 +56,16 @@ public class BlockStmtImpl extends ASTWrapperPsiElement implements BlockStmt {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, RewriteByLuaBlockStmt.class);
     }
 
+    @Override
+    @NotNull
+    public List<SetByLuaBlockStmt> getSetByLuaBlockStmtList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, SetByLuaBlockStmt.class);
+    }
+
+    @Override
+    @NotNull
+    public List<SslCertificateByLuaBlockStmt> getSslCertificateByLuaBlockStmtList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, SslCertificateByLuaBlockStmt.class);
+    }
+
 }

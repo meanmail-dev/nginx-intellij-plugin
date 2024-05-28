@@ -23,4 +23,10 @@ public interface BlockStmt extends PsiElement {
     @NotNull
     List<RewriteByLuaBlockStmt> getRewriteByLuaBlockStmtList();
 
+    @NotNull
+    List<SetByLuaBlockStmt> getSetByLuaBlockStmtList();
+
+    @NotNull
+    List<SslCertificateByLuaBlockStmt> getSslCertificateByLuaBlockStmtList();
+
 }

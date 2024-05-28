@@ -52,6 +52,14 @@ public class Visitor extends PsiElementVisitor {
         visitNamedElement(o);
     }
 
+    public void visitSetByLuaBlockStmt(@NotNull SetByLuaBlockStmt o) {
+        visitPsiElement(o);
+    }
+
+    public void visitSslCertificateByLuaBlockStmt(@NotNull SslCertificateByLuaBlockStmt o) {
+        visitPsiElement(o);
+    }
+
     public void visitStringStmt(@NotNull StringStmt o) {
         visitPsiElement(o);
     }

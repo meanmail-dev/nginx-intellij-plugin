@@ -3,9 +3,19 @@ package dev.meanmail.parsing
 import com.intellij.testFramework.ParsingTestCase
 import dev.meanmail.NginxParserDefinition
 
-class ParsingTest : ParsingTestCase("testData", "nginx.conf",
-        NginxParserDefinition()) {
+class ParsingTest : ParsingTestCase(
+    "testData", "nginx.conf",
+    NginxParserDefinition()
+) {
     fun testSample() {
+        doTest(true)
+    }
+
+    fun testSample2() {
+        doTest(true)
+    }
+
+    fun testLua() {
         doTest(true)
     }
 

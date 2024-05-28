@@ -32,6 +32,8 @@ private statement ::= (
                        | content_by_lua_block_stmt
                        | rewrite_by_lua_block_stmt
                        | access_by_lua_block_stmt
+                       | ssl_certificate_by_lua_block_stmt
+                       | set_by_lua_block_stmt
                       ) [COMMENT]
 
 string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE)
@@ -52,3 +54,5 @@ lua_block_stmt ::= LBRACE lua_stmt RBRACE {pin=1}
 access_by_lua_block_stmt ::= ACCESS_BY_LUA_BLOCK lua_block_stmt {pin=1}
 content_by_lua_block_stmt ::= CONTENT_BY_LUA_BLOCK lua_block_stmt {pin=1}
 rewrite_by_lua_block_stmt ::= REWRITE_BY_LUA_BLOCK lua_block_stmt {pin=1}
+ssl_certificate_by_lua_block_stmt ::= SSL_CERTIFICATE_BY_LUA_BLOCK lua_block_stmt {pin=1}
+set_by_lua_block_stmt ::= SET_BY_LUA_BLOCK lua_block_stmt {pin=1}
