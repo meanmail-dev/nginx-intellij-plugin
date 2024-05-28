@@ -1,6 +1,7 @@
 ## 2024.1.1 (May, 28, 2024)
 
 * Update icon
+* Support `ssl_certificate_by_lua_block` and `set_by_lua_block` (needs any Lua Language plugin)
 
 ## 2024.1 ( May, 26, 2024)
 
