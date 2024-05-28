@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: main
+    schedule:
+      interval: "daily"
+      time: "00:00"
+    groups:
+      all-actions:
+        patterns: [ "*" ]
