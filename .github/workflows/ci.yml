@@ -28,6 +28,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          distribution: 'corretto'
           java-version: '17'
 
       - name: Test
@@ -44,6 +45,7 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
+          distribution: 'corretto'
           java-version: '17'
 
       - name: Build with Gradle
