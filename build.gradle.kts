@@ -123,7 +123,11 @@ tasks {
 
     publishPlugin {
         dependsOn("buildPlugin")
+        try {
         token.set(file("token.txt").readLines()[0])
+        } catch (e: Exception) {
+            println("No token.txt found")
+        }
         channels.set(listOf(config("publishChannel")))
     }
 
