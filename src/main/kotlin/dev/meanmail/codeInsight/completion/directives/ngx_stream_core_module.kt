@@ -39,6 +39,7 @@ val streamServer = Directive(
         streamLimitConnLogLevel,
         streamListen,
         streamOpenLogFileCache,
+        streamPass,
         streamPrereadBufferSize,
         streamPrereadTimeout,
         streamProxyBind,
