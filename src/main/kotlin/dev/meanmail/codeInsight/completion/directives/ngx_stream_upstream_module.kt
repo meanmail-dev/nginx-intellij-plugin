@@ -18,15 +18,15 @@ val streamUpstreamResolverTimeout = Directive(
 val streamUpstream = Directive(
     "upstream",
     children = setOf(
-        streamUpstreamServer,
-        streamUpstreamZone,
-        streamUpstreamState,
         streamUpstreamHash,
         streamUpstreamLeastConn,
         streamUpstreamLeastTime,
         streamUpstreamRandom,
         streamUpstreamResolver,
         streamUpstreamResolverTimeout,
+        streamUpstreamServer,
+        streamUpstreamState,
+        streamUpstreamZone,
     )
 )
 

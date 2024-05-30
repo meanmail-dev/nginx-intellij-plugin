@@ -25,11 +25,11 @@ val ngx_http_mp4_module = Module(
     "ngx_http_mp4_module",
     enabled = false,
     directives = setOf(
-        mp4,
         mp4BufferSize,
         mp4LimitRate,
         mp4LimitRateAfter,
         mp4MaxBufferSize,
         mp4StartKeyFrame,
+        mp4,
     )
 )

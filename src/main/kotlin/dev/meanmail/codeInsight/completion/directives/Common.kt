@@ -136,8 +136,8 @@ val all = Directive(
             ngx_http_ssi_module.directives +
             ngx_http_ssl_module.directives +
             ngx_http_stub_status_module.directives +
-            ngx_http_upstream_conf_module.directives +
             ngx_http_sub_module.directives +
+            ngx_http_upstream_conf_module.directives +
             ngx_http_upstream_hc_module.directives +
             ngx_http_upstream_module.directives +
             ngx_http_userid_module.directives +
