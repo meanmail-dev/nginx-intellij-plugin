@@ -1,3 +1,7 @@
+## 2024.4 (2024-XX-XX)
+
+* Full support for all Lua block directives in Nginx configuration parsing
+
 ## 2024.3 (May, 30, 2024)
 
 * Add `ngx_stream_pass_module` to directives
