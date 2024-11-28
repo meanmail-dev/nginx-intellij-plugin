@@ -13,7 +13,7 @@ public interface Types {
     IElementType INCLUDE_DIRECTIVE_STMT = new NginxElementType("INCLUDE_DIRECTIVE_STMT");
     IElementType INCLUDE_STMT = new NginxElementType("INCLUDE_STMT");
     IElementType INCLUDE_TARGET_STMT = new NginxElementType("INCLUDE_TARGET_STMT");
-    IElementType LUA_BLOCK_DIRECTIVE_STMT = new NginxElementType("LUA_BLOCK_DIRECTIVE_STMT");
+    IElementType LUA_BLOCK_DIRECTIVE_WITH_PARAMS_STMT = new NginxElementType("LUA_BLOCK_DIRECTIVE_WITH_PARAMS_STMT");
     IElementType LUA_BLOCK_STMT = new NginxElementType("LUA_BLOCK_STMT");
     IElementType LUA_STMT = new NginxElementType("LUA_STMT");
     IElementType NAME_STMT = new NginxElementType("NAME_STMT");
@@ -28,7 +28,7 @@ public interface Types {
     IElementType INCLUDE_TARGET = new NginxTokenType("INCLUDE_TARGET");
     IElementType LBRACE = new NginxTokenType("LBRACE");
     IElementType LUA = new NginxTokenType("LUA");
-    IElementType LUA_BLOCK = new NginxTokenType("LUA_BLOCK");
+    IElementType LUA_BLOCK_DIRECTIVE = new NginxTokenType("LUA_BLOCK_DIRECTIVE");
     IElementType QUOTE = new NginxTokenType("QUOTE");
     IElementType RBRACE = new NginxTokenType("RBRACE");
     IElementType SEMICOLON = new NginxTokenType("SEMICOLON");
@@ -48,8 +48,8 @@ public interface Types {
                 return new IncludeStmtImpl(node);
             } else if (type == INCLUDE_TARGET_STMT) {
                 return new IncludeTargetStmtImpl(node);
-            } else if (type == LUA_BLOCK_DIRECTIVE_STMT) {
-                return new LuaBlockDirectiveStmtImpl(node);
+            } else if (type == LUA_BLOCK_DIRECTIVE_WITH_PARAMS_STMT) {
+                return new LuaBlockDirectiveWithParamsStmtImpl(node);
             } else if (type == LUA_BLOCK_STMT) {
                 return new LuaBlockStmtImpl(node);
             } else if (type == LUA_STMT) {

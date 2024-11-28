@@ -3,24 +3,25 @@ package dev.meanmail.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.NlsSafe;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.util.IncorrectOperationException;
-import dev.meanmail.psi.LuaBlockDirectiveStmt;
+import com.intellij.psi.util.PsiTreeUtil;
+import dev.meanmail.psi.LuaBlockDirectiveWithParamsStmt;
 import dev.meanmail.psi.LuaBlockStmt;
+import dev.meanmail.psi.ValueStmt;
 import dev.meanmail.psi.Visitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class LuaBlockDirectiveStmtImpl extends ASTWrapperPsiElement implements LuaBlockDirectiveStmt {
+import java.util.List;
 
-    public LuaBlockDirectiveStmtImpl(@NotNull ASTNode node) {
+public class LuaBlockDirectiveWithParamsStmtImpl extends ASTWrapperPsiElement implements LuaBlockDirectiveWithParamsStmt {
+
+    public LuaBlockDirectiveWithParamsStmtImpl(@NotNull ASTNode node) {
         super(node);
     }
-    
+
     public void accept(@NotNull Visitor visitor) {
-        visitor.visitLuaBlockDirectiveStmt(this);
+        visitor.visitLuaBlockDirectiveWithParamsStmt(this);
     }
 
     @Override
@@ -36,18 +37,9 @@ public class LuaBlockDirectiveStmtImpl extends ASTWrapperPsiElement implements L
     }
 
     @Override
-    public String getName() {
-        return getNameIdentifier().getText();
+    @NotNull
+    public List<ValueStmt> getValueStmtList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ValueStmt.class);
     }
 
-    @Override
-    public @NotNull
-    PsiElement getNameIdentifier() {
-        return this.getFirstChild();
-    }
-
-    @Override
-    public PsiElement setName(@NlsSafe @NotNull String name) throws IncorrectOperationException {
-        return this;
-    }
 }

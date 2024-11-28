@@ -135,17 +135,29 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // LUA_BLOCK lua_block_stmt
-    public static boolean lua_block_directive_stmt(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "lua_block_directive_stmt")) return false;
-        if (!nextTokenIs(b, LUA_BLOCK)) return false;
+    // LUA_BLOCK_DIRECTIVE value_stmt* lua_block_stmt
+    public static boolean lua_block_directive_with_params_stmt(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "lua_block_directive_with_params_stmt")) return false;
+        if (!nextTokenIs(b, LUA_BLOCK_DIRECTIVE)) return false;
         boolean r, p;
-        Marker m = enter_section_(b, l, _NONE_, LUA_BLOCK_DIRECTIVE_STMT, null);
-        r = consumeToken(b, LUA_BLOCK);
+        Marker m = enter_section_(b, l, _NONE_, LUA_BLOCK_DIRECTIVE_WITH_PARAMS_STMT, null);
+        r = consumeToken(b, LUA_BLOCK_DIRECTIVE);
         p = r; // pin = 1
-        r = r && lua_block_stmt(b, l + 1);
+        r = r && report_error_(b, lua_block_directive_with_params_stmt_1(b, l + 1));
+        r = p && lua_block_stmt(b, l + 1) && r;
         exit_section_(b, l, m, r, p, null);
         return r || p;
+    }
+
+    // value_stmt*
+    private static boolean lua_block_directive_with_params_stmt_1(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "lua_block_directive_with_params_stmt_1")) return false;
+        while (true) {
+            int c = current_position_(b);
+            if (!value_stmt(b, l + 1)) break;
+            if (!empty_element_parsed_guard_(b, "lua_block_directive_with_params_stmt_1", c)) break;
+        }
+        return true;
     }
 
     /* ********************************************************** */
@@ -206,7 +218,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
     // (
     //                        include_directive_stmt
     //                        | directive_stmt
-    //                        | lua_block_directive_stmt
+    //                        | lua_block_directive_with_params_stmt
     //                       ) [COMMENT]
     static boolean statement(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "statement")) return false;
@@ -220,13 +232,13 @@ public class NginxParser implements PsiParser, LightPsiParser {
 
     // include_directive_stmt
     //                        | directive_stmt
-    //                        | lua_block_directive_stmt
+    //                        | lua_block_directive_with_params_stmt
     private static boolean statement_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "statement_0")) return false;
         boolean r;
         r = include_directive_stmt(b, l + 1);
         if (!r) r = directive_stmt(b, l + 1);
-        if (!r) r = lua_block_directive_stmt(b, l + 1);
+        if (!r) r = lua_block_directive_with_params_stmt(b, l + 1);
         return r;
     }
 

@@ -64,7 +64,7 @@ EOL=[\n|\r|\r\n]
 IDENTIFIER=({LETTER} | {UNDERSCORE}) ({LETTER} | {DIGIT} | {UNDERSCORE})*
 SEMICOLON=";"
 SHARP="#"
-VALUE=[^\s;'\"]
+VALUE=[^\s;'\"\{]
 ESCAPE=\\.
 STRING=([^'\\]+|{ESCAPE})+
 DQSTRING=([^\"\\]+|{ESCAPE})+
@@ -86,7 +86,7 @@ COMMENT={SHARP}.*{EOL}
 
 <YYINITIAL> {
     include                  { yypush(INCLUDE_STATE); return INCLUDE; }
-    [a-z_]+_by_lua_block    { yypush(LUA_BLOCK_STATE); return LUA_BLOCK; }
+    [a-z_]+_by_lua_block    { yypush(LUA_BLOCK_STATE); return LUA_BLOCK_DIRECTIVE; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {SEMICOLON}              { return SEMICOLON; }
     {COMMENT}                { return COMMENT; }
@@ -98,9 +98,11 @@ COMMENT={SHARP}.*{EOL}
 }
 
 <LUA_BLOCK_STATE> {
-    {LBRACE}                  { yypush(LUA_STATE); return LBRACE; }
     {WHITE_SPACE}             { return WHITE_SPACE; }
-    [^]                       { yypop(); return BAD_CHARACTER; }
+    {QUOTE}                   { yypush(STRING_STATE); return QUOTE; }
+    {DQUOTE}                  { yypush(DQSTRING_STATE); return DQUOTE; }
+    ({VALUE}{IDENTIFIER}?)+   { return VALUE; }
+    {LBRACE}                  { yypush(LUA_STATE); return LBRACE; }
 }
 
 <LUA_STATE> {

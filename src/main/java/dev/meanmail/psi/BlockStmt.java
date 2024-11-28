@@ -15,6 +15,6 @@ public interface BlockStmt extends PsiElement {
     List<IncludeDirectiveStmt> getIncludeDirectiveStmtList();
 
     @NotNull
-    List<LuaBlockDirectiveStmt> getLuaBlockDirectiveStmtList();
+    List<LuaBlockDirectiveWithParamsStmt> getLuaBlockDirectiveWithParamsStmtList();
 
 }

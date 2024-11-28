@@ -40,8 +40,8 @@ public class BlockStmtImpl extends ASTWrapperPsiElement implements BlockStmt {
 
     @Override
     @NotNull
-    public List<LuaBlockDirectiveStmt> getLuaBlockDirectiveStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, LuaBlockDirectiveStmt.class);
+    public List<LuaBlockDirectiveWithParamsStmt> getLuaBlockDirectiveWithParamsStmtList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, LuaBlockDirectiveWithParamsStmt.class);
     }
 
 }

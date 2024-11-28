@@ -43,6 +43,10 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    fun testSetByLuaBlock() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")

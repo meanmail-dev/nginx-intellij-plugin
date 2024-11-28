@@ -27,7 +27,7 @@ nginxFile ::= statement*
 private statement ::= (
                        include_directive_stmt
                        | directive_stmt
-                       | lua_block_directive_stmt
+                       | lua_block_directive_with_params_stmt
                       ) [COMMENT]
 
 string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE)
@@ -45,4 +45,4 @@ block_stmt ::= LBRACE statement* RBRACE {pin=1}
 directive_stmt ::= name_stmt value_stmt* (SEMICOLON | block_stmt) {pin=1}
 lua_stmt ::= LUA
 lua_block_stmt ::= LBRACE lua_stmt RBRACE {pin=1}
-lua_block_directive_stmt ::= LUA_BLOCK lua_block_stmt {pin=1}
+lua_block_directive_with_params_stmt ::= LUA_BLOCK_DIRECTIVE value_stmt* lua_block_stmt {pin=1}

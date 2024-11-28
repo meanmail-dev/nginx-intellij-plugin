@@ -22,7 +22,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
             Types.COMMENT -> COMMENT_KEYS
             Types.INCLUDE -> INCLUDE_KEYS
             Types.IDENTIFIER -> IDENTIFIER_KEYS
-            Types.LUA_BLOCK -> IDENTIFIER_KEYS
+            Types.LUA_BLOCK_DIRECTIVE -> IDENTIFIER_KEYS
             Types.SEMICOLON -> SEMICOLON_KEYS
             else -> EMPTY_KEYS
         }

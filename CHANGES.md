@@ -15,6 +15,8 @@
   - Corrected `scgiCacheLockAge` to `scgi_cache_lock_age`
 * Enhanced IPv6 address handling in various directives
 * Verified compatibility with Nginx 1.27.3
+* Fixed lexer and syntax highlighting for Lua block directives with parameters
+* Improved parsing of `set_by_lua_block` and similar Lua directives
 
 ## 2024.3 (May, 30, 2024)
 

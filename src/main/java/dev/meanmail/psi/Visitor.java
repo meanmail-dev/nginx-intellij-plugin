@@ -28,8 +28,8 @@ public class Visitor extends PsiElementVisitor {
         visitReferenceElement(o);
     }
 
-    public void visitLuaBlockDirectiveStmt(@NotNull LuaBlockDirectiveStmt o) {
-        visitNamedElement(o);
+    public void visitLuaBlockDirectiveWithParamsStmt(@NotNull LuaBlockDirectiveWithParamsStmt o) {
+        visitPsiElement(o);
     }
 
     public void visitLuaBlockStmt(@NotNull LuaBlockStmt o) {
