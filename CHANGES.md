@@ -1,6 +1,10 @@
 ## 2024.4 (2024-XX-XX)
 
 * Full support for all Lua block directives in Nginx configuration parsing
+* Added support for new Nginx 1.27.3 configuration syntax:
+  - `resolve` parameter in `upstream` server directive
+  - `resolver` and `resolver_timeout` directives in `upstream` block
+  - New `proxy_pass_trailers` directive
 
 ## 2024.3 (May, 30, 2024)
 

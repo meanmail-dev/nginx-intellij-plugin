@@ -39,6 +39,10 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    fun testUpstream_1_27_3() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")
