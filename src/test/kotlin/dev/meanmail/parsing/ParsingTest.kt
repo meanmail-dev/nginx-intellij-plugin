@@ -19,6 +19,26 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    fun testUpstream() {
+        doTest(true)
+    }
+
+    fun testLocation() {
+        doTest(true)
+    }
+
+    fun testSSL() {
+        doTest(true)
+    }
+
+    fun testLogging() {
+        doTest(true)
+    }
+
+    fun testRateLimiting() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")
