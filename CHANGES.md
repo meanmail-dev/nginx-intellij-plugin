@@ -1,4 +1,4 @@
-## 2024.4 (2024-XX-XX)
+## 2024.4 (2024-11-28)
 
 * Full support for all Lua block directives in Nginx configuration parsing
 * Added support for new Nginx 1.27.3 configuration syntax:
