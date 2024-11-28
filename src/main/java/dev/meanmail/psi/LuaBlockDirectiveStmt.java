@@ -3,7 +3,7 @@ package dev.meanmail.psi;
 
 import org.jetbrains.annotations.Nullable;
 
-public interface SetByLuaBlockStmt extends NamedElement {
+public interface LuaBlockDirectiveStmt extends NamedElement {
 
     @Nullable
     LuaBlockStmt getLuaBlockStmt();

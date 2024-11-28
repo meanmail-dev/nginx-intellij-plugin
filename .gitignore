@@ -139,6 +139,15 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Ignore patch and original files
+*.orig
+*.rej
+*.patch
+
+# Ignore IntelliJ IDEA service files
+.idea/modules.xml
+.idea/git_toolbox_blame.xml
+
 /idea-flex.skeleton
 !/gradle/wrapper/gradle-wrapper.jar
 build

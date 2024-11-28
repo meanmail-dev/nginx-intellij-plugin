@@ -1,0 +1,9 @@
+@@ -542,7 +544,7 @@
+     int zzCurrentPosL;
+     int zzMarkedPosL;
+     int zzEndReadL = zzEndRead;
+-    CharSequence zzBufferL = zzBuffer;
++    char[] zzBufferL = zzBuffer;
+ 
+     int [] zzTransL = ZZ_TRANS;
+     int [] zzRowMapL = ZZ_ROWMAP;

@@ -1,0 +1,58 @@
+diff --git a/src/main/java/dev/meanmail/NginxLexer.java b/src/main/java/dev/meanmail/NginxLexer.java
+index 1234567..7654321 100644
+--- a/src/main/java/dev/meanmail/NginxLexer.java
++++ b/src/main/java/dev/meanmail/NginxLexer.java
+@@ -287,7 +287,7 @@ public class NginxLexer implements com.intellij.lexer.FlexLexer {
+ 
+   /** this buffer contains the current text to be matched and is
+       the source of the yytext() string */
+-  private CharSequence zzBuffer = "";
++  private char[] zzBuffer = new char[0];
+ 
+   /** the textposition at the last accepting state */
+   private int zzMarkedPos;
+@@ -405,25 +405,27 @@ public class NginxLexer implements com.intellij.lexer.FlexLexer {
+   }
+ 
+   public void reset(CharSequence buffer, int start, int end, int initialState) {
+-    zzBuffer = buffer;
+-    zzCurrentPos = zzMarkedPos = zzStartRead = start;
+-    zzAtEOF  = false;
+-    zzAtBOL = true;
++    zzBuffer = buffer.toString().toCharArray();
++    zzCurrentPos = start;
++    zzMarkedPos = start;
++    zzStartRead = start;
+     zzEndRead = end;
+     yybegin(initialState);
++    zzAtEOF = false;
++    zzAtBOL = true;
+   }
+ 
+   /**
+    * Returns the text matched by the current regular expression.
+    */
+   public final CharSequence yytext() {
+-    return zzBuffer.subSequence(zzStartRead, zzMarkedPos);
++    return new String(zzBuffer, zzStartRead, zzMarkedPos - zzStartRead);
+   }
+ 
+   /**
+    * Returns the character at position {@code pos} from the
+    * matched text.
+    */
+   public final char yycharat(int pos) {
+-    return zzBuffer.charAt(zzStartRead+pos);
++    return zzBuffer[zzStartRead + pos];
+   }
+ 
+   /**
+@@ -542,7 +544,7 @@ public class NginxLexer implements com.intellij.lexer.FlexLexer {
+     int zzCurrentPosL;
+     int zzMarkedPosL;
+     int zzEndReadL = zzEndRead;
+-    CharSequence zzBufferL = zzBuffer;
++    char[] zzBufferL = zzBuffer;
+ 
+     int [] zzTransL = ZZ_TRANS;
+     int [] zzRowMapL = ZZ_ROWMAP;

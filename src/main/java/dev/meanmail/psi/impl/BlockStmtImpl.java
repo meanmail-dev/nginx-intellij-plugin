@@ -28,18 +28,6 @@ public class BlockStmtImpl extends ASTWrapperPsiElement implements BlockStmt {
 
     @Override
     @NotNull
-    public List<AccessByLuaBlockStmt> getAccessByLuaBlockStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, AccessByLuaBlockStmt.class);
-    }
-
-    @Override
-    @NotNull
-    public List<ContentByLuaBlockStmt> getContentByLuaBlockStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, ContentByLuaBlockStmt.class);
-    }
-
-    @Override
-    @NotNull
     public List<DirectiveStmt> getDirectiveStmtList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, DirectiveStmt.class);
     }
@@ -52,20 +40,8 @@ public class BlockStmtImpl extends ASTWrapperPsiElement implements BlockStmt {
 
     @Override
     @NotNull
-    public List<RewriteByLuaBlockStmt> getRewriteByLuaBlockStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, RewriteByLuaBlockStmt.class);
-    }
-
-    @Override
-    @NotNull
-    public List<SetByLuaBlockStmt> getSetByLuaBlockStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, SetByLuaBlockStmt.class);
-    }
-
-    @Override
-    @NotNull
-    public List<SslCertificateByLuaBlockStmt> getSslCertificateByLuaBlockStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, SslCertificateByLuaBlockStmt.class);
+    public List<LuaBlockDirectiveStmt> getLuaBlockDirectiveStmtList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, LuaBlockDirectiveStmt.class);
     }
 
 }

@@ -7,20 +7,20 @@ import com.intellij.openapi.util.NlsSafe;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.util.IncorrectOperationException;
+import dev.meanmail.psi.LuaBlockDirectiveStmt;
 import dev.meanmail.psi.LuaBlockStmt;
-import dev.meanmail.psi.SetByLuaBlockStmt;
 import dev.meanmail.psi.Visitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SetByLuaBlockStmtImpl extends ASTWrapperPsiElement implements SetByLuaBlockStmt {
+public class LuaBlockDirectiveStmtImpl extends ASTWrapperPsiElement implements LuaBlockDirectiveStmt {
 
-    public SetByLuaBlockStmtImpl(@NotNull ASTNode node) {
+    public LuaBlockDirectiveStmtImpl(@NotNull ASTNode node) {
         super(node);
     }
-
+    
     public void accept(@NotNull Visitor visitor) {
-        visitor.visitSetByLuaBlockStmt(this);
+        visitor.visitLuaBlockDirectiveStmt(this);
     }
 
     @Override

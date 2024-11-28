@@ -48,9 +48,7 @@ class NginxStructureViewElement(private val element: NavigatablePsiElement) : St
                         block_stmt,
                         DirectiveStmt::class.java,
                         IncludeDirectiveStmt::class.java,
-                        AccessByLuaBlockStmt::class.java,
-                        ContentByLuaBlockStmt::class.java,
-                        RewriteByLuaBlockStmt::class.java
+                        LuaBlockDirectiveStmt::class.java
                     ).map { NginxStructureViewElement(it as NavigatablePsiElement) }
                 }
                 .toTypedArray()
