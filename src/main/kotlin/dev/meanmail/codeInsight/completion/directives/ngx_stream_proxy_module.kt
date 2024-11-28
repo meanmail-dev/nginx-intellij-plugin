@@ -47,7 +47,7 @@ val streamProxySslName = Directive("proxy_ssl_name")
 val streamProxySslPasswordFile = Directive("proxy_ssl_password_file")
 val streamProxySslProtocols = Directive(
     "proxy_ssl_protocols",
-    defaultValue = "TLSv1 TLSv1.1 TLSv1.2"
+    defaultValue = "TLSv1.2 TLSv1.3"
 )
 val streamProxySslServerName = ToggleDirective("proxy_ssl_server_name", false)
 val streamProxySslSessionReuse = ToggleDirective("proxy_ssl_session_reuse", true)

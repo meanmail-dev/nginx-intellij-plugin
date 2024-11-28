@@ -2,7 +2,20 @@ package dev.meanmail.codeInsight.completion.directives
 
 // https://nginx.org/en/docs/http/ngx_http_upstream_module.html
 
-val upstreamServer = Directive("server")
+val upstreamServerResolve = Directive("resolve")
+val upstreamServerResolverTimeout = Directive(
+    "resolver_timeout", 
+    defaultValue = "30s"
+)
+
+val upstreamServer = Directive(
+    "server", 
+    children = setOf(
+        upstreamServerResolve,
+        upstreamServerResolverTimeout
+    )
+)
+
 val zone = Directive("zone")
 val state = Directive("state")
 val hash = Directive("hash")

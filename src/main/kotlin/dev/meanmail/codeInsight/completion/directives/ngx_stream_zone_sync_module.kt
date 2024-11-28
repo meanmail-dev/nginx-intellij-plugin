@@ -28,7 +28,7 @@ val streamZoneSyncSslName = Directive("zone_sync_ssl_name")
 val streamZoneSyncSslPasswordFile = Directive("zone_sync_ssl_password_file")
 val streamZoneSyncSslProtocols = Directive(
     "zone_sync_ssl_protocols",
-    defaultValue = "TLSv1 TLSv1.1 TLSv1.2"
+    defaultValue = "TLSv1.2 TLSv1.3"
 )
 val streamZoneSyncSslServerName = ToggleDirective("zone_sync_ssl_server_name", false)
 val streamZoneSyncSslTrustedCertificate = Directive("zone_sync_ssl_trusted_certificate")

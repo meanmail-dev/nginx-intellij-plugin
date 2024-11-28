@@ -5,6 +5,16 @@
   - `resolve` parameter in `upstream` server directive
   - `resolver` and `resolver_timeout` directives in `upstream` block
   - New `proxy_pass_trailers` directive
+* Security updates: Disabled TLSv1 and TLSv1.1 protocols by default across modules
+  - Updated SSL/TLS protocols to TLSv1.2 and TLSv1.3 in:
+    * HTTP JS module
+    * Stream Proxy module
+    * Stream Zone Sync module
+    * SSL modules for HTTP, Stream, and Mail
+* Fixed directive naming in SCGI module:
+  - Corrected `scgiCacheLockAge` to `scgi_cache_lock_age`
+* Enhanced IPv6 address handling in various directives
+* Verified compatibility with Nginx 1.27.3
 
 ## 2024.3 (May, 30, 2024)
 

@@ -25,7 +25,7 @@ val streamSslPasswordFile = Directive("ssl_password_file")
 val streamSslPreferServerCiphers = ToggleDirective("ssl_prefer_server_ciphers", false)
 val streamSslProtocols = Directive(
     "ssl_protocols",
-    defaultValue = "TLSv1 TLSv1.1 TLSv1.2"
+    defaultValue = "TLSv1.2 TLSv1.3"
 )
 val streamSslSessionCache = Directive(
     "ssl_session_cache",

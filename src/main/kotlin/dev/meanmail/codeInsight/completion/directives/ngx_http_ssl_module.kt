@@ -35,7 +35,7 @@ val sslPasswordFile = Directive("ssl_password_file")
 val sslPreferServerCiphers = ToggleDirective("ssl_prefer_server_ciphers", false)
 val sslProtocols = Directive(
     "ssl_protocols",
-    defaultValue = "TLSv1 TLSv1.1 TLSv1.2"
+    defaultValue = "TLSv1.2 TLSv1.3"
 )
 val sslRejectHandshake = ToggleDirective("ssl_reject_handshake", false)
 val sslSessionCache = Directive(

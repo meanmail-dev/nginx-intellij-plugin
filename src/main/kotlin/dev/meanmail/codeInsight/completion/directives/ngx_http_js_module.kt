@@ -10,7 +10,7 @@ val jsFetchCiphers = Directive(
 )
 val jsFetchProtocols = Directive(
     "js_fetch_protocols",
-    defaultValue = "TLSv1 TLSv1.1 TLSv1.2"
+    defaultValue = "TLSv1.2 TLSv1.3"
 )
 val jsFetchTrustedCertificate = Directive("js_fetch_trusted_certificate")
 val jsFetchVerifyDepth = Directive(

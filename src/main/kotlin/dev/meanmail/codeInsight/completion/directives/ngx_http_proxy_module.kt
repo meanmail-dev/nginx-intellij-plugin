@@ -105,6 +105,7 @@ val proxyPass = Directive("proxy_pass")
 val proxyPassHeader = Directive("proxy_pass_header")
 val proxyPassRequestBody = ToggleDirective("proxy_pass_request_body", true)
 val proxyPassRequestHeaders = ToggleDirective("proxy_pass_request_headers", true)
+val proxyPassTrailers = ToggleDirective("proxy_pass_trailers", false)
 val proxyReadTimeout = Directive(
     "proxy_read_timeout",
     defaultValue = "60s"
@@ -209,6 +210,7 @@ val ngx_http_proxy_module = Module(
         proxyPassHeader,
         proxyPassRequestBody,
         proxyPassRequestHeaders,
+        proxyPassTrailers,
         proxyReadTimeout,
         proxyRedirect,
         proxyRequestBuffering,

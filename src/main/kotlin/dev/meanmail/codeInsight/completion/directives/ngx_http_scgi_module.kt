@@ -13,7 +13,7 @@ val scgiCacheBypass = Directive("scgi_cache_bypass")
 val scgiCacheKey = Directive("scgi_cache_key")
 val scgiCacheLock = ToggleDirective("scgi_cache_lock", false)
 val scgiCacheLockAge = Directive(
-    "scgiCacheLockAge",
+    "scgi_cache_lock_age",
     defaultValue = "5s"
 )
 val scgiCacheLockTimeout = Directive(

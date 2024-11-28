@@ -3,7 +3,7 @@ package dev.meanmail.codeInsight.completion.directives
 // https://nginx.org/en/docs/mail/ngx_mail_smtp_module.html
 
 val smtpAuth = Directive(
-    "imap_auth",
+    "smtp_auth",
     defaultValue = "plain login"
 )
 val smtpCapabilities = Directive("smtp_capabilities")

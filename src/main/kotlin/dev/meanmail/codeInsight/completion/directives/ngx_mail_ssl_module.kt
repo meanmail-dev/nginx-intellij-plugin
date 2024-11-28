@@ -21,7 +21,7 @@ val mailSslPasswordFile = Directive("ssl_password_file")
 val mailSslPreferServerCiphers = ToggleDirective("ssl_prefer_server_ciphers", false)
 val mailSslProtocols = Directive(
     "ssl_protocols",
-    defaultValue = "TLSv1 TLSv1.1 TLSv1.2"
+    defaultValue = "TLSv1.2 TLSv1.3"
 )
 val mailSslSessionCache = Directive(
     "ssl_session_cache",
