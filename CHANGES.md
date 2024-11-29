@@ -6,6 +6,10 @@
   - Added special highlighting for Lua code blocks
 * Improved file navigation:
   - Fixed include directive paths resolution relative to nginx root directory
+* Bug fixes:
+  - Fixed IDE error when trying to fold empty blocks
+* Improved handling of folding for blocks with unbalanced or empty braces in `NginxFoldingBuilder`
+* Prevented potential `IllegalArgumentException` when creating folding regions for empty or malformed blocks
 
 ## 2024.4 (November, 28, 2024)
 

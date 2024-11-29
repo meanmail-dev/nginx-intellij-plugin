@@ -25,15 +25,17 @@ class NginxFoldingBuilder : FoldingBuilderEx(), DumbAware {
             LuaBlockStmt::class.java
         )
         for (block in blocks) {
-            descriptors.add(
-                FoldingDescriptor(
-                    block.node,
-                    TextRange(
-                        block.textRange.startOffset + 1,
-                        block.textRange.endOffset - 1
+            // Only create folding region if block has content (more than just braces)
+            val start = block.textRange.startOffset + 1
+            val end = block.textRange.endOffset - 1
+            if (end > start) {
+                descriptors.add(
+                    FoldingDescriptor(
+                        block.node,
+                        TextRange(start, end)
                     )
                 )
-            )
+            }
         }
         return descriptors.toTypedArray()
     }
