@@ -4,6 +4,8 @@
   - Added proper highlighting for strings in quotes
   - Added highlighting for braces, values, and include targets
   - Added special highlighting for Lua code blocks
+* Improved file navigation:
+  - Fixed include directive paths resolution relative to nginx root directory
 
 ## 2024.4 (November, 28, 2024)
 
