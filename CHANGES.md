@@ -1,4 +1,11 @@
-## 2024.4 (2024-11-28)
+## 2024.5 (November, 29, 2024)
+
+* Enhanced syntax highlighting:
+  - Added proper highlighting for strings in quotes
+  - Added highlighting for braces, values, and include targets
+  - Added special highlighting for Lua code blocks
+
+## 2024.4 (November, 28, 2024)
 
 * Full support for all Lua block directives in Nginx configuration parsing
 * Added support for new Nginx 1.27.3 configuration syntax:
