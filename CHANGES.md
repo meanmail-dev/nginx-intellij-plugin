@@ -1,31 +1,33 @@
-## 2024.5 (November, 29, 2024)
+## 2024.5 (December, 2, 2024)
 
+* Add directive inspection
 * Enhanced syntax highlighting:
-  - Added proper highlighting for strings in quotes
-  - Added highlighting for braces, values, and include targets
-  - Added special highlighting for Lua code blocks
+    - Added proper highlighting for strings in quotes
+    - Added highlighting for braces, values, and include targets
+    - Added special highlighting for Lua code blocks
 * Improved file navigation:
-  - Fixed include directive paths resolution relative to nginx root directory
-* Bug fixes:
-  - Fixed IDE error when trying to fold empty blocks
+    - Fixed include directive paths resolution relative to nginx root directory
+* Added new inspection for validating Nginx directive values
 * Improved handling of folding for blocks with unbalanced or empty braces in `NginxFoldingBuilder`
+* Bug fixes:
+    - Fixed IDE error when trying to fold empty blocks
 * Prevented potential `IllegalArgumentException` when creating folding regions for empty or malformed blocks
 
 ## 2024.4 (November, 28, 2024)
 
 * Full support for all Lua block directives in Nginx configuration parsing
 * Added support for new Nginx 1.27.3 configuration syntax:
-  - `resolve` parameter in `upstream` server directive
-  - `resolver` and `resolver_timeout` directives in `upstream` block
-  - New `proxy_pass_trailers` directive
+    - `resolve` parameter in `upstream` server directive
+    - `resolver` and `resolver_timeout` directives in `upstream` block
+    - New `proxy_pass_trailers` directive
 * Security updates: Disabled TLSv1 and TLSv1.1 protocols by default across modules
-  - Updated SSL/TLS protocols to TLSv1.2 and TLSv1.3 in:
-    * HTTP JS module
-    * Stream Proxy module
-    * Stream Zone Sync module
-    * SSL modules for HTTP, Stream, and Mail
+    - Updated SSL/TLS protocols to TLSv1.2 and TLSv1.3 in:
+        * HTTP JS module
+        * Stream Proxy module
+        * Stream Zone Sync module
+        * SSL modules for HTTP, Stream, and Mail
 * Fixed directive naming in SCGI module:
-  - Corrected `scgiCacheLockAge` to `scgi_cache_lock_age`
+    - Corrected `scgiCacheLockAge` to `scgi_cache_lock_age`
 * Enhanced IPv6 address handling in various directives
 * Verified compatibility with Nginx 1.27.3
 * Fixed lexer and syntax highlighting for Lua block directives with parameters

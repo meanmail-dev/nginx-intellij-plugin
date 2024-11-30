@@ -7,7 +7,10 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.util.PsiTreeUtil
-import dev.meanmail.psi.*
+import dev.meanmail.psi.BlockStmt
+import dev.meanmail.psi.DirectiveStmt
+import dev.meanmail.psi.IncludeDirectiveStmt
+import dev.meanmail.psi.LuaBlockDirectiveStmt
 
 class NginxStructureViewElement(private val element: NavigatablePsiElement) : StructureViewTreeElement,
     SortableTreeElement {

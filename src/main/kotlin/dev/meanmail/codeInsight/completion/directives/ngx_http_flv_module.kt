@@ -2,12 +2,16 @@ package dev.meanmail.codeInsight.completion.directives
 
 // https://nginx.org/en/docs/http/ngx_http_flv_module.html
 
-val flv = Directive("flv")
-
-val ngx_http_flv_module = Module(
+val ngx_http_flv_module = NginxModule(
     "ngx_http_flv_module",
-    enabled = false,
-    directives = setOf(
-        flv,
-    )
+    description = "Enables pseudo-streaming support for Flash Video (FLV) files",
+    enabled = true
+)
+
+val flv = Directive(
+    name = "flv",
+    description = "Enables pseudo-streaming support for Flash Video (FLV) files, allowing clients to start playing a video from a specified time position",
+    parameters = listOf(),
+    context = listOf(location),
+    module = ngx_http_flv_module
 )

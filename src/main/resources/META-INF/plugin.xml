@@ -20,6 +20,14 @@
         <multiHostInjector implementation="dev.meanmail.lang.injection.NginxLuaInjector"/>
         <completion.contributor language="Nginx Configuration"
                                 implementationClass="dev.meanmail.codeInsight.completion.NginxCompletionContributor"/>
+        <localInspection
+                language="Nginx Configuration"
+                implementationClass="dev.meanmail.codeInsight.inspections.NginxDirectiveInspection"
+                displayName="Invalid Nginx Directive Value"
+                groupName="Nginx"
+                enabledByDefault="true"
+                level="ERROR"
+                shortName="NginxDirectiveValueInspection"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">

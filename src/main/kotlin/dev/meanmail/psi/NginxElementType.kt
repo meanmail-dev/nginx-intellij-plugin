@@ -6,4 +6,4 @@ import org.jetbrains.annotations.NonNls
 
 
 class NginxElementType(@NonNls debugName: String) :
-        IElementType(debugName, NginxLanguage)
+    IElementType(debugName, NginxLanguage)

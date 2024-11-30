@@ -6,15 +6,15 @@ import java.io.File
 
 fun resolveFile(filepath: String, base: VirtualFile): VirtualFile? {
     val target = File(filepath)
-    
+
     // First try absolute path
     if (target.isAbsolute) {
         return LocalFileSystem.getInstance().findFileByIoFile(target)
     }
-    
+
     // Try relative to current file
     base.findFileByRelativePath(filepath)?.let { return it }
-    
+
     // Try relative to nginx root directory (parent directories until we find nginx.conf)
     var currentDir = base
     while (currentDir.parent != null) {
@@ -25,7 +25,7 @@ fun resolveFile(filepath: String, base: VirtualFile): VirtualFile? {
             break
         }
     }
-    
+
     return null
 }
 

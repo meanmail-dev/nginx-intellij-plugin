@@ -12,6 +12,7 @@ import dev.meanmail.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DirectiveStmtImpl extends ASTWrapperPsiElement implements DirectiveStmt {
@@ -61,5 +62,21 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
     @Override
     public PsiElement setName(@NlsSafe @NotNull String name) throws IncorrectOperationException {
         return this;
+    }
+
+    @Override
+    public List<String> getPath() {
+        List<String> path = new ArrayList<>();
+        DirectiveStmt parent = this;
+        while (parent != null) {
+            path.add(parent.getName());
+            parent = PsiTreeUtil.getParentOfType(parent, DirectiveStmt.class);
+        }
+
+        List<String> reversedPath = new ArrayList<>();
+        for (int i = path.size() - 1; i >= 0; i--) {
+            reversedPath.add(path.get(i));
+        }
+        return reversedPath;
     }
 }

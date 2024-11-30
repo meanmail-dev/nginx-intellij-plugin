@@ -2,14 +2,38 @@ package dev.meanmail.codeInsight.completion.directives
 
 // https://nginx.org/en/docs/http/ngx_http_access_module.html
 
-val allow = Directive("allow")
-val deny = Directive("deny")
+val ngx_http_access_module = NginxModule(
+    name = "ngx_http_access_module",
+    description = "Permits or denies access based on IP addresses or networks",
+    enabled = true
+)
 
-val ngx_http_access_module = Module(
-    "ngx_http_access_module",
-    enabled = true,
-    directives = setOf(
-        allow,
-        deny,
-    )
+val allow = Directive(
+    "allow",
+    description = "Allows access for specified IP addresses or networks",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "address",
+            description = "IP address, network, or special value (all, unix:)",
+            valueType = ValueType.STRING,
+            required = true
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_access_module
+)
+
+val deny = Directive(
+    "deny",
+    description = "Denies access for specified IP addresses or networks",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "address",
+            description = "IP address, network, or special value (all, unix:)",
+            valueType = ValueType.STRING,
+            required = true
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_access_module
 )

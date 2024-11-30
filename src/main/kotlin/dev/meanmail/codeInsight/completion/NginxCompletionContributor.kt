@@ -6,11 +6,11 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.findParentOfType
 import com.intellij.util.ProcessingContext
 import dev.meanmail.codeInsight.completion.directives.Directive
-import dev.meanmail.codeInsight.completion.directives.any
 import dev.meanmail.codeInsight.completion.directives.all
+import dev.meanmail.codeInsight.completion.directives.determineFileContext
+import dev.meanmail.codeInsight.completion.directives.findDirectives
 import dev.meanmail.psi.DirectiveStmt
 import dev.meanmail.psi.NameStmt
-
 
 class NginxCompletionContributor : CompletionContributor() {
     init {
@@ -24,31 +24,43 @@ class NginxCompletionContributor : CompletionContributor() {
 }
 
 class DirectiveNameCompletionProvider : CompletionProvider<CompletionParameters>() {
+    private val directiveCache = mutableMapOf<String?, List<Directive>>()
+
     override fun addCompletions(
         parameters: CompletionParameters,
         context: ProcessingContext,
         result: CompletionResultSet
     ) {
-        val parents = mutableListOf<String?>()
-        var parent = parameters.originalPosition
+        val contextStmt = parameters.originalPosition
             ?.parent?.findParentOfType<DirectiveStmt>()
-        while (parent != null) {
-            parents.add(parent.name)
-            parent = parent.findParentOfType()
-        }
-        val directives: Set<Directive>
-        if (parents.isEmpty()) {
-            directives = all.children
-        } else {
-            var directive: Directive? = all
-            for (parent_name in parents.reversed()) {
-                directive = directive?.findChildByName(parent_name) ?: break
+
+        val directives = directiveCache.getOrPut(contextStmt?.name) {
+            val file = parameters.originalPosition?.containingFile
+            if (file == null) {
+                all
+            } else {
+                val fileContext: Set<Directive>? = determineFileContext(file)
+                if (fileContext == null) {
+                    all
+                } else {
+                    val path = contextStmt?.path
+                    val completion = mutableSetOf<Directive>()
+
+                    for (directive in fileContext) {
+                        completion.addAll(findDirectives(directive.name, path))
+                    }
+                    completion.toList()
+                }
             }
-            directives = (directive?.children ?: setOf()) + any.children
         }
 
-        for (name in directives.map { it.name }) {
-            result.addElement(LookupElementBuilder.create(name))
+        for (directive in directives) {
+            val lookupElement = LookupElementBuilder
+                .create(directive.name)
+                .withTypeText(directive.description)
+                .withPresentableText(directive.name)
+
+            result.addElement(lookupElement)
         }
     }
 }

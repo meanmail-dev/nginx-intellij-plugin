@@ -17,4 +17,6 @@ public interface DirectiveStmt extends NamedElement {
     @NotNull
     List<ValueStmt> getValueStmtList();
 
+    @NotNull
+    List<String> getPath();
 }

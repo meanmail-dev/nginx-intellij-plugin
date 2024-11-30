@@ -6,7 +6,7 @@ import dev.meanmail.NginxLanguage
 import org.jetbrains.annotations.NonNls
 
 class NginxTokenType(@NonNls debugName: String) :
-        IElementType(debugName, NginxLanguage) {
+    IElementType(debugName, NginxLanguage) {
 
     override fun toString(): String {
         return "NginxTokenType.${super.toString()}"

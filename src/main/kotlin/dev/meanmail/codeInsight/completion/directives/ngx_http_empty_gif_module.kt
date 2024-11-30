@@ -2,12 +2,23 @@ package dev.meanmail.codeInsight.completion.directives
 
 // https://nginx.org/en/docs/http/ngx_http_empty_gif_module.html
 
-val emptyGif = Directive("empty_gif")
-
-val ngx_http_empty_gif_module = Module(
+val ngx_http_empty_gif_module = NginxModule(
     "ngx_http_empty_gif_module",
-    enabled = true,
-    directives = setOf(
-        emptyGif,
-    )
+    description = "Provides a location that always returns a 1x1 transparent GIF image",
+    enabled = true
+)
+
+val emptyGif = Directive(
+    name = "empty_gif",
+    description = "Provides a location that always returns a 1x1 transparent GIF image",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "no_parameters",
+            description = "This directive does not accept any parameters",
+            valueType = ValueType.STRING,
+            required = false
+        )
+    ),
+    context = listOf(location),
+    module = ngx_http_empty_gif_module
 )
