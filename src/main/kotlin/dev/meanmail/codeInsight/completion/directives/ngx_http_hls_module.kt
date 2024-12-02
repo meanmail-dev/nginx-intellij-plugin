@@ -11,7 +11,7 @@ val ngx_http_hls_module = NginxModule(
 val hls = Directive(
     name = "hls",
     description = "Turns on HLS streaming in the surrounding location",
-    parameters = listOf(),
+    parameters = emptyList(),
     context = listOf(location),
     module = ngx_http_hls_module
 )

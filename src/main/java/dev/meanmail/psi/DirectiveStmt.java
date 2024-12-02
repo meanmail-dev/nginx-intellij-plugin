@@ -9,13 +9,22 @@ import java.util.List;
 public interface DirectiveStmt extends NamedElement {
 
     @Nullable
-    BlockStmt getBlockStmt();
+    GeoDirectiveStmt getGeoDirectiveStmt();
 
-    @NotNull
-    NameStmt getNameStmt();
+    @Nullable
+    IfDirectiveStmt getIfDirectiveStmt();
 
-    @NotNull
-    List<ValueStmt> getValueStmtList();
+    @Nullable
+    LocationDirectiveStmt getLocationDirectiveStmt();
+
+    @Nullable
+    LuaDirectiveStmt getLuaDirectiveStmt();
+
+    @Nullable
+    MapDirectiveStmt getMapDirectiveStmt();
+
+    @Nullable
+    RegularDirectiveStmt getRegularDirectiveStmt();
 
     @NotNull
     List<String> getPath();

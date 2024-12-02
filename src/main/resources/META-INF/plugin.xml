@@ -28,6 +28,14 @@
                 enabledByDefault="true"
                 level="ERROR"
                 shortName="NginxDirectiveValueInspection"/>
+        <localInspection
+                language="Nginx Configuration"
+                implementationClass="dev.meanmail.codeInsight.inspections.NginxGeoInspection"
+                displayName="Invalid Nginx Geo Directive Usage"
+                groupName="Nginx"
+                enabledByDefault="true"
+                level="ERROR"
+                shortName="NginxGeoInspection"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">

@@ -1,0 +1,7 @@
+stream {
+    geo $address_variable $result_variable {
+        <error descr="The 'delete' parameter is only allowed in http context">delete $arg_proxy;</error>
+        default 0;
+        192.168.1.0/24 1;
+    }
+}

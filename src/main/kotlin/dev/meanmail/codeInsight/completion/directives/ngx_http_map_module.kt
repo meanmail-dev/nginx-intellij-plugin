@@ -10,7 +10,8 @@ val ngx_http_map_module = NginxModule(
 
 val map = Directive(
     name = "map",
-    description = "Creates a new variable whose value depends on values of one or more source variables",
+    description = "Creates a new variable whose value depends on values of one or more source variables. " +
+            "Supports special mapping values like 'default' (catch-all rule) and '' (empty string mapping).",
     parameters = listOf(
         DirectiveParameter(
             name = "source_variable",
@@ -22,12 +23,6 @@ val map = Directive(
             name = "result_variable",
             description = "Target variable to store the mapped result",
             valueType = ValueType.STRING,
-            required = true
-        ),
-        DirectiveParameter(
-            name = "mapping_rules",
-            description = "Mapping rules with optional special parameters like 'default', 'hostnames', 'include', 'volatile'",
-            valueType = ValueType.STRING_LIST,
             required = true
         )
     ),

@@ -1,0 +1,5 @@
+http {
+    <error descr="The 'default' parameter is required in geo block">geo $address_variable $result_variable {
+        192.168.1.0/24 1;
+    }</error>
+}

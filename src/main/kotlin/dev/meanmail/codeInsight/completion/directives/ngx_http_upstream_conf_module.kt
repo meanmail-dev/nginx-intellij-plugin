@@ -30,7 +30,7 @@ val upstreamConf = Directive(
         Note: Since addresses in a group are not required to be unique, specific servers 
         in a group are referenced by their IDs.
     """.trimIndent(),
-    parameters = listOf(),
+    parameters = emptyList(),
     context = listOf(location),
     module = ngx_http_upstream_conf_module
 )

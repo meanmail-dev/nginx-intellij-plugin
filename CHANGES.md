@@ -1,17 +1,31 @@
-## 2024.5 (December, 2, 2024)
+## 2024.5 (December, 3, 2024)
 
-* Add directive inspection
-* Enhanced syntax highlighting:
-    - Added proper highlighting for strings in quotes
-    - Added highlighting for braces, values, and include targets
-    - Added special highlighting for Lua code blocks
-* Improved file navigation:
-    - Fixed include directive paths resolution relative to nginx root directory
-* Added new inspection for validating Nginx directive values
-* Improved handling of folding for blocks with unbalanced or empty braces in `NginxFoldingBuilder`
+* Enhanced directive support:
+    - Full support for map directive configuration and validation
+    - Improved autocompletion for map parameters
+    - Added validation for map block values
+    - Support for include files within map blocks
+    - Added new inspection for validating Nginx directive values
+* Added new features:
+    - Full support for Lua blocks in configuration
+    - Enhanced SSL configuration handling
+    - Added support for geo blocks for geolocation
+    - Expanded support for conditional expressions (if)
+* Editor improvements:
+    - Enhanced syntax highlighting for strings, braces, and values
+    - Special highlighting for Lua code blocks
+    - Smarter autocompletion for all directives
+    - Enhanced configuration file navigation
+    - More precise syntax validation
+    - Better support for nested blocks
+    - Improved handling of folding for blocks
 * Bug fixes:
+    - Fixed location blocks processing
+    - Improved directive modifiers handling
+    - Fixed parameter values processing
+    - Fixed include directive paths resolution relative to nginx root directory
     - Fixed IDE error when trying to fold empty blocks
-* Prevented potential `IllegalArgumentException` when creating folding regions for empty or malformed blocks
+    - Prevented potential `IllegalArgumentException` in folding regions
 
 ## 2024.4 (November, 28, 2024)
 

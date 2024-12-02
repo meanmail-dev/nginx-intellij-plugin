@@ -1,0 +1,9 @@
+http {
+    server {
+        location / {
+            if ($variable = 1) {
+                return 403;
+            }
+        }
+    }
+}

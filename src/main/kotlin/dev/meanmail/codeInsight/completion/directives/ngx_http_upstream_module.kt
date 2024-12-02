@@ -285,7 +285,7 @@ val least_time = Directive(
 val ntlm = Directive(
     name = "ntlm",
     description = "Enables NTLM authentication for upstream servers",
-    parameters = listOf(),
+    parameters = emptyList(),
     context = listOf(upstream),
     module = ngx_http_upstream_module
 )

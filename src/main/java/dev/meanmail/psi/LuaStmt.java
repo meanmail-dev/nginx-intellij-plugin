@@ -1,8 +1,8 @@
 // This is a generated file. Not intended for manual editing.
 package dev.meanmail.psi;
 
-import com.intellij.psi.PsiLanguageInjectionHost;
+import com.intellij.psi.PsiElement;
 
-public interface LuaStmt extends PsiLanguageInjectionHost {
+public interface LuaStmt extends PsiElement {
 
 }

@@ -7,6 +7,6 @@ import org.jetbrains.annotations.Nullable;
 public interface LuaBlockStmt extends PsiElement {
 
     @Nullable
-    LuaStmt getLuaStmt();
+    LuaCodeStmt getLuaCodeStmt();
 
 }

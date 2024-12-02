@@ -1,6 +1,5 @@
 package dev.meanmail
 
-import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
 
@@ -9,7 +8,7 @@ fun resolveFile(filepath: String, base: VirtualFile): VirtualFile? {
 
     // First try absolute path
     if (target.isAbsolute) {
-        return LocalFileSystem.getInstance().findFileByIoFile(target)
+        return base.fileSystem.findFileByPath(filepath)
     }
 
     // Try relative to current file

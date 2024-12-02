@@ -5,7 +5,7 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import dev.meanmail.psi.LuaBlockStmt;
-import dev.meanmail.psi.LuaStmt;
+import dev.meanmail.psi.LuaCodeStmt;
 import dev.meanmail.psi.Visitor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,8 +28,8 @@ public class LuaBlockStmtImpl extends ASTWrapperPsiElement implements LuaBlockSt
 
     @Override
     @Nullable
-    public LuaStmt getLuaStmt() {
-        return findChildByClass(LuaStmt.class);
+    public LuaCodeStmt getLuaCodeStmt() {
+        return findChildByClass(LuaCodeStmt.class);
     }
 
 }

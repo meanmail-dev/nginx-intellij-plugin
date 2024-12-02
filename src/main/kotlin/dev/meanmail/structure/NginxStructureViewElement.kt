@@ -9,8 +9,6 @@ import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import dev.meanmail.psi.BlockStmt
 import dev.meanmail.psi.DirectiveStmt
-import dev.meanmail.psi.IncludeDirectiveStmt
-import dev.meanmail.psi.LuaBlockDirectiveStmt
 
 class NginxStructureViewElement(private val element: NavigatablePsiElement) : StructureViewTreeElement,
     SortableTreeElement {
@@ -45,20 +43,30 @@ class NginxStructureViewElement(private val element: NavigatablePsiElement) : St
 
     override fun getChildren(): Array<TreeElement> {
         if (element is DirectiveStmt) {
-            return PsiTreeUtil.getChildrenOfTypeAsList(element, BlockStmt::class.java)
-                .flatMap { block_stmt ->
-                    PsiTreeUtil.getChildrenOfAnyType(
-                        block_stmt,
-                        DirectiveStmt::class.java,
-                        IncludeDirectiveStmt::class.java,
-                        LuaBlockDirectiveStmt::class.java
-                    ).map { NginxStructureViewElement(it as NavigatablePsiElement) }
+            var blockStmt: BlockStmt? = null
+            val regularDirectiveStmt = element.getRegularDirectiveStmt();
+            if (regularDirectiveStmt != null) {
+                blockStmt = regularDirectiveStmt.getBlockStmt()
+            } else {
+                val locationDirectiveStmt = element.getLocationDirectiveStmt()
+                if (locationDirectiveStmt != null) {
+                    blockStmt = locationDirectiveStmt.getBlockStmt()
+                } else {
+                    val ifDirectiveStmt = element.getIfDirectiveStmt()
+                    if (ifDirectiveStmt != null) {
+                        blockStmt = ifDirectiveStmt.getBlockStmt()
+                    }
                 }
-                .toTypedArray()
+            }
+            if (blockStmt != null) {
+                return blockStmt.directiveStmtList.map { NginxStructureViewElement(it as NavigatablePsiElement) }
+                    .toTypedArray()
+            }
+            return emptyArray()
         }
         return PsiTreeUtil.getChildrenOfAnyType(
             element,
-            DirectiveStmt::class.java, IncludeDirectiveStmt::class.java
+            DirectiveStmt::class.java
         )
             .map { NginxStructureViewElement(it as NavigatablePsiElement) }
             .toTypedArray()

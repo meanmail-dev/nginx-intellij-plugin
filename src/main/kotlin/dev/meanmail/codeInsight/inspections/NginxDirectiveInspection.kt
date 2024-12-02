@@ -4,15 +4,16 @@ import com.intellij.codeInspection.InspectionManager
 import com.intellij.codeInspection.LocalInspectionTool
 import com.intellij.codeInspection.ProblemDescriptor
 import com.intellij.codeInspection.ProblemHighlightType
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.findParentOfType
 import dev.meanmail.NginxFileType
 import dev.meanmail.codeInsight.completion.directives.Directive
+import dev.meanmail.codeInsight.completion.directives.any
 import dev.meanmail.codeInsight.completion.directives.determineFileContext
 import dev.meanmail.codeInsight.completion.directives.findDirectives
 import dev.meanmail.psi.DirectiveStmt
-import dev.meanmail.psi.NameStmt
 
 class NginxDirectiveInspection : LocalInspectionTool() {
     override fun checkFile(
@@ -27,7 +28,7 @@ class NginxDirectiveInspection : LocalInspectionTool() {
         val directivesStmts = PsiTreeUtil.findChildrenOfType(file, DirectiveStmt::class.java)
 
         for (directiveStmt in directivesStmts) {
-            val nameElement = directiveStmt.children.filterIsInstance<NameStmt>().firstOrNull() ?: continue
+            val nameElement = directiveStmt.nameIdentifier ?: continue
             val matchingDirectives = findDirectives(nameElement.text)
             if (matchingDirectives.isEmpty()) {
                 problems.add(
@@ -51,12 +52,16 @@ class NginxDirectiveInspection : LocalInspectionTool() {
 
     private fun validateDirectiveContext(
         directiveStmt: DirectiveStmt,
-        nameElement: NameStmt,
+        nameElement: PsiElement,
         matchingDirectives: List<Directive>,
         manager: InspectionManager,
         isOnTheFly: Boolean
     ): List<ProblemDescriptor> {
         val directiveName = directiveStmt.name
+
+        if (matchingDirectives.any { any in it.context }) {
+            return emptyList()
+        }
 
         if (matchingDirectives.all { it.context.isEmpty() }) {
             return listOf(

@@ -1,0 +1,9 @@
+http {
+    server {
+        location / {
+            if ($variable ~ "pattern") {
+                return 403;
+            }
+        }
+    }
+}

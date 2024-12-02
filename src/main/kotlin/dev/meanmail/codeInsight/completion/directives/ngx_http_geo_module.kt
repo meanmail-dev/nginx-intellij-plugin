@@ -13,16 +13,16 @@ val geo = Directive(
     description = "Creates variables with values depending on the client IP address, useful for creating IP-based access controls or conditional configurations",
     parameters = listOf(
         DirectiveParameter(
-            name = "address",
-            description = "IP address or network range to define a specific geographical context",
+            name = "address_variable",
+            description = "Optional variable for IP address (default: \$remote_addr)",
             valueType = ValueType.STRING,
             required = false
         ),
         DirectiveParameter(
-            name = "variable_value",
-            description = "Value to assign when the client IP matches the specified address or network range",
+            name = "result_variable",
+            description = "Variable to store geolocation result",
             valueType = ValueType.STRING,
-            required = false
+            required = true
         )
     ),
     context = listOf(http),

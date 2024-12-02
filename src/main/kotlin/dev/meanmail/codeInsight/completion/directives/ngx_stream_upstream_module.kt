@@ -108,7 +108,7 @@ val streamUpstreamHash = Directive(
 val streamUpstreamLeastConn = Directive(
     name = "least_conn",
     description = "Selects the server with the least number of active connections in stream context",
-    parameters = listOf(),
+    parameters = emptyList(),
     context = listOf(upstream),
     module = ngx_stream_upstream_module
 )
@@ -199,7 +199,7 @@ val streamUpstreamResolverTimeout = Directive(
 val streamUpstream = Directive(
     name = "upstream",
     description = "Defines a group of servers for load balancing in stream context",
-    parameters = listOf(),
+    parameters = emptyList(),
     context = listOf(stream),
     module = ngx_stream_upstream_module
 )

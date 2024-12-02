@@ -6,8 +6,6 @@ import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.findParentOfType
 import com.intellij.util.ProcessingContext
 import dev.meanmail.codeInsight.completion.directives.Directive
-import dev.meanmail.codeInsight.completion.directives.all
-import dev.meanmail.codeInsight.completion.directives.determineFileContext
 import dev.meanmail.codeInsight.completion.directives.findDirectives
 import dev.meanmail.psi.DirectiveStmt
 import dev.meanmail.psi.NameStmt
@@ -33,23 +31,30 @@ class DirectiveNameCompletionProvider : CompletionProvider<CompletionParameters>
     ) {
         val contextStmt = parameters.originalPosition
             ?.parent?.findParentOfType<DirectiveStmt>()
-
-        val directives = directiveCache.getOrPut(contextStmt?.name) {
-            val file = parameters.originalPosition?.containingFile
-            if (file == null) {
-                all
-            } else {
-                val fileContext: Set<Directive>? = determineFileContext(file)
-                if (fileContext == null) {
-                    all
-                } else {
-                    val path = contextStmt?.path
-                    val completion = mutableSetOf<Directive>()
-
-                    for (directive in fileContext) {
-                        completion.addAll(findDirectives(directive.name, path))
+        var parent = contextStmt?.findParentOfType<DirectiveStmt>()
+        if (contextStmt != null) {
+            val name = contextStmt.name
+            val path = parent?.path
+            if (name != null) {
+                val directives = findDirectives(name, path)
+                if (directives.isNotEmpty()) {
+                    if (result.prefixMatcher.prefix == "") {
+                        parent = contextStmt
                     }
-                    completion.toList()
+                }
+            }
+        }
+        val name = parent?.name
+
+        val directives = directiveCache.getOrPut(name) {
+            if (name == null || parent == null) {
+                Directive.all
+            } else {
+                val directives = findDirectives(name, parent.path.subList(0, parent.path.size - 1))
+                if (directives.isEmpty()) {
+                    emptyList()
+                } else {
+                    directives.flatMap { it.children }
                 }
             }
         }

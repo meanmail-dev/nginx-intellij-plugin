@@ -5,8 +5,6 @@ import com.intellij.ide.structureView.StructureViewModelBase
 import com.intellij.ide.structureView.StructureViewTreeElement
 import com.intellij.ide.util.treeView.smartTree.Sorter
 import com.intellij.psi.PsiFile
-import dev.meanmail.psi.NameStmt
-import dev.meanmail.psi.ValueStmt
 
 class NginxStructureViewModel(psiFile: PsiFile) :
     StructureViewModelBase(psiFile, NginxStructureViewElement(psiFile)),
@@ -22,6 +20,6 @@ class NginxStructureViewModel(psiFile: PsiFile) :
     }
 
     override fun isAlwaysLeaf(element: StructureViewTreeElement): Boolean {
-        return element.value is NameStmt || element.value is ValueStmt
+        return false
     }
 }

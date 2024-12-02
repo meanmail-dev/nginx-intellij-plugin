@@ -133,7 +133,7 @@ val include = Directive(
             required = true
         )
     ),
-    context = listOf(main),
+    context = listOf(any),
     module = ngx_core_module
 )
 

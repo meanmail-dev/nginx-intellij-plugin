@@ -12,7 +12,7 @@ fun createFileFromText(project: Project, text: String): NginxFile {
     ) as NginxFile
 }
 
-fun createIncludeTargetStmt(project: Project, name: String): IncludeTargetStmt {
-    val file = createFileFromText(project, "include $name;")
-    return file.firstChild.children[1] as IncludeTargetStmt
-}
+//fun createIncludeTargetStmt(project: Project, name: String): IncludeTargetStmt {
+//    val file = createFileFromText(project, "include $name;")
+//    return file.firstChild.children[1] as IncludeTargetStmt
+//}

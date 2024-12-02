@@ -5,7 +5,7 @@ import com.intellij.lang.injection.MultiHostInjector
 import com.intellij.lang.injection.MultiHostRegistrar
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import dev.meanmail.psi.LuaStmt
+import dev.meanmail.psi.LuaCodeStmt
 
 
 class NginxLuaInjector : MultiHostInjector {
@@ -13,7 +13,7 @@ class NginxLuaInjector : MultiHostInjector {
         registrar: MultiHostRegistrar, context: PsiElement
     ) {
         val language = Language.findLanguageByID("Lua") ?: return
-        if (context is LuaStmt) {
+        if (context is LuaCodeStmt) {
             registrar
                 .startInjecting(language)
                 .addPlace(
@@ -24,6 +24,6 @@ class NginxLuaInjector : MultiHostInjector {
     }
 
     override fun elementsToInjectIn(): MutableList<out Class<out PsiElement>> {
-        return mutableListOf(LuaStmt::class.java)
+        return mutableListOf(LuaCodeStmt::class.java)
     }
 }

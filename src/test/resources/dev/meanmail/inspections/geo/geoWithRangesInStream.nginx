@@ -1,0 +1,7 @@
+stream {
+    geo $address_variable $result_variable {
+        <error descr="The 'ranges' parameter is only allowed in http context">ranges;</error>
+        default 0;
+        192.168.1.0/24 1;
+    }
+}

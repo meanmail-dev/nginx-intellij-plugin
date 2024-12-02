@@ -1,0 +1,6 @@
+http {
+    geo $address_variable $result_variable {
+        include conf.d/geo/*.conf;
+        default 0;
+    }
+}

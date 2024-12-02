@@ -29,7 +29,7 @@ val stubStatus = Directive(
         
         Note: Prior to 1.7.5, required an argument (e.g., "stub_status on")
     """.trimIndent(),
-    parameters = listOf(),
+    parameters = emptyList(),
     context = listOf(server, location),
     module = ngx_http_stub_status_module
 )

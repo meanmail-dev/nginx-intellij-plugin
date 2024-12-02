@@ -33,30 +33,74 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
 
     @Override
     @Nullable
-    public BlockStmt getBlockStmt() {
-        return findChildByClass(BlockStmt.class);
+    public GeoDirectiveStmt getGeoDirectiveStmt() {
+        return findChildByClass(GeoDirectiveStmt.class);
     }
 
     @Override
-    @NotNull
-    public NameStmt getNameStmt() {
-        return findNotNullChildByClass(NameStmt.class);
+    @Nullable
+    public IfDirectiveStmt getIfDirectiveStmt() {
+        return findChildByClass(IfDirectiveStmt.class);
     }
 
     @Override
-    @NotNull
-    public List<ValueStmt> getValueStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, ValueStmt.class);
+    @Nullable
+    public LocationDirectiveStmt getLocationDirectiveStmt() {
+        return findChildByClass(LocationDirectiveStmt.class);
+    }
+
+    @Override
+    @Nullable
+    public LuaDirectiveStmt getLuaDirectiveStmt() {
+        return findChildByClass(LuaDirectiveStmt.class);
+    }
+
+    @Override
+    @Nullable
+    public MapDirectiveStmt getMapDirectiveStmt() {
+        return findChildByClass(MapDirectiveStmt.class);
+    }
+
+    @Override
+    @Nullable
+    public RegularDirectiveStmt getRegularDirectiveStmt() {
+        return findChildByClass(RegularDirectiveStmt.class);
     }
 
     @Override
     public String getName() {
-        return getNameIdentifier().getText();
+        PsiElement nameIdentifier = getNameIdentifier();
+        if (nameIdentifier == null) return "";
+        return nameIdentifier.getText();
     }
 
     @Override
-    public @NotNull PsiElement getNameIdentifier() {
-        return getNameStmt();
+    public @Nullable PsiElement getNameIdentifier() {
+        RegularDirectiveStmt regularDirectiveStmt = getRegularDirectiveStmt();
+        if (regularDirectiveStmt != null) {
+            return regularDirectiveStmt.getNameStmt();
+        }
+        LocationDirectiveStmt locationDirectiveStmt = getLocationDirectiveStmt();
+        if (locationDirectiveStmt != null) {
+            return locationDirectiveStmt.getLocationStmt();
+        }
+        IfDirectiveStmt ifDirectiveStmt = getIfDirectiveStmt();
+        if (ifDirectiveStmt != null) {
+            return ifDirectiveStmt.getIfStmt();
+        }
+        MapDirectiveStmt mapDirectiveStmt = getMapDirectiveStmt();
+        if (mapDirectiveStmt != null) {
+            return mapDirectiveStmt.getMapStmt();
+        }
+        GeoDirectiveStmt geoDirectiveStmt = getGeoDirectiveStmt();
+        if (geoDirectiveStmt != null) {
+            return geoDirectiveStmt.getGeoStmt();
+        }
+        LuaDirectiveStmt luaDirectiveStmt = getLuaDirectiveStmt();
+        if (luaDirectiveStmt != null) {
+            return luaDirectiveStmt.getLuaStmt();
+        }
+        return null;
     }
 
     @Override
@@ -65,6 +109,7 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
     }
 
     @Override
+    @NotNull
     public List<String> getPath() {
         List<String> path = new ArrayList<>();
         DirectiveStmt parent = this;

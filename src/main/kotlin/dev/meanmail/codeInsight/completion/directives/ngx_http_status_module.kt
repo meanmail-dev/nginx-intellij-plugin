@@ -25,7 +25,7 @@ val status = Directive(
         - Provides comprehensive server status information
         - Requires careful configuration to prevent unauthorized access
     """.trimIndent(),
-    parameters = listOf(),
+    parameters = emptyList(),
     context = listOf(location),
     module = ngx_http_status_module
 )

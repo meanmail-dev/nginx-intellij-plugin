@@ -1,0 +1,9 @@
+http {
+    server {
+        location / {
+            if (-f $request_filename) {
+                return 403;
+            }
+        }
+    }
+}

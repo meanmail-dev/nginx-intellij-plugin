@@ -11,7 +11,7 @@ val ngx_stream_core_module = NginxModule(
 val stream = Directive(
     "stream",
     description = "Defines a stream context for handling stream-level configurations",
-    parameters = listOf(),
+    parameters = emptyList(),
     module = ngx_stream_core_module,
     context = listOf(main)
 )
@@ -19,7 +19,7 @@ val stream = Directive(
 val streamServer = Directive(
     name = "server",
     description = "Defines a stream server block with configuration for handling stream connections",
-    parameters = listOf(),
+    parameters = emptyList(),
     module = ngx_stream_core_module,
     context = listOf(stream)
 )

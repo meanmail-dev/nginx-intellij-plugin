@@ -5,7 +5,9 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import dev.meanmail.psi.*;
+import dev.meanmail.psi.BlockStmt;
+import dev.meanmail.psi.DirectiveStmt;
+import dev.meanmail.psi.Visitor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,18 +32,6 @@ public class BlockStmtImpl extends ASTWrapperPsiElement implements BlockStmt {
     @NotNull
     public List<DirectiveStmt> getDirectiveStmtList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, DirectiveStmt.class);
-    }
-
-    @Override
-    @NotNull
-    public List<IncludeDirectiveStmt> getIncludeDirectiveStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, IncludeDirectiveStmt.class);
-    }
-
-    @Override
-    @NotNull
-    public List<LuaBlockDirectiveWithParamsStmt> getLuaBlockDirectiveWithParamsStmtList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, LuaBlockDirectiveWithParamsStmt.class);
     }
 
 }
