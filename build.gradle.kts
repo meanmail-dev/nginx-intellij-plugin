@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 
 fun config(name: String) = project.findProperty(name).toString()
 
@@ -51,6 +53,10 @@ intellijPlatform {
     }
 
     buildSearchableOptions = false
+
+    pluginVerification.ides {
+        recommended()
+    }
 
     publishing {
         try {
