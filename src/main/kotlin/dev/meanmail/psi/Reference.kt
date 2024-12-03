@@ -19,14 +19,13 @@ class Reference(element: ReferenceElement) :
     }
 
     private fun resolveFile(ref: String): PsiElement? {
-        if (ref.startsWith("http")) {
+        if (ref.startsWith("http://") || ref.startsWith("https://")) {
             return WebReference(element, ref).resolve()
         }
         if (ref.isEmpty()) return null
-        var file: VirtualFile? = null
         val directory = element.containingFile
             ?.containingDirectory?.virtualFile ?: return null
-        file = resolveFile(ref, directory) ?: return null
+        val file = resolveFile(ref, directory) ?: return null
 
         return PsiManager.getInstance(element.project).findFile(file)
     }
