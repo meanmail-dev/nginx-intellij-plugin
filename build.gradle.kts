@@ -49,8 +49,8 @@ intellijPlatform {
             sinceBuild.set(config("platformSinceBuild"))
         }
     }
-    
-    instrumentCode = false
+
+    buildSearchableOptions = false
 
     publishing {
         try {
