@@ -1,7 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
-import org.jetbrains.intellij.platform.gradle.models.ProductRelease
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 fun config(name: String) = project.findProperty(name).toString()
 
@@ -25,7 +23,7 @@ version = config("version")
 
 dependencies {
     testImplementation(libs.junit)
-    
+
     intellijPlatform {
         create(config("platformType"), config("platformVersion"))
         plugins(providers.gradleProperty("plugins").map { it.split(',') })

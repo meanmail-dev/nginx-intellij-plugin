@@ -9,10 +9,10 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.util.findParentOfType
 import dev.meanmail.NginxFileType
-import dev.meanmail.codeInsight.completion.directives.Directive
-import dev.meanmail.codeInsight.completion.directives.any
-import dev.meanmail.codeInsight.completion.directives.determineFileContext
-import dev.meanmail.codeInsight.completion.directives.findDirectives
+import dev.meanmail.directives.Directive
+import dev.meanmail.directives.any
+import dev.meanmail.directives.determineFileContext
+import dev.meanmail.directives.findDirectives
 import dev.meanmail.psi.DirectiveStmt
 
 class NginxDirectiveInspection : LocalInspectionTool() {

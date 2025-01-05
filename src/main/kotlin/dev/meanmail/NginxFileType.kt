@@ -23,7 +23,7 @@ object NginxFileType : LanguageFileType(NginxLanguage) {
         return DEFAULT_EXTENSION
     }
 
-    override fun getIcon(): Icon? {
+    override fun getIcon(): Icon {
         return AllIcons.FILE
     }
 

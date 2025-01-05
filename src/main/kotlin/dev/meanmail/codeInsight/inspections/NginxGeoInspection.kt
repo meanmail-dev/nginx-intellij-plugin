@@ -7,9 +7,9 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import dev.meanmail.NginxFileType
-import dev.meanmail.codeInsight.completion.directives.geo
-import dev.meanmail.codeInsight.completion.directives.http
-import dev.meanmail.codeInsight.completion.directives.stream
+import dev.meanmail.directives.nginx.http.geo
+import dev.meanmail.directives.nginx.http.http
+import dev.meanmail.directives.nginx.stream.stream
 import dev.meanmail.psi.DirectiveStmt
 
 class NginxGeoInspection : LocalInspectionTool() {

@@ -44,7 +44,7 @@ class NginxStructureViewElement(private val element: NavigatablePsiElement) : St
     override fun getChildren(): Array<TreeElement> {
         if (element is DirectiveStmt) {
             var blockStmt: BlockStmt? = null
-            val regularDirectiveStmt = element.getRegularDirectiveStmt();
+            val regularDirectiveStmt = element.getRegularDirectiveStmt()
             if (regularDirectiveStmt != null) {
                 blockStmt = regularDirectiveStmt.getBlockStmt()
             } else {

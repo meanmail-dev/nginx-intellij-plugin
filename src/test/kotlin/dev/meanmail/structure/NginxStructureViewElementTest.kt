@@ -1,11 +1,9 @@
 package dev.meanmail.structure
 
-import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.navigation.NavigationItem
 import com.intellij.psi.NavigatablePsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.meanmail.NginxFileType
-import dev.meanmail.psi.DirectiveStmt
 
 class NginxStructureViewElementTest : BasePlatformTestCase() {
 
@@ -91,7 +89,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
         val locationElement = element.children[0].children[0].children[0]
 
         assertEquals("location", locationElement.presentation.presentableText)
-        
+
         val locationChildren = locationElement.children
         assertEquals(2, locationChildren.size)
         assertEquals("root", locationChildren[0].presentation.presentableText)
@@ -116,7 +114,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
         val ifElement = element.children[0].children[0].children[0]
 
         assertEquals("if", ifElement.presentation.presentableText)
-        
+
         val ifChildren = ifElement.children
         assertEquals(1, ifChildren.size)
         assertEquals("return", ifChildren[0].presentation.presentableText)
