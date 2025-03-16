@@ -23,6 +23,11 @@ import static dev.meanmail.psi.Types.*;
       yybegin(newState);
       stack.push(newState);
   }
+  
+  public final int yycurent() {
+      int state = stack.size() == 0 ? YYINITIAL : stack.peek();
+      return state;
+  }
 
   public final int yypop() {
       if (stack.size() == 0) {
@@ -144,8 +149,9 @@ DQUOTE="\""
 }
 
 <LUA_STATE> {
-    {RBRACE}                  { yypop(); yypop(); return RBRACE; }
-    [^}]+                     { return LUA; }
+    {RBRACE}                  { yypop(); if (yycurent() == LUA_STATE) return LUA; yypop(); return RBRACE; }
+    {LBRACE}                  { yypush(LUA_STATE); return LUA; }
+    [^\{\}]+                  { return LUA; }
 }
 
 <STRING_STATE> {

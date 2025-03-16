@@ -47,6 +47,7 @@ intellijPlatform {
         changeNotes.set(readChangeNotes("CHANGES.md"))
         ideaVersion {
             sinceBuild.set(config("platformSinceBuild"))
+            untilBuild.set(provider { null })
         }
     }
 

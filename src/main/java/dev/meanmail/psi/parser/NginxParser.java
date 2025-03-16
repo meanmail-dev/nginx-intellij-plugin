@@ -14,23 +14,6 @@ import static dev.meanmail.psi.Types.*;
 @SuppressWarnings({"SimplifiableIfStatement", "UnusedAssignment"})
 public class NginxParser implements PsiParser, LightPsiParser {
 
-    public ASTNode parse(IElementType t, PsiBuilder b) {
-        parseLight(t, b);
-        return b.getTreeBuilt();
-    }
-
-    public void parseLight(IElementType t, PsiBuilder b) {
-        boolean r;
-        b = adapt_builder_(t, b, this, null);
-        Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-        r = parse_root_(t, b);
-        exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
-    }
-
-    protected boolean parse_root_(IElementType t, PsiBuilder b) {
-        return parse_root_(t, b, 0);
-    }
-
     static boolean parse_root_(IElementType t, PsiBuilder b, int l) {
         return nginxFile(b, l + 1);
     }
@@ -481,13 +464,18 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // LUA
+    // LUA+
     public static boolean lua_code_stmt(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "lua_code_stmt")) return false;
         if (!nextTokenIs(b, LUA)) return false;
         boolean r;
         Marker m = enter_section_(b);
         r = consumeToken(b, LUA);
+        while (r) {
+            int c = current_position_(b);
+            if (!consumeToken(b, LUA)) break;
+            if (!empty_element_parsed_guard_(b, "lua_code_stmt", c)) break;
+        }
         exit_section_(b, m, LUA_CODE_STMT, r);
         return r;
     }
@@ -831,6 +819,23 @@ public class NginxParser implements PsiParser, LightPsiParser {
         r = consumeToken(b, VARIABLE);
         exit_section_(b, m, VARIABLE_STMT, r);
         return r;
+    }
+
+    public ASTNode parse(IElementType t, PsiBuilder b) {
+        parseLight(t, b);
+        return b.getTreeBuilt();
+    }
+
+    public void parseLight(IElementType t, PsiBuilder b) {
+        boolean r;
+        b = adapt_builder_(t, b, this, null);
+        Marker m = enter_section_(b, 0, _COLLAPSE_, null);
+        r = parse_root_(t, b);
+        exit_section_(b, 0, m, t, r, true, TRUE_CONDITION);
+    }
+
+    protected boolean parse_root_(IElementType t, PsiBuilder b) {
+        return parse_root_(t, b, 0);
     }
 
 }

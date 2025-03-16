@@ -161,7 +161,7 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitValueStmt(@NotNull ValueStmt o) {
-        visitPsiElement(o);
+        visitReferenceElement(o);
     }
 
     public void visitVariableStmt(@NotNull VariableStmt o) {
@@ -169,6 +169,10 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitPsiLanguageInjectionHost(@NotNull PsiLanguageInjectionHost o) {
+        visitElement(o);
+    }
+
+    public void visitReferenceElement(@NotNull ReferenceElement o) {
         visitElement(o);
     }
 

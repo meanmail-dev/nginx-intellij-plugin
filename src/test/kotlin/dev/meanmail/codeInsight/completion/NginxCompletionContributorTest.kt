@@ -32,7 +32,7 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
     }
 
     fun testMainContext() {
-        // В корне конфига должны быть доступны основные директивы
+        // Main directives should be available in the root of the config
         doTest(
             """
             eve<caret>
@@ -43,19 +43,19 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
     }
 
     fun testHttpContext() {
-        // В http блоке должны быть доступны серверные директивы
+        // Server directives should be available in the http block
         doTest(
             """
             http {
                 server<caret>
             }
         """.trimIndent(),
+            "proxy_ssl_server_name",
             "server",
             "server_name_in_redirect",
             "server_names_hash_bucket_size",
             "server_names_hash_max_size",
             "server_tokens",
-            "proxy_ssl_server_name",
             "ssl_prefer_server_ciphers",
             "uwsgi_ssl_server_name",
             strict = true
@@ -63,7 +63,7 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
     }
 
     fun testServerContext() {
-        // В server блоке должны быть доступны директивы сервера
+        // Server directives should be available in the server block
         doTest(
             """
             http {
@@ -78,7 +78,7 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
     }
 
     fun testLocationContext() {
-        // В location блоке должны быть доступны директивы location
+        // Location directives should be available in the location block
         doTest(
             """
             http {
@@ -97,7 +97,7 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
     }
 
     fun testLocationIfContext() {
-        // В if блоке внутри location должны быть доступны директивы if
+        // If directives should be available in the if block inside location
         doTest(
             """
             http {
@@ -116,7 +116,7 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
     }
 
     fun testEventsContext() {
-        // В events блоке должны быть доступны директивы events
+        // Events directives should be available in the events block
         doTest(
             """
             events {
@@ -129,7 +129,7 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
     }
 
     fun testUpstreamContext() {
-        // В upstream блоке должны быть доступны директивы upstream
+        // Upstream directives should be available in the upstream block
         doTest(
             """
             http {

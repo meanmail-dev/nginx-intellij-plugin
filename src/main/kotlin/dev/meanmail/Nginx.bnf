@@ -69,7 +69,7 @@ geo_block_stmt ::= LBRACE geo_block_content* RBRACE {pin=1}
 geo_directive_stmt ::= geo_stmt variable_stmt [variable_stmt] geo_block_stmt {pin=1}
 
 lua_stmt ::= LUA_BLOCK_DIRECTIVE
-lua_code_stmt ::= LUA
+lua_code_stmt ::= LUA+ {pin=1}
 lua_block_stmt ::= LBRACE lua_code_stmt RBRACE {pin=1}
 lua_directive_stmt ::= lua_stmt value_stmt* lua_block_stmt {pin=1}
 

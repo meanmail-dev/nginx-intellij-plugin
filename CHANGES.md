@@ -1,3 +1,16 @@
+## 2025.5.1 (March, 16, 2025)
+
+* Add support for directives:
+    - `js_context_reuse`
+    - `js_engine`
+    - `js_fetch_buffer_size`
+    - `js_fetch_max_response_buffer_size`
+    - `js_fetch_timeout`
+    - `js_fetch_verify`
+    - `js_periodic`
+    - `js_preload_object`
+    - `js_shared_dict_zone`
+
 ## 2024.5 (December, 3, 2024)
 
 * Enhanced directive support:
