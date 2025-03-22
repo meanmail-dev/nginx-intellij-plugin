@@ -1,4 +1,13 @@
+## 2025.6 (March, 22, 2025)
+
+* A dark theme for file icons
+* Allow set directive parameters in if block
+
 ## 2025.5.1 (March, 16, 2025)
+
+* Support JetBrains IDE 2025.*
+
+## 2025.5 (March, 16, 2025)
 
 * Add support for directives:
     - `js_context_reuse`

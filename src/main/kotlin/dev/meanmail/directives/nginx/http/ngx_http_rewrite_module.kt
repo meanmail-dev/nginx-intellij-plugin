@@ -90,6 +90,21 @@ val rewriteLog = ToggleDirective(
     enabled = false
 )
 
+val `if` = RecursiveDirective(
+    name = "if",
+    description = "Creates a conditional configuration block that executes directives when the specified condition is true",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "condition",
+            description = "Condition to evaluate, supporting variable checks, comparisons, regex matching, and file existence tests",
+            valueType = ValueType.STRING,
+            required = true
+        )
+    ),
+    context = listOf(server, location),
+    module = ngx_http_rewrite_module
+)
+
 val set = Directive(
     name = "set",
     description = "Assigns a value to a specified NGINX variable for dynamic request processing",
@@ -107,7 +122,7 @@ val set = Directive(
             required = true
         )
     ),
-    context = listOf(server, location, locationIf),
+    context = listOf(server, location, locationIf, `if`),
     module = ngx_http_rewrite_module
 )
 
@@ -117,19 +132,4 @@ val uninitializedVariableWarn = ToggleDirective(
     context = listOf(http, server, location),
     module = ngx_http_rewrite_module,
     enabled = true
-)
-
-val `if` = RecursiveDirective(
-    name = "if",
-    description = "Creates a conditional configuration block that executes directives when the specified condition is true",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "condition",
-            description = "Condition to evaluate, supporting variable checks, comparisons, regex matching, and file existence tests",
-            valueType = ValueType.STRING,
-            required = true
-        )
-    ),
-    context = listOf(server, location),
-    module = ngx_http_rewrite_module
 )
