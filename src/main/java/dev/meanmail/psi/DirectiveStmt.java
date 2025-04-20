@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface DirectiveStmt extends NamedElement {
+public interface DirectiveStmt extends WithPathElement {
 
     @Nullable
     GeoDirectiveStmt getGeoDirectiveStmt();

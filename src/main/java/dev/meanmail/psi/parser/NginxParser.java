@@ -45,13 +45,17 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // (variable_stmt | VALUE | IDENTIFIER) (variable_stmt | VALUE | IDENTIFIER)*
+    // (variable_stmt | VALUE | IDENTIFIER) +
     public static boolean concatenated_expr(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "concatenated_expr")) return false;
         boolean r;
         Marker m = enter_section_(b, l, _NONE_, CONCATENATED_EXPR, "<concatenated expr>");
         r = concatenated_expr_0(b, l + 1);
-        r = r && concatenated_expr_1(b, l + 1);
+        while (r) {
+            int c = current_position_(b);
+            if (!concatenated_expr_0(b, l + 1)) break;
+            if (!empty_element_parsed_guard_(b, "concatenated_expr", c)) break;
+        }
         exit_section_(b, l, m, r, false, null);
         return r;
     }
@@ -59,27 +63,6 @@ public class NginxParser implements PsiParser, LightPsiParser {
     // variable_stmt | VALUE | IDENTIFIER
     private static boolean concatenated_expr_0(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "concatenated_expr_0")) return false;
-        boolean r;
-        r = variable_stmt(b, l + 1);
-        if (!r) r = consumeToken(b, VALUE);
-        if (!r) r = consumeToken(b, IDENTIFIER);
-        return r;
-    }
-
-    // (variable_stmt | VALUE | IDENTIFIER)*
-    private static boolean concatenated_expr_1(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "concatenated_expr_1")) return false;
-        while (true) {
-            int c = current_position_(b);
-            if (!concatenated_expr_1_0(b, l + 1)) break;
-            if (!empty_element_parsed_guard_(b, "concatenated_expr_1", c)) break;
-        }
-        return true;
-    }
-
-    // variable_stmt | VALUE | IDENTIFIER
-    private static boolean concatenated_expr_1_0(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "concatenated_expr_1_0")) return false;
         boolean r;
         r = variable_stmt(b, l + 1);
         if (!r) r = consumeToken(b, VALUE);
@@ -686,7 +669,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
     }
 
     /* ********************************************************** */
-    // name_stmt value_stmt* (SEMICOLON | block_stmt)
+    // name_stmt BINARY_OPERATOR? value_stmt* (SEMICOLON | block_stmt)
     public static boolean regular_directive_stmt(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "regular_directive_stmt")) return false;
         if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -695,25 +678,33 @@ public class NginxParser implements PsiParser, LightPsiParser {
         r = name_stmt(b, l + 1);
         p = r; // pin = 1
         r = r && report_error_(b, regular_directive_stmt_1(b, l + 1));
-        r = p && regular_directive_stmt_2(b, l + 1) && r;
+        r = p && report_error_(b, regular_directive_stmt_2(b, l + 1)) && r;
+        r = p && regular_directive_stmt_3(b, l + 1) && r;
         exit_section_(b, l, m, r, p, null);
         return r || p;
     }
 
-    // value_stmt*
+    // BINARY_OPERATOR?
     private static boolean regular_directive_stmt_1(PsiBuilder b, int l) {
         if (!recursion_guard_(b, l, "regular_directive_stmt_1")) return false;
+        consumeToken(b, BINARY_OPERATOR);
+        return true;
+    }
+
+    // value_stmt*
+    private static boolean regular_directive_stmt_2(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "regular_directive_stmt_2")) return false;
         while (true) {
             int c = current_position_(b);
             if (!value_stmt(b, l + 1)) break;
-            if (!empty_element_parsed_guard_(b, "regular_directive_stmt_1", c)) break;
+            if (!empty_element_parsed_guard_(b, "regular_directive_stmt_2", c)) break;
         }
         return true;
     }
 
     // SEMICOLON | block_stmt
-    private static boolean regular_directive_stmt_2(PsiBuilder b, int l) {
-        if (!recursion_guard_(b, l, "regular_directive_stmt_2")) return false;
+    private static boolean regular_directive_stmt_3(PsiBuilder b, int l) {
+        if (!recursion_guard_(b, l, "regular_directive_stmt_3")) return false;
         boolean r;
         r = consumeToken(b, SEMICOLON);
         if (!r) r = block_stmt(b, l + 1);

@@ -25,7 +25,7 @@ public class Visitor extends PsiElementVisitor {
     }
 
     public void visitDirectiveStmt(@NotNull DirectiveStmt o) {
-        visitNamedElement(o);
+        visitWithPathElement(o);
     }
 
     public void visitGeoBlockContent(@NotNull GeoBlockContent o) {
@@ -176,7 +176,7 @@ public class Visitor extends PsiElementVisitor {
         visitElement(o);
     }
 
-    public void visitNamedElement(@NotNull NamedElement o) {
+    public void visitWithPathElement(@NotNull WithPathElement o) {
         visitElement(o);
     }
 
