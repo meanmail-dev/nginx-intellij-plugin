@@ -1,4 +1,4 @@
-<idea-plugin url="https://meanmail.dev/plugin/7">
+<idea-plugin url="https://meanmail.dev">
     <id>dev.meanmail.plugin.nginx-intellij-plugin</id>
     <name>Nginx Configuration</name>
     <version>SNAPSHOT</version>
@@ -23,7 +23,7 @@
         <localInspection
                 language="Nginx Configuration"
                 implementationClass="dev.meanmail.codeInsight.inspections.NginxDirectiveInspection"
-                displayName="Invalid Nginx Directive Value"
+                displayName="Invalid nginx directive usage"
                 groupName="Nginx"
                 enabledByDefault="true"
                 level="ERROR"
@@ -31,11 +31,12 @@
         <localInspection
                 language="Nginx Configuration"
                 implementationClass="dev.meanmail.codeInsight.inspections.NginxGeoInspection"
-                displayName="Invalid Nginx Geo Directive Usage"
+                displayName="Invalid nginx geo directive usage"
                 groupName="Nginx"
                 enabledByDefault="true"
                 level="ERROR"
                 shortName="NginxGeoInspection"/>
+        <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">
