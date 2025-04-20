@@ -1,3 +1,17 @@
+## 2025.8 (April, 20, 2025)
+
+* Add suport directives:
+    - proxy_cookie_domain
+    - proxy_cookie_flags
+    - proxy_cookie_path
+    - proxy_ignore_client_abort
+    - proxy_ssl_certificate_cache
+    - proxy_ssl_key_log
+
+## 2025.7 (April, 6, 2025)
+
+* Add error reporting
+
 ## 2025.6 (March, 22, 2025)
 
 * A dark theme for file icons

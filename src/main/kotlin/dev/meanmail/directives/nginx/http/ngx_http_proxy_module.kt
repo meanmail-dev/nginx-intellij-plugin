@@ -1,9 +1,6 @@
 package dev.meanmail.directives.nginx.http
 
-import dev.meanmail.directives.Directive
-import dev.meanmail.directives.DirectiveParameter
-import dev.meanmail.directives.NginxModule
-import dev.meanmail.directives.ValueType
+import dev.meanmail.directives.*
 
 // https://nginx.org/en/docs/http/ngx_http_proxy_module.html
 
@@ -11,69 +8,6 @@ val ngx_http_proxy_module = NginxModule(
     name = "ngx_http_proxy_module",
     description = "Allows proxying requests to another server and configuring the connection",
     enabled = true
-)
-
-val proxy = Directive(
-    name = "proxy_pass",
-    description = "Sets the protocol, address, and optional port of a proxied server. Can use domain names, IP addresses, and Unix sockets",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "url",
-            description = "URL of the proxied server, including protocol (http/https), optional port, and path. Can include variables and Unix socket paths",
-            valueType = ValueType.STRING,
-            required = true
-        )
-    ),
-    context = listOf(location, locationIf, limitExcept),
-    module = ngx_http_proxy_module
-)
-
-val proxyMethod = Directive(
-    name = "proxy_method",
-    description = "Specifies a custom HTTP method to be used when forwarding requests to the proxied server, overriding the original client request method",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "method",
-            description = "HTTP method to use instead of the client request method (e.g., GET, POST, PUT, DELETE)",
-            valueType = ValueType.STRING,
-            required = true
-        )
-    ),
-    context = listOf(http, server, location),
-    module = ngx_http_proxy_module
-)
-
-val proxyHttpVersion = Directive(
-    name = "proxy_http_version",
-    description = "Sets the HTTP protocol version for proxying requests to the backend server",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "version",
-            description = "HTTP protocol version to use when proxying requests",
-            valueType = ValueType.STRING,
-            required = false,
-            defaultValue = "1.0",
-            allowedValues = listOf("1.0", "1.1")
-        )
-    ),
-    context = listOf(http, server, location),
-    module = ngx_http_proxy_module
-)
-
-val proxyConnectTimeout = Directive(
-    name = "proxy_connect_timeout",
-    description = "Defines a timeout for establishing a connection with a proxied server",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "timeout",
-            description = "Connection timeout duration (usually not exceeding 75 seconds)",
-            valueType = ValueType.TIME,
-            required = false,
-            defaultValue = "60s"
-        )
-    ),
-    context = listOf(http, server, location),
-    module = ngx_http_proxy_module
 )
 
 val proxyBind = Directive(
@@ -85,6 +19,22 @@ val proxyBind = Directive(
             description = "Local IP address or interface to bind outgoing connections",
             valueType = ValueType.STRING,
             required = false
+        ),
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxyBufferSize = Directive(
+    name = "proxy_buffer_size",
+    description = "Sets the size of the buffer used for reading the first part of the response from the proxied server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "size",
+            description = "Size of the buffer for reading the first part of the response",
+            valueType = ValueType.SIZE,
+            required = false,
+            defaultValue = "4k"
         )
     ),
     context = listOf(http, server, location),
@@ -101,22 +51,6 @@ val proxyBuffering = Directive(
             valueType = ValueType.BOOLEAN,
             required = false,
             defaultValue = "on"
-        )
-    ),
-    context = listOf(http, server, location),
-    module = ngx_http_proxy_module
-)
-
-val proxyBufferSize = Directive(
-    name = "proxy_buffer_size",
-    description = "Sets the size of the buffer used for reading the first part of the response from the proxied server",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "size",
-            description = "Size of the buffer for reading the first part of the response",
-            valueType = ValueType.SIZE,
-            required = false,
-            defaultValue = "4k"
         )
     ),
     context = listOf(http, server, location),
@@ -419,6 +353,70 @@ val proxyCacheValid = Directive(
     module = ngx_http_proxy_module
 )
 
+val proxyConnectTimeout = Directive(
+    name = "proxy_connect_timeout",
+    description = "Defines a timeout for establishing a connection with a proxied server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "timeout",
+            description = "Connection timeout duration (usually not exceeding 75 seconds)",
+            valueType = ValueType.TIME,
+            required = false,
+            defaultValue = "60s"
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxyCookieDomain = Directive(
+    name = "proxy_cookie_domain",
+    description = "Sets the domain for the Set-Cookie header in responses from the proxied server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "domain",
+            description = "Domain for the Set-Cookie header",
+            valueType = ValueType.STRING,
+            required = false,
+            defaultValue = "off"
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxyCookieFlags = Directive(
+    name = "proxy_cookie_flags",
+    description = "Sets the flags for the Set-Cookie header in responses from the proxied server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "flags",
+            description = "Flags for the Set-Cookie header",
+            valueType = ValueType.STRING,
+            required = false,
+            defaultValue = "off"
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxyCookiePath = Directive(
+    name = "proxy_cookie_path",
+    description = "Sets the path for the Set-Cookie header in responses from the proxied server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "path",
+            description = "Path for the Set-Cookie header",
+            valueType = ValueType.STRING,
+            required = false,
+            defaultValue = "off"
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
 val proxyForceRanges = Directive(
     name = "proxy_force_ranges",
     description = "Enables byte-range support for proxied requests regardless of the Range request header field",
@@ -476,6 +474,31 @@ val proxyHideHeader = Directive(
             required = true
         )
     ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxyHttpVersion = Directive(
+    name = "proxy_http_version",
+    description = "Sets the HTTP protocol version for proxying requests to the backend server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "version",
+            description = "HTTP protocol version to use when proxying requests",
+            valueType = ValueType.STRING,
+            required = false,
+            defaultValue = "1.0",
+            allowedValues = listOf("1.0", "1.1")
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxyIgnoreClientAbort = ToggleDirective(
+    name = "proxy_ignore_client_abort",
+    description = "Determines whether to ignore client aborts when sending requests to the proxied server",
+    enabled = false,
     context = listOf(http, server, location),
     module = ngx_http_proxy_module
 )
@@ -545,6 +568,21 @@ val proxyMaxTempFileSize = Directive(
             name = "size",
             description = "Maximum size of temporary file (0 disables buffering to temporary files)",
             valueType = ValueType.SIZE,
+            required = true
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxyMethod = Directive(
+    name = "proxy_method",
+    description = "Specifies a custom HTTP method to be used when forwarding requests to the proxied server, overriding the original client request method",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "method",
+            description = "HTTP method to use instead of the client request method (e.g., GET, POST, PUT, DELETE)",
+            valueType = ValueType.STRING,
             required = true
         )
     ),
@@ -627,6 +665,21 @@ val proxyNoCache = Directive(
     module = ngx_http_proxy_module
 )
 
+val proxyPass = Directive(
+    name = "proxy_pass",
+    description = "Sets the protocol, address, and optional port of a proxied server. Can use domain names, IP addresses, and Unix sockets",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "url",
+            description = "URL of the proxied server, including protocol (http/https), optional port, and path. Can include variables and Unix socket paths",
+            valueType = ValueType.STRING,
+            required = true
+        )
+    ),
+    context = listOf(location, locationIf, limitExcept),
+    module = ngx_http_proxy_module
+)
+
 val proxyPassHeader = Directive(
     name = "proxy_pass_header",
     description = "Allows passing specified headers from the proxied server to the client, overriding the default header hiding behavior",
@@ -642,13 +695,13 @@ val proxyPassHeader = Directive(
     module = ngx_http_proxy_module
 )
 
-val proxyPassRequestHeaders = Directive(
-    name = "proxy_pass_request_headers",
-    description = "Determines whether the original request headers are passed to the proxied server",
+val proxyPassRequestBody = Directive(
+    name = "proxy_pass_request_body",
+    description = "Determines whether the original request body is passed to the proxied server",
     parameters = listOf(
         DirectiveParameter(
             name = "enabled",
-            description = "When enabled, the original client request headers are passed to the proxied server",
+            description = "When enabled, the original client request body is passed to the proxied server",
             valueType = ValueType.BOOLEAN,
             required = false,
             defaultValue = "on"
@@ -658,13 +711,13 @@ val proxyPassRequestHeaders = Directive(
     module = ngx_http_proxy_module
 )
 
-val proxyPassRequestBody = Directive(
-    name = "proxy_pass_request_body",
-    description = "Determines whether the original request body is passed to the proxied server",
+val proxyPassRequestHeaders = Directive(
+    name = "proxy_pass_request_headers",
+    description = "Determines whether the original request headers are passed to the proxied server",
     parameters = listOf(
         DirectiveParameter(
             name = "enabled",
-            description = "When enabled, the original client request body is passed to the proxied server",
+            description = "When enabled, the original client request headers are passed to the proxied server",
             valueType = ValueType.BOOLEAN,
             required = false,
             defaultValue = "on"
@@ -768,6 +821,21 @@ val proxySendTimeout = Directive(
     module = ngx_http_proxy_module
 )
 
+val proxySetBody = Directive(
+    name = "proxy_set_body",
+    description = "Allows changing the request body before passing it to the proxied server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "body",
+            description = "New body content to be sent to the proxied server",
+            valueType = ValueType.STRING,
+            required = false
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
 val proxySetHeader = Directive(
     name = "proxy_set_header",
     description = "Allows redefining or adding headers to be passed to the proxied server",
@@ -783,21 +851,6 @@ val proxySetHeader = Directive(
             description = "Value of the header to be set",
             valueType = ValueType.STRING,
             required = true
-        )
-    ),
-    context = listOf(http, server, location),
-    module = ngx_http_proxy_module
-)
-
-val proxySetBody = Directive(
-    name = "proxy_set_body",
-    description = "Allows changing the request body before passing it to the proxied server",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "body",
-            description = "New body content to be sent to the proxied server",
-            valueType = ValueType.STRING,
-            required = false
         )
     ),
     context = listOf(http, server, location),
@@ -831,6 +884,14 @@ val proxySslCertificate = Directive(
             required = true
         )
     ),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxySslCertificateCache = Directive(
+    name = "proxy_ssl_certificate_cache",
+    description = "Specifies the cache for SSL certificates used for authentication to a proxied HTTPS server",
+    parameters = emptyList(),
     context = listOf(http, server, location),
     module = ngx_http_proxy_module
 )
@@ -888,15 +949,16 @@ val proxySslConfCommand = Directive(
 
 val proxySslCrl = Directive(
     name = "proxy_ssl_crl",
-    description = "Specifies the certificate revocation list (CRL) file for verifying the proxied HTTPS server's certificate",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "file",
-            description = "Path to the certificate revocation list file",
-            valueType = ValueType.STRING,
-            required = true
-        )
-    ),
+    description = "Specifies the certificate revocation list (CRL) file for verifying the certificate of the proxied HTTPS server",
+    parameters = emptyList(),
+    context = listOf(http, server, location),
+    module = ngx_http_proxy_module
+)
+
+val proxySslKeyLog = Directive(
+    name = "proxy_ssl_key_log",
+    description = "Specifies the file for logging SSL session keys for debugging purposes",
+    parameters = emptyList(),
     context = listOf(http, server, location),
     module = ngx_http_proxy_module
 )
@@ -1083,38 +1145,6 @@ val proxyTempPath = Directive(
             description = "Path to the directory for storing temporary files",
             valueType = ValueType.STRING,
             required = true
-        )
-    ),
-    context = listOf(http, server, location),
-    module = ngx_http_proxy_module
-)
-
-val proxyUpstreamTimeout = Directive(
-    name = "proxy_upstream_timeout",
-    description = "Sets the timeout for communicating with an upstream server",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "timeout",
-            description = "Maximum time to wait for communication with an upstream server",
-            valueType = ValueType.TIME,
-            required = false,
-            defaultValue = "0"
-        )
-    ),
-    context = listOf(http, server, location),
-    module = ngx_http_proxy_module
-)
-
-val proxyUpstreamMaxFails = Directive(
-    name = "proxy_upstream_max_fails",
-    description = "Sets the maximum number of failed attempts to communicate with an upstream server",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "number",
-            description = "Maximum number of unsuccessful attempts before marking the server as unavailable",
-            valueType = ValueType.NUMBER,
-            required = false,
-            defaultValue = "1"
         )
     ),
     context = listOf(http, server, location),
