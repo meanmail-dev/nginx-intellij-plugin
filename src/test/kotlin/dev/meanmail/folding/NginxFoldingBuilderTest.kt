@@ -5,14 +5,14 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.meanmail.NginxFileType
 
 class NginxFoldingBuilderTest : BasePlatformTestCase() {
-    
+
     override fun getTestDataPath(): String {
         return "src/test/testData/folding"
     }
 
     fun testSimpleBlockFolding() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {
@@ -22,28 +22,31 @@ class NginxFoldingBuilderTest : BasePlatformTestCase() {
             }
             """.trimIndent()
         )
-        
+
         myFixture.doHighlighting() // Required for folding initialization
         val foldingModel = myFixture.editor.foldingModel
         val foldingRegions = foldingModel.allFoldRegions
         assertEquals(2, foldingRegions.size)
-        
+
         // Check inner server block
-        val serverBlock = foldingRegions.find { 
-            it.startOffset == myFixture.editor.document.text.indexOf('{', myFixture.editor.document.text.indexOf("server")) + 1 
+        val serverBlock = foldingRegions.find {
+            it.startOffset == myFixture.editor.document.text.indexOf(
+                '{',
+                myFixture.editor.document.text.indexOf("server")
+            ) + 1
         }
         assertNotNull(serverBlock)
-        
+
         // Check outer http block
-        val httpBlock = foldingRegions.find { 
-            it.startOffset == myFixture.editor.document.text.indexOf('{') + 1 
+        val httpBlock = foldingRegions.find {
+            it.startOffset == myFixture.editor.document.text.indexOf('{') + 1
         }
         assertNotNull(httpBlock)
     }
 
     fun testLuaBlockFolding() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {
@@ -56,44 +59,50 @@ class NginxFoldingBuilderTest : BasePlatformTestCase() {
             }
             """.trimIndent()
         )
-        
+
         myFixture.doHighlighting() // Required for folding initialization
         val foldingModel = myFixture.editor.foldingModel
         val foldingRegions = foldingModel.allFoldRegions
         assertEquals(4, foldingRegions.size)
-        
+
         // Check lua block
-        val luaBlock = foldingRegions.find { 
-            it.startOffset == myFixture.editor.document.text.indexOf('{', myFixture.editor.document.text.indexOf("content_by_lua_block")) + 1 
+        val luaBlock = foldingRegions.find {
+            it.startOffset == myFixture.editor.document.text.indexOf(
+                '{',
+                myFixture.editor.document.text.indexOf("content_by_lua_block")
+            ) + 1
         }
         assertNotNull(luaBlock)
     }
 
     fun testEmptyBlockNoFolding() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {}
             }
             """.trimIndent()
         )
-        
+
         myFixture.doHighlighting() // Required for folding initialization
         val foldingModel = myFixture.editor.foldingModel
         val foldingRegions = foldingModel.allFoldRegions
         assertEquals(1, foldingRegions.size) // Only for http block
-        
+
         // Check that empty server block has no folding
-        val serverBlock = foldingRegions.find { 
-            it.startOffset == myFixture.editor.document.text.indexOf('{', myFixture.editor.document.text.indexOf("server")) + 1 
+        val serverBlock = foldingRegions.find {
+            it.startOffset == myFixture.editor.document.text.indexOf(
+                '{',
+                myFixture.editor.document.text.indexOf("server")
+            ) + 1
         }
         assertNull(serverBlock)
     }
 
     fun testMissingClosingBrace() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {
@@ -114,7 +123,8 @@ class NginxFoldingBuilderTest : BasePlatformTestCase() {
 
         // Print debug info
         foldingDescriptors.forEachIndexed { index, descriptor ->
-            val text = myFixture.editor.document.getText(TextRange(descriptor.range.startOffset, descriptor.range.endOffset))
+            val text =
+                myFixture.editor.document.getText(TextRange(descriptor.range.startOffset, descriptor.range.endOffset))
             println("Region $index: start=${descriptor.range.startOffset}, end=${descriptor.range.endOffset}, length=${text.length}")
             println("Content: '$text'")
         }
@@ -130,14 +140,15 @@ class NginxFoldingBuilderTest : BasePlatformTestCase() {
         // Verify that regions are nested (each region should start after the previous one)
         for (i in 1 until foldingDescriptors.size) {
             assertTrue(
-                "Region $i should start after region ${i-1}",
-                foldingDescriptors[i].range.startOffset > foldingDescriptors[i-1].range.startOffset
+                "Region $i should start after region ${i - 1}",
+                foldingDescriptors[i].range.startOffset > foldingDescriptors[i - 1].range.startOffset
             )
         }
 
         // Verify that each region contains some expected text
         foldingDescriptors.forEach { descriptor ->
-            val regionText = myFixture.editor.document.getText(TextRange(descriptor.range.startOffset, descriptor.range.endOffset))
+            val regionText =
+                myFixture.editor.document.getText(TextRange(descriptor.range.startOffset, descriptor.range.endOffset))
             assertTrue(
                 "Region should contain some content",
                 regionText.contains("root") || regionText.contains("location") || regionText.contains("server")

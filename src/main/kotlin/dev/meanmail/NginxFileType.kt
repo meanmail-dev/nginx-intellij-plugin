@@ -2,15 +2,10 @@ package dev.meanmail
 
 
 import com.intellij.openapi.fileTypes.LanguageFileType
-import org.jetbrains.annotations.NonNls
 import javax.swing.Icon
 
 
-object NginxFileType : LanguageFileType(NginxLanguage) {
-
-    @NonNls
-    private val DEFAULT_EXTENSION = "conf"
-
+class NginxFileType : LanguageFileType(NginxLanguage) {
     override fun getName(): String {
         return NginxLanguage.id
     }
@@ -20,11 +15,14 @@ object NginxFileType : LanguageFileType(NginxLanguage) {
     }
 
     override fun getDefaultExtension(): String {
-        return DEFAULT_EXTENSION
+        return "conf"
     }
 
     override fun getIcon(): Icon {
         return AllIcons.FILE
     }
 
+    companion object {
+        val INSTANCE: NginxFileType = NginxFileType()
+    }
 }

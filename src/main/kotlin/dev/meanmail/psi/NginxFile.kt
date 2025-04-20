@@ -11,7 +11,7 @@ class NginxFile(viewProvider: FileViewProvider) :
     PsiFileBase(viewProvider, NginxLanguage) {
 
     override fun getFileType(): FileType {
-        return NginxFileType
+        return NginxFileType.INSTANCE
     }
 
     override fun toString(): String {

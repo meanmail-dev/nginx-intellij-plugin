@@ -9,7 +9,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
     fun testEmptyFile() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             ""
         )
 
@@ -21,7 +21,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
     fun testSimpleDirective() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             worker_processes 1;
             """.trimIndent()
@@ -37,7 +37,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
     fun testNestedDirectives() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {
@@ -72,7 +72,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
     fun testLocationDirective() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {
@@ -98,7 +98,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
     fun testIfDirective() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {
@@ -122,7 +122,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
     fun testNavigationAndPresentation() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {
@@ -154,7 +154,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
     fun testMissingClosingBrace() {
         myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 server {

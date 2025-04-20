@@ -1,7 +1,6 @@
 package dev.meanmail.codeInsight.inspections
 
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.junit.Test
 
 class NginxLuaInspectionTest : BasePlatformTestCase() {
 
@@ -14,7 +13,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.enableInspections(NginxDirectiveInspection::class.java)
     }
 
-    @Test
     fun testContentByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -33,7 +31,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testAccessByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -55,7 +52,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testRewriteByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -76,7 +72,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testSetByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -95,7 +90,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testInitByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -111,7 +105,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testBalancerByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -130,7 +123,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testHeaderFilterByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -149,7 +141,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testBodyFilterByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -171,7 +162,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testLogByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",
@@ -190,7 +180,6 @@ class NginxLuaInspectionTest : BasePlatformTestCase() {
         myFixture.checkHighlighting()
     }
 
-    @Test
     fun testSslCertificateByLuaBlock() {
         myFixture.configureByText(
             "test.nginx.conf",

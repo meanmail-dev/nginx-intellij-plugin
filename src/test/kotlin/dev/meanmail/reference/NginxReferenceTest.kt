@@ -22,7 +22,7 @@ class NginxReferenceTest : BasePlatformTestCase() {
 
         // Create main config with include directive
         val mainConfig = myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 include conf.d/server.conf;
@@ -59,7 +59,7 @@ class NginxReferenceTest : BasePlatformTestCase() {
 
         // Create config with absolute path
         val mainConfig = myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 include $basePath/conf.d/server.conf;
@@ -79,7 +79,7 @@ class NginxReferenceTest : BasePlatformTestCase() {
 
     fun testNonExistentFileReference() {
         val config = myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 include conf.d/nonexistent.conf;
@@ -106,7 +106,7 @@ class NginxReferenceTest : BasePlatformTestCase() {
         )
 
         val config = myFixture.configureByText(
-            NginxFileType,
+            NginxFileType.INSTANCE,
             """
             http {
                 include conf.d/nested/app.conf;

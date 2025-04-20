@@ -18,7 +18,7 @@ class NginxGeoInspection : LocalInspectionTool() {
         manager: InspectionManager,
         isOnTheFly: Boolean
     ): Array<ProblemDescriptor> {
-        if (file.fileType != NginxFileType) return emptyArray()
+        if (file.fileType !is NginxFileType) return emptyArray()
 
         val problems = mutableListOf<ProblemDescriptor>()
         val directivesStmts = PsiTreeUtil.findChildrenOfType(file, DirectiveStmt::class.java)

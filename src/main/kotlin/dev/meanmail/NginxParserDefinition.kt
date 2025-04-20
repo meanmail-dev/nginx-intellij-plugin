@@ -53,9 +53,9 @@ class NginxParserDefinition : ParserDefinition {
         return Types.Factory.createElement(node)
     }
 
-    companion object {
-        val WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE)
-        val COMMENTS = TokenSet.create(Types.COMMENT)
-        val FILE = IFileElementType(NginxLanguage)
-    }
 }
+
+val WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE)
+val COMMENTS = TokenSet.create(Types.COMMENT)
+val FILE = IFileElementType(NginxLanguage)
+ 
