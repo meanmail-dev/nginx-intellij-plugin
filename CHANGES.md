@@ -1,3 +1,8 @@
+## 2025.9 (May, 28, 2025)
+
+* Fix recursive include directive processing
+* Update dependencies
+
 ## 2025.8 (April, 20, 2025)
 
 * Add suport directives:

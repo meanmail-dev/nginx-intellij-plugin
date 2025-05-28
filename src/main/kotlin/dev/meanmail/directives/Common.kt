@@ -63,8 +63,11 @@ open class Directive(
     val children: MutableSet<Directive> = mutableSetOf()
 
     init {
-        if (context.isNotEmpty() && context.contains(any)) {
+        if (context.contains(any)) {
             all.forEach { it.children.add(this) }
+        }
+        if (context.contains(self)) {
+            this.children.add(this)
         }
         context.forEach { it.children.add(this) }
         module.directives.add(this)
@@ -89,7 +92,16 @@ open class Directive(
         if (path.size == 1) {
             return true
         }
-        if (context.any { it.isAllowedPath(path.subList(0, path.size - 1)) }) {
+        val subPath = path.subList(0, path.size - 1)
+        if (context.contains(any)) {
+            return all.any { it.isAllowedPath(subPath) }
+        }
+        if (context.any {
+                if (it == self) {
+                    return this.isAllowedPath(subPath)
+                }
+                it.isAllowedPath(subPath)
+            }) {
             return true
         }
         return false
@@ -205,25 +217,6 @@ open class Directive(
     }
 }
 
-class RecursiveDirective(
-    name: String,
-    description: String,
-    parameters: List<DirectiveParameter>,
-    context: List<Directive>,
-    module: NginxModule
-) : Directive(
-    name,
-    description,
-    parameters,
-    context,
-    module
-) {
-    init {
-        // Add itself as a potential child to support recursion
-        this.children.add(this)
-    }
-}
-
 class ToggleDirective(
     name: String,
     description: String,
@@ -263,6 +256,14 @@ val main_module = NginxModule(
 val any = Directive(
     "any",
     "Directive for dynamic context determination",
+    emptyList(),
+    emptyList(),
+    main_module
+)
+
+val self = Directive(
+    "self",
+    "Directive for self-referencing contexts",
     emptyList(),
     emptyList(),
     main_module

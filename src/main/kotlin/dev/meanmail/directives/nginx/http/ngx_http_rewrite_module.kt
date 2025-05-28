@@ -10,7 +10,7 @@ val ngx_http_rewrite_module = NginxModule(
     enabled = true
 )
 
-val locationIf = RecursiveDirective(
+val locationIf = Directive(
     name = "if",
     description = "Creates a conditional block within a location context, executing directives when the specified condition is true",
     parameters = listOf(
@@ -21,7 +21,7 @@ val locationIf = RecursiveDirective(
             required = true
         )
     ),
-    context = listOf(location),
+    context = listOf(location, self),
     module = ngx_http_rewrite_module
 )
 
@@ -90,7 +90,7 @@ val rewriteLog = ToggleDirective(
     enabled = false
 )
 
-val `if` = RecursiveDirective(
+val `if` = Directive(
     name = "if",
     description = "Creates a conditional configuration block that executes directives when the specified condition is true",
     parameters = listOf(
@@ -101,7 +101,7 @@ val `if` = RecursiveDirective(
             required = true
         )
     ),
-    context = listOf(server, location),
+    context = listOf(server, location, self),
     module = ngx_http_rewrite_module
 )
 

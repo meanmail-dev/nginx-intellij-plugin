@@ -18,6 +18,9 @@ class ParsingTest : ParsingTestCase(
     fun testLua() {
         doTest(true)
     }
+    fun testNestedLocation() {
+        doTest(true)
+    }
 
     fun testUpstream() {
         doTest(true)

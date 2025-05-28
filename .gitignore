@@ -145,3 +145,4 @@ build
 src/main/gen
 token.txt
 .intellijPlatform
+.kotlin

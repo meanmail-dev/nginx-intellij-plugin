@@ -40,7 +40,7 @@ val server = Directive(
     module = ngx_http_core_module
 )
 
-val location = RecursiveDirective(
+val location = Directive(
     "location",
     description = "Location directives are used to control the behavior of a single location in a server block.",
     parameters = listOf(
@@ -51,7 +51,7 @@ val location = RecursiveDirective(
             required = true
         )
     ),
-    context = listOf(server),
+    context = listOf(server, self),
     module = ngx_http_core_module
 )
 
