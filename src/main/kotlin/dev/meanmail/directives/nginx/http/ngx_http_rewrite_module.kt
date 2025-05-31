@@ -25,18 +25,26 @@ val locationIf = Directive(
     module = ngx_http_rewrite_module
 )
 
+val `if` = Directive(
+    name = "if",
+    description = "Creates a conditional configuration block that executes directives when the specified condition is true",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "condition",
+            description = "Condition to evaluate, supporting variable checks, comparisons, regex matching, and file existence tests",
+            valueType = ValueType.STRING,
+            required = true
+        )
+    ),
+    context = listOf(server, location, self),
+    module = ngx_http_rewrite_module
+)
+
 val `break` = Directive(
     name = "break",
     description = "Stops processing the current set of rewrite module directives and continues request processing in the current location",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "none",
-            description = "No parameters required. Immediately stops further processing of rewrite directives",
-            valueType = ValueType.STRING,
-            required = false
-        )
-    ),
-    context = listOf(server, location, locationIf),
+    parameters = emptyList(),
+    context = listOf(server, location, `if`),
     module = ngx_http_rewrite_module
 )
 
@@ -51,7 +59,7 @@ val `return` = Directive(
             required = true
         )
     ),
-    context = listOf(server, location, locationIf),
+    context = listOf(server, location, `if`),
     module = ngx_http_rewrite_module
 )
 
@@ -78,31 +86,16 @@ val rewrite = Directive(
             required = false
         )
     ),
-    context = listOf(server, location, locationIf),
+    context = listOf(server, location, `if`),
     module = ngx_http_rewrite_module
 )
 
 val rewriteLog = ToggleDirective(
     name = "rewrite_log",
     description = "Enables or disables logging of rewrite module directive processing for debugging",
-    context = listOf(http, server, location),
+    context = listOf(http, server, location, `if`),
     module = ngx_http_rewrite_module,
     enabled = false
-)
-
-val `if` = Directive(
-    name = "if",
-    description = "Creates a conditional configuration block that executes directives when the specified condition is true",
-    parameters = listOf(
-        DirectiveParameter(
-            name = "condition",
-            description = "Condition to evaluate, supporting variable checks, comparisons, regex matching, and file existence tests",
-            valueType = ValueType.STRING,
-            required = true
-        )
-    ),
-    context = listOf(server, location, self),
-    module = ngx_http_rewrite_module
 )
 
 val set = Directive(
@@ -122,14 +115,14 @@ val set = Directive(
             required = true
         )
     ),
-    context = listOf(server, location, locationIf, `if`),
+    context = listOf(server, location, `if`),
     module = ngx_http_rewrite_module
 )
 
 val uninitializedVariableWarn = ToggleDirective(
     name = "uninitialized_variable_warn",
     description = "Controls logging of warnings when uninitialized variables are encountered during request processing",
-    context = listOf(http, server, location),
+    context = listOf(http, server, location, `if`),
     module = ngx_http_rewrite_module,
     enabled = true
 )

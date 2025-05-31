@@ -1,3 +1,9 @@
+## 2025.10 (May, 31, 2025)
+
+* Improved handling of the `if` directive in the rewrite module
+* Simplified the `break` directive by removing unnecessary parameters
+
+
 ## 2025.9 (May, 28, 2025)
 
 * Fix recursive include directive processing
