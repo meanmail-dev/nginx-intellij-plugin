@@ -2,7 +2,7 @@
 
 * Fix `pcre_jit` directive context
 * Fix `google_perftools_profiles` directive context
-* Support lua directives only in Pro version
+* Support for external directives is only in Pro version
 
 ## 2025.10 (May, 31, 2025)
 
