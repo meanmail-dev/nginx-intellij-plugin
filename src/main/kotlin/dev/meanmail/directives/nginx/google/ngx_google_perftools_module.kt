@@ -1,10 +1,6 @@
 package dev.meanmail.directives.nginx.google
 
-import dev.meanmail.directives.Directive
-import dev.meanmail.directives.DirectiveParameter
-import dev.meanmail.directives.NginxModule
-import dev.meanmail.directives.ValueType
-import dev.meanmail.directives.nginx.stream.stream
+import dev.meanmail.directives.*
 
 // https://nginx.org/en/docs/ngx_google_perftools_module.html
 
@@ -26,6 +22,6 @@ val streamGooglePerftoolsProfiles = Directive(
             defaultValue = "/tmp/nginx_profiles"
         )
     ),
-    context = listOf(stream),
+    context = listOf(main),
     module = ngx_google_perftools_module
 )
