@@ -209,7 +209,7 @@ val pcreJit = Directive(
             allowedValues = listOf("on", "off")
         )
     ),
-    context = listOf(events),
+    context = listOf(main),
     module = ngx_core_module
 )
 
