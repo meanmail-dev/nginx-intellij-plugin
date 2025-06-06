@@ -103,14 +103,14 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
             http {
                 server {
                     location / {
-                        if (${'$'}request_method = POST) {
-                            ret<caret>
+                        if ($\request_method = POST) {
+                            re<caret>
                         }
                     }
                 }
             }
         """.trimIndent(),
-            "return", "echo_reset_timer",
+            "return", "rewrite", "rewrite_log", "break", "expires",
             strict = true
         )
     }

@@ -20,8 +20,6 @@ import dev.meanmail.directives.nginx.stream.ssl.ngx_stream_ssl_module
 import dev.meanmail.directives.nginx.stream.ssl.ngx_stream_ssl_preread_module
 import dev.meanmail.directives.nginx.stream.upstream.ngx_stream_upstream_hc_module
 import dev.meanmail.directives.nginx.stream.upstream.ngx_stream_upstream_module
-import dev.meanmail.directives.openresty.http.echo.ngx_http_echo_module
-import dev.meanmail.directives.openresty.http.lua.lua_nginx_module
 import dev.meanmail.psi.DirectiveStmt
 
 enum class ValueType {
@@ -206,10 +204,6 @@ open class Directive(
             *ngx_mail_realip_module.directives.toTypedArray(),
             *ngx_mail_smtp_module.directives.toTypedArray(),
             *ngx_mail_ssl_module.directives.toTypedArray(),
-
-            // External modules
-            *ngx_http_echo_module.directives.toTypedArray(),
-            *lua_nginx_module.directives.toTypedArray(),
         )
 
         val all: List<Directive>
