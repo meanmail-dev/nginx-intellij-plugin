@@ -246,6 +246,21 @@ val grpcSslCertificate = Directive(
     module = ngx_http_grpc_module
 )
 
+val grpcSslCertificateCache = Directive(
+    name = "grpc_ssl_certificate_cache",
+    description = "Enables or disables caching of SSL certificates for gRPC connections",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "enabled",
+            description = "Enable or disable SSL certificate caching",
+            valueType = ValueType.BOOLEAN,
+            defaultValue = "off",
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_grpc_module
+)
+
 val grpcSslCertificateKey = Directive(
     name = "grpc_ssl_certificate_key",
     description = "Specifies the path to the client SSL certificate key for gRPC connections",

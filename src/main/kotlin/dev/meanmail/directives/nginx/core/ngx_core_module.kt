@@ -244,6 +244,14 @@ val sslEngine = Directive(
     module = ngx_core_module
 )
 
+val sslObjectCacheInheritable = ToggleDirective(
+    "ssl_object_cache_inheritable",
+    "Enables or disables inheritable SSL object cache",
+    true,
+    context = listOf(main),
+    module = ngx_core_module
+)
+
 val threadPool = Directive(
     "thread_pool",
     description = "Configures thread pool parameters",

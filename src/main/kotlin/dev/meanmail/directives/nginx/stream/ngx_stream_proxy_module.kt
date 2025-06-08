@@ -286,6 +286,22 @@ val streamProxySslCertificate = Directive(
     module = ngx_stream_proxy_module
 )
 
+val streamProxySslCertificateCache = Directive(
+    name = "proxy_ssl_certificate_cache",
+    description = "Enables caching of SSL certificates for proxied connections to improve performance",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "state",
+            valueType = ValueType.BOOLEAN,
+            description = "Enables or disables caching of SSL certificates for proxied connections",
+            required = false,
+            defaultValue = "off"
+        )
+    ),
+    context = listOf(stream, streamServer),
+    module = ngx_stream_proxy_module
+)
+
 val streamProxySslCertificateKey = Directive(
     name = "proxy_ssl_certificate_key",
     description = "Specifies the private key for the client SSL certificate",

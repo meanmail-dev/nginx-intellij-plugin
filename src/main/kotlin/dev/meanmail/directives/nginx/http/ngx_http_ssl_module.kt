@@ -41,10 +41,10 @@ val sslCertificate = Directive(
         If intermediate certificates are needed, they should be specified in the same file in order: 
         primary certificate first, then intermediate certificates. 
         A secret key in PEM format may be placed in the same file.
-        
+
         Can be specified multiple times to load certificates of different types (e.g., RSA and ECDSA).
         Requires OpenSSL 1.0.2+ for separate certificate chains.
-        
+
         Supports variables in filename since version 1.15.9 (with potential performance implications).
         Can use 'data:${'$'}variable' syntax since 1.15.10 to load certificate from a variable.
     """.trimIndent(),
@@ -60,6 +60,22 @@ val sslCertificate = Directive(
             """.trimIndent(),
             valueType = ValueType.STRING,
             required = true
+        )
+    ),
+    context = listOf(http, server),
+    module = ngx_http_ssl_module
+)
+
+val sslCertificateCache = Directive(
+    name = "ssl_certificate_cache",
+    description = "Configures the cache for SSL certificates to improve performance by avoiding repeated file reads",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "size",
+            description = "Size of the SSL certificate cache",
+            valueType = ValueType.BOOLEAN,
+            required = true,
+            defaultValue = "off"
         )
     ),
     context = listOf(http, server),
@@ -273,12 +289,12 @@ val sslProtocols = Directive(
     name = "ssl_protocols",
     description = """
         Enables specified SSL/TLS protocols.
-        
+
         Notes:
         - TLSv1.1 and TLSv1.2 require OpenSSL 1.0.1+
         - TLSv1.3 requires OpenSSL 1.1.1+
         - TLSv1.3 is used by default since version 1.23.4
-        
+
         If specified at server level, can use default server's value.
     """.trimIndent(),
     parameters = listOf(

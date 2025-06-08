@@ -890,8 +890,15 @@ val proxySslCertificate = Directive(
 
 val proxySslCertificateCache = Directive(
     name = "proxy_ssl_certificate_cache",
-    description = "Specifies the cache for SSL certificates used for authentication to a proxied HTTPS server",
-    parameters = emptyList(),
+    description = "Enables caching of SSL certificates used for authentication to a proxied HTTPS server",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "enabled",
+            description = "Whether to enable caching of SSL certificates",
+            valueType = ValueType.BOOLEAN,
+            defaultValue = "off"
+        )
+    ),
     context = listOf(http, server, location),
     module = ngx_http_proxy_module
 )

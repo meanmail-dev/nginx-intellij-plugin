@@ -1,3 +1,13 @@
+## 2025.13 (June, 8, 2025)
+
+* Add support for new directives:
+  - `grpc_ssl_certificate_cache`
+  - `keepalive_min_timeout`
+  - `proxy_ssl_certificate_cache`
+  - `ssl_certificate_cache`
+  - `ssl_object_cache_inheritable`
+  - `uwsgi_ssl_certificate_cache`
+
 ## 2025.11 (June, 6, 2025)
 
 * Fix `pcre_jit` directive context

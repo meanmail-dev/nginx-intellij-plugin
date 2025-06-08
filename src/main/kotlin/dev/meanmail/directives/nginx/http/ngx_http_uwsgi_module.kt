@@ -648,6 +648,21 @@ val uwsgiSslCertificate = Directive(
     module = ngx_http_uwsgi_module
 )
 
+val uwsgiSslCertificateCache = Directive(
+    name = "uwsgi_ssl_certificate_cache",
+    description = "Enables caching of SSL certificates for secure connections to uwsgi servers",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "enabled",
+            description = "Enable or disable SSL certificate caching",
+            valueType = ValueType.BOOLEAN,
+            defaultValue = "off",
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_uwsgi_module
+)
+
 val uwsgiSslCertificateKey = Directive(
     name = "uwsgi_ssl_certificate_key",
     description = "Specifies the path to the private key for the SSL certificate",

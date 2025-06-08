@@ -371,6 +371,22 @@ val keepaliveDisable = Directive(
     module = ngx_http_core_module
 )
 
+val keepaliveMinTimeout = Directive(
+    "keepalive_min_timeout",
+    description = "Sets the minimum timeout for keep-alive connections",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "timeout",
+            description = "Minimum timeout for keep-alive connections",
+            valueType = ValueType.TIME,
+            required = true,
+            defaultValue = "0"
+        )
+    ),
+    context = listOf(http, server, location),
+    module = ngx_http_core_module
+)
+
 val keepaliveRequests = Directive(
     "keepalive_requests",
     description = "Sets the maximum number of requests that can be served through a keep-alive connection",

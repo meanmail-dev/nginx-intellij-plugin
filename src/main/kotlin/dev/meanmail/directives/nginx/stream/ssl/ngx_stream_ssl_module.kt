@@ -43,6 +43,21 @@ val streamSslCertificate = Directive(
     module = ngx_stream_ssl_module
 )
 
+val streamSslCertificateCache = Directive(
+    name = "ssl_certificate_cache",
+    description = "Enables or disables the SSL certificate cache",
+    parameters = listOf(
+        DirectiveParameter(
+            name = "enabled",
+            valueType = ValueType.BOOLEAN,
+            description = "Enables or disables the SSL certificate cache",
+            defaultValue = "off"
+        )
+    ),
+    context = listOf(stream, streamServer),
+    module = ngx_stream_ssl_module
+)
+
 val streamSslCertificateKey = Directive(
     name = "ssl_certificate_key",
     description = "Sets the path to the SSL/TLS certificate private key file",
