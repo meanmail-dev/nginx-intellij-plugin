@@ -1,9 +1,10 @@
 package dev.meanmail.codeInsight.inspections
 
-import com.intellij.codeInspection.InspectionManager
-import com.intellij.codeInspection.LocalInspectionTool
-import com.intellij.codeInspection.ProblemDescriptor
-import com.intellij.codeInspection.ProblemHighlightType
+import com.intellij.codeInspection.*
+import com.intellij.ide.BrowserUtil
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
@@ -35,7 +36,7 @@ class NginxDirectiveInspection : LocalInspectionTool() {
                     manager.createProblemDescriptor(
                         nameElement,
                         "Unknown directive",
-                        true,
+                        UnknownDirectiveQuickFix(),
                         ProblemHighlightType.ERROR,
                         isOnTheFly
                     )
@@ -118,5 +119,25 @@ class NginxDirectiveInspection : LocalInspectionTool() {
         }
 
         return emptyList()
+    }
+
+    /**
+     * Quick Fix that suggests installing the Pro version for unknown directives
+     */
+    private class UnknownDirectiveQuickFix : LocalQuickFix {
+        override fun getName(): String = "Check if this directive is available in Pro version"
+
+        override fun getFamilyName(): String = "NGINX Pro Features"
+
+        override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+            ApplicationManager.getApplication().invokeLater {
+                BrowserUtil.browse("https://plugins.jetbrains.com/plugin/18280-nginx-configuration-pro")
+
+                Messages.showInfoMessage(
+                    "Please install the plugin from the marketplace page that has been opened in your browser.",
+                    "NGINX Pro Plugin"
+                )
+            }
+        }
     }
 }
