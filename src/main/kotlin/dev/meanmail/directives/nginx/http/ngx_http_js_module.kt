@@ -21,7 +21,7 @@ val jsImport = Directive(
             required = true
         )
     ),
-    context = listOf(http),
+    context = listOf(http, server, location),
     module = ngx_http_js_module
 )
 

@@ -196,7 +196,7 @@ val streamJsImport = Directive(
             required = true
         )
     ),
-    context = listOf(stream),
+    context = listOf(stream, streamServer),
     module = ngx_stream_js_module
 )
 
@@ -284,7 +284,7 @@ val streamJsPath = Directive(
             required = true
         )
     ),
-    context = listOf(stream),
+    context = listOf(stream, streamServer),
     module = ngx_stream_js_module
 )
 
@@ -326,7 +326,7 @@ val streamJsPreloadObject = Directive(
             required = true
         )
     ),
-    context = listOf(stream),
+    context = listOf(stream, streamServer),
     module = ngx_stream_js_module
 )
 
