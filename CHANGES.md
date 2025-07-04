@@ -1,3 +1,10 @@
+## 2025.14 (July, 4, 2025)
+
+* added some new contexts to directives (Thanks @atwupack)
+  - `js_import`
+  - `js_path`
+  - `js_preload_object`
+
 ## 2025.13 (June, 8, 2025)
 
 * Add support for new directives:
