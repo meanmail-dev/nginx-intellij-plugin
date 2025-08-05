@@ -4,7 +4,101 @@
     <version>SNAPSHOT</version>
     <idea-version since-build="233"/>
     <vendor email="plugin@meanmail.ru" url="https://meanmail.dev">meanmail</vendor>
-    <description></description>
+    <description><![CDATA[<h4>IDE Plugin for Nginx Configuration Files</h4>
+<p>Designed for working with Nginx configuration files,
+    our plugin offers a comprehensive set of features to enhance your workflow.</p>
+
+<h4>Free vs Pro Comparison</h4>
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; text-align: left;">
+    <thead>
+    <tr style="background-color: #f2f2f2;">
+        <th>Feature</th>
+        <th>Free Version</th>
+        <th><strong><a
+                href="https://plugins.jetbrains.com/plugin/18280-nginx-configuration-pro">Pro version</a></strong></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Syntax highlighting</td>
+        <td>✅</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td>Directive auto-completion</td>
+        <td>✅</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td>File navigation</td>
+        <td>✅</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td>File structure display</td>
+        <td>✅</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td>Comment / Uncomment actions</td>
+        <td>✅</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td><strong>Support for custom directives (external modules)</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td><strong>Advanced inspections</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td><strong>Lua block syntax highlighting</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td><strong>Auto-formatting</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td><strong>Quick documentation</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td><strong>Priority updates and new features</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    <tr>
+        <td><strong>Priority support</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    </tbody>
+</table>
+
+<h4>Key Features:</h4>
+<ul>
+    <li><strong>Syntax highlighting:</strong> Clear and convenient work with Nginx configurations.</li>
+    <li><strong>Directive auto-completion:</strong> Speeds up the editing process.</li>
+    <li><strong>File navigation:</strong> Simplifies transitions between related files.</li>
+    <li><strong>Lua block syntax highlighting:</strong> Requires an installed Lua syntax support plugin.</li>
+    <li><strong>File structure display:</strong> Intuitive tool window for structure overview.</li>
+    <li><strong>Comment and uncomment actions:</strong> Convenient commands for code management.</li>
+</ul>
+
+<h4>More info</h4>
+<ul>
+    <li><a href="https://meanmail.dev/">meanmail.dev</a></li>
+</ul>
+
+Your ratings and feedback are very important. The feature will appear the faster the more people request it.
+]]></description>
     <change-notes></change-notes>
 
     <depends>com.intellij.modules.lang</depends>

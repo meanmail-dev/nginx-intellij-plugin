@@ -1,19 +1,23 @@
+## 2025.17 (August, 5, 2025)
+
+* Fix ngx_http_grpc_module directives
+
 ## 2025.14 (July, 4, 2025)
 
 * added some new contexts to directives (Thanks @atwupack)
-  - `js_import`
-  - `js_path`
-  - `js_preload_object`
+    - `js_import`
+    - `js_path`
+    - `js_preload_object`
 
 ## 2025.13 (June, 8, 2025)
 
 * Add support for new directives:
-  - `grpc_ssl_certificate_cache`
-  - `keepalive_min_timeout`
-  - `proxy_ssl_certificate_cache`
-  - `ssl_certificate_cache`
-  - `ssl_object_cache_inheritable`
-  - `uwsgi_ssl_certificate_cache`
+    - `grpc_ssl_certificate_cache`
+    - `keepalive_min_timeout`
+    - `proxy_ssl_certificate_cache`
+    - `ssl_certificate_cache`
+    - `ssl_object_cache_inheritable`
+    - `uwsgi_ssl_certificate_cache`
 
 ## 2025.11 (June, 6, 2025)
 
