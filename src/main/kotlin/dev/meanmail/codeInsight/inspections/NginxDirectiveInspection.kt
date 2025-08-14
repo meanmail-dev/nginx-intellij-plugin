@@ -1,10 +1,10 @@
 package dev.meanmail.codeInsight.inspections
 
+import com.intellij.codeInsight.intention.preview.IntentionPreviewUtils
 import com.intellij.codeInspection.*
 import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
@@ -130,13 +130,13 @@ class NginxDirectiveInspection : LocalInspectionTool() {
         override fun getFamilyName(): String = "NGINX Pro Features"
 
         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
+            // Avoid side effects during intention preview (runs on a copy). See IDEA SideEffectGuard.
+            if (IntentionPreviewUtils.isPreviewElement(descriptor.psiElement)) {
+                return
+            }
+
             ApplicationManager.getApplication().invokeLater {
                 BrowserUtil.browse("https://plugins.jetbrains.com/plugin/18280-nginx-configuration-pro")
-
-                Messages.showInfoMessage(
-                    "Please install the plugin from the marketplace page that has been opened in your browser.",
-                    "NGINX Pro Plugin"
-                )
             }
         }
     }
