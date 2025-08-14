@@ -102,14 +102,14 @@ val streamProxyHalfClose = Directive(
 
 val streamProxyNextUpstream = Directive(
     name = "proxy_next_upstream",
-    description = "Configures failover mechanism for proxied connections when primary server fails",
+    description = "When a connection to the proxied server cannot be established, determines whether a client connection will be passed to the next server.",
     parameters = listOf(
         DirectiveParameter(
-            name = "conditions",
-            valueType = ValueType.STRING,
-            description = "Specifies conditions for trying the next upstream server. Can include error, timeout, invalid_header, etc.",
-            required = false,
-            allowedValues = listOf("error", "timeout", "invalid_header", "http_500", "http_502", "http_503", "http_504")
+            name = "enable",
+            valueType = ValueType.BOOLEAN,
+            description = "Enable the passing connection to proxied server",
+            required = true,
+            defaultValue = "on"
         )
     ),
     context = listOf(stream, streamServer),

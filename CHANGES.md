@@ -1,6 +1,9 @@
 ## 2025.19 (August, 14, 2025)
 
 * Minor improvements
+* Fix the proxy_next_upstream directive
+* Support `on` param for the stub_status directive
+* Fix the proxy_cache_path directive
 
 ## 2025.17 (August, 5, 2025)
 

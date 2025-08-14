@@ -276,8 +276,8 @@ val proxyCachePath = Directive(
             required = true
         ),
         DirectiveParameter(
-            name = "parameters",
-            description = "Additional cache configuration parameters",
+            name = "levels",
+            description = "Cache levels for cache storage",
             valueType = ValueType.STRING,
             required = false
         )
@@ -294,10 +294,101 @@ val proxyCachePurge = Directive(
             name = "condition",
             description = "Condition for cache purge",
             valueType = ValueType.STRING,
-            required = false
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "use_temp_path",
+            description = "Enables cache temporary path",
+            valueType = ValueType.BOOLEAN,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "keys_zone",
+            description = "Keys zone name and size: name:size",
+            valueType = ValueType.STRING,
+            required = true,
+        ),
+        DirectiveParameter(
+            name = "inactive",
+            description = "Inactive time",
+            valueType = ValueType.TIME,
+            defaultValue = "10m",
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "max_size",
+            description = "Maximum cache size",
+            valueType = ValueType.SIZE,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "min_free",
+            description = "Minimum cache free",
+            valueType = ValueType.SIZE,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "manager_files",
+            description = "Manager files",
+            valueType = ValueType.NUMBER,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "manager_sleep",
+            description = "Manager sleep time",
+            valueType = ValueType.TIME,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "manager_threshold",
+            description = "Manager threshold",
+            valueType = ValueType.TIME,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "loader_files",
+            description = "Loader files",
+            valueType = ValueType.NUMBER,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "loader_sleep",
+            description = "Loader sleep time",
+            valueType = ValueType.TIME,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "loader_threshold",
+            description = "Loader threshold",
+            valueType = ValueType.TIME,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "purger",
+            description = "Enable or disable a purger",
+            valueType = ValueType.BOOLEAN,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "purger_files",
+            description = "Purger files",
+            valueType = ValueType.NUMBER,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "purger_sleep",
+            description = "Purger sleep time",
+            valueType = ValueType.TIME,
+            required = false,
+        ),
+        DirectiveParameter(
+            name = "purger_threshold",
+            description = "Purger threshold",
+            valueType = ValueType.TIME,
+            required = false,
         )
     ),
-    context = listOf(http, server, location),
+    context = listOf(http),
     module = ngx_http_proxy_module
 )
 
@@ -598,7 +689,7 @@ val proxyNextUpstream = Directive(
             name = "conditions",
             description = "Space-separated list of conditions that trigger passing the request to the next server",
             valueType = ValueType.STRING,
-            required = false,
+            required = true,
             defaultValue = "error timeout",
             allowedValues = listOf(
                 "error",
@@ -612,7 +703,8 @@ val proxyNextUpstream = Directive(
                 "http_404",
                 "http_429",
                 "non_idempotent"
-            )
+            ),
+            multiple = true
         )
     ),
     context = listOf(http, server, location),
