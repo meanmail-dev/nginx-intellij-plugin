@@ -60,6 +60,11 @@
         <td>✅</td>
     </tr>
     <tr>
+        <td><strong>Brotli directives</strong></td>
+        <td>❌</td>
+        <td>✅</td>
+    </tr>
+    <tr>
         <td><strong>Auto-formatting</strong></td>
         <td>❌</td>
         <td>✅</td>

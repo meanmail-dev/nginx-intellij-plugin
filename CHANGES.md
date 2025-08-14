@@ -1,3 +1,7 @@
+## 2025.19 (August, 14, 2025)
+
+* Minor improvements
+
 ## 2025.17 (August, 5, 2025)
 
 * Fix ngx_http_grpc_module directives
