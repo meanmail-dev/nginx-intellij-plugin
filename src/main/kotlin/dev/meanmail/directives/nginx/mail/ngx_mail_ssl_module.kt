@@ -279,3 +279,11 @@ val starttls = Directive(
     context = listOf(mail, mailServer),
     module = ngx_mail_ssl_module
 )
+
+val mailSslCertificateCompression = ToggleDirective(
+    name = "ssl_certificate_compression",
+    description = "Enables TLSv1.3 certificate compression (RFC 8879). Disabled by default since 1.29.1",
+    enabled = false,
+    context = listOf(mail, mailServer),
+    module = ngx_mail_ssl_module
+)

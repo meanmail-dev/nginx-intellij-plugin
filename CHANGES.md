@@ -1,3 +1,7 @@
+## 2025.20 (September, 16, 2025)
+
+* Update Nginx support to 1.29.1: added `early_hints` and `ssl_certificate_compression` directives
+
 ## 2025.19 (August, 14, 2025)
 
 * Minor improvements

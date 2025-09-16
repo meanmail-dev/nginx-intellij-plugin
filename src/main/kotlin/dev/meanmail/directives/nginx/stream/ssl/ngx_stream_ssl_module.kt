@@ -1,9 +1,6 @@
 package dev.meanmail.directives.nginx.stream.ssl
 
-import dev.meanmail.directives.Directive
-import dev.meanmail.directives.DirectiveParameter
-import dev.meanmail.directives.NginxModule
-import dev.meanmail.directives.ValueType
+import dev.meanmail.directives.*
 import dev.meanmail.directives.nginx.stream.stream
 import dev.meanmail.directives.nginx.stream.streamServer
 
@@ -318,6 +315,14 @@ val streamSslVerifyDepth = Directive(
             description = "Maximum depth of certificate chain verification",
         )
     ),
+    context = listOf(stream, streamServer),
+    module = ngx_stream_ssl_module
+)
+
+val streamSslCertificateCompression = ToggleDirective(
+    name = "ssl_certificate_compression",
+    description = "Enables TLSv1.3 certificate compression (RFC 8879). Disabled by default since 1.29.1",
+    enabled = false,
     context = listOf(stream, streamServer),
     module = ngx_stream_ssl_module
 )

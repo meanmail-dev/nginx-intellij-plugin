@@ -943,6 +943,14 @@ val serverTokens = ToggleDirective(
     module = ngx_http_core_module
 )
 
+val earlyHints = ToggleDirective(
+    name = "early_hints",
+    description = "Enables processing and forwarding of 103 Early Hints from upstream (proxy/gRPC)",
+    enabled = false,
+    context = listOf(http, server, location),
+    module = ngx_http_core_module
+)
+
 val subrequestOutputBufferSize = Directive(
     "subrequest_output_buffer_size",
     description = "Sets the buffer size for subrequest output",
