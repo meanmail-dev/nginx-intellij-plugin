@@ -76,7 +76,7 @@ RPAREN=\)
 
 NUMBER_INTEGER={DIGIT}+
 NUMBER_FLOAT={DIGIT}+\.{DIGIT}+
-NUMBER_TIME={DIGIT}+(ms|s|m|h|d|w|M|y)
+NUMBER_DURATION={DIGIT}+(ms|s|m|h|d|w|M|y)
 NUMBER_SIZE={DIGIT}+(b|B|k|K|m|M|g|G)
 NUMBER={NUMBER_FLOAT}|{NUMBER_INTEGER}
 
@@ -132,7 +132,7 @@ DQUOTE="\""
 
 <DIRECTIVE_STATE> {
     {VARIABLE}               { return VARIABLE; }
-    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_DURATION}            { return NUMBER_DURATION; }
     {NUMBER_SIZE}            { return NUMBER_SIZE; }
     {NUMBER}                 { return NUMBER; }
     {IP_RANGE}               { return IP_RANGE; }
@@ -157,7 +157,7 @@ DQUOTE="\""
     {QUOTE}                       { yypush(STRING_STATE); return QUOTE; }
     {DQUOTE}                      { yypush(DQSTRING_STATE); return DQUOTE; }
     {VARIABLE}                    { return VARIABLE; }
-    {NUMBER_TIME}                 { return NUMBER_TIME; }
+    {NUMBER_DURATION}                 { return NUMBER_DURATION; }
     {NUMBER_SIZE}                 { return NUMBER_SIZE; }
     {NUMBER}                      { return NUMBER; }
     {IP_ADDRESS}                  { return IP_ADDRESS; }
@@ -198,7 +198,7 @@ DQUOTE="\""
     {QUOTE}                  { yypush(STRING_STATE); return QUOTE; }
     {DQUOTE}                 { yypush(DQSTRING_STATE); return DQUOTE; }
     {VARIABLE}               { return VARIABLE; }
-    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_DURATION}            { return NUMBER_DURATION; }
     {NUMBER_SIZE}            { return NUMBER_SIZE; }
     {NUMBER}                 { return NUMBER; }
     {IP_RANGE}               { return IP_RANGE; }
@@ -216,7 +216,7 @@ DQUOTE="\""
     include                  { return MAP_INCLUDE; }
     volatile                 { return MAP_VOLATILE; }
     hostnames                { return MAP_HOSTNAMES; }
-    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_DURATION}            { return NUMBER_DURATION; }
     {NUMBER_SIZE}            { return NUMBER_SIZE; }
     {NUMBER}                 { return NUMBER; }
     {IP_RANGE}               { return IP_RANGE; }
@@ -230,7 +230,7 @@ DQUOTE="\""
     {QUOTE}                  { yypush(STRING_STATE); return QUOTE; }
     {DQUOTE}                 { yypush(DQSTRING_STATE); return DQUOTE; }
     {VARIABLE}               { return VARIABLE; }
-    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_DURATION}            { return NUMBER_DURATION; }
     {NUMBER_SIZE}            { return NUMBER_SIZE; }
     {NUMBER}                 { return NUMBER; }
     {IP_RANGE}               { return IP_RANGE; }
@@ -249,7 +249,7 @@ DQUOTE="\""
     include                  { return GEO_INCLUDE; }
     proxy                    { return GEO_PROXY; }
     ranges                   { return GEO_RANGES; }
-    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_DURATION}            { return NUMBER_DURATION; }
     {NUMBER_SIZE}            { return NUMBER_SIZE; }
     {NUMBER}                 { return NUMBER; }
     {IP_RANGE}               { return IP_RANGE; }

@@ -31,7 +31,7 @@ value_stmt ::= IDENTIFIER
                | IP_RANGE
                | IP_ADDRESS
                | NUMBER
-               | NUMBER_TIME
+               | NUMBER_DURATION
                | NUMBER_SIZE
                | VALUE
                | string_stmt
@@ -79,7 +79,7 @@ lua_block_stmt ::= LBRACE lua_code_stmt RBRACE {pin=1}
 lua_directive_stmt ::= lua_stmt value_stmt* lua_block_stmt {pin=1}
 
 if_stmt ::= IF
-concatenated_expr ::= (variable_stmt | IP_ADDRESS | NUMBER | NUMBER_TIME | NUMBER_SIZE | VALUE | IDENTIFIER) +
+concatenated_expr ::= (variable_stmt | IP_ADDRESS | NUMBER | NUMBER_DURATION | NUMBER_SIZE | VALUE | IDENTIFIER) +
 condition_expr ::= concatenated_expr | string_stmt
 condition_stmt ::= UNARY_OPERATOR condition_expr | condition_expr (BINARY_OPERATOR condition_expr)?
 if_paren_stmt ::= LPAREN condition_stmt RPAREN {pin=1}

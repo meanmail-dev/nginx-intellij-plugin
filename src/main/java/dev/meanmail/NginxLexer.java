@@ -2298,7 +2298,7 @@ public class NginxLexer implements FlexLexer {
           // fall through
           case 79: break;
           case 31:
-            { return NUMBER_TIME;
+            { return NUMBER_DURATION;
             }
           // fall through
           case 80: break;

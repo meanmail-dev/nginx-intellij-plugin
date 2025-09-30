@@ -78,7 +78,7 @@ public interface Types {
   IElementType MAP_VOLATILE = new NginxTokenType("MAP_VOLATILE");
   IElementType NUMBER = new NginxTokenType("NUMBER");
   IElementType NUMBER_SIZE = new NginxTokenType("NUMBER_SIZE");
-  IElementType NUMBER_TIME = new NginxTokenType("NUMBER_TIME");
+  IElementType NUMBER_DURATION = new NginxTokenType("NUMBER_DURATION");
   IElementType QUOTE = new NginxTokenType("QUOTE");
   IElementType RBRACE = new NginxTokenType("RBRACE");
   IElementType RETURN = new NginxTokenType("RETURN");

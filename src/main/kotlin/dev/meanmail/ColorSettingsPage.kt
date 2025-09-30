@@ -12,24 +12,24 @@ class NginxColorSettingsPage : ColorSettingsPage {
     private val descriptors = arrayOf(
         AttributesDescriptor("Braces", NginxSyntaxHighlighter.BRACE),
         AttributesDescriptor("Comment", NginxSyntaxHighlighter.COMMENT),
-        AttributesDescriptor("Directive//Identifier", NginxSyntaxHighlighter.IDENTIFIER),
-        AttributesDescriptor("Directive//Lua block", NginxSyntaxHighlighter.LUA_BLOCK_DIRECTIVE),
+        AttributesDescriptor("Directive identifier", NginxSyntaxHighlighter.IDENTIFIER),
+        AttributesDescriptor("Directive identifier//Lua block", NginxSyntaxHighlighter.LUA_BLOCK_DIRECTIVE),
         AttributesDescriptor("IP address", NginxSyntaxHighlighter.IP_ADDRESS),
         AttributesDescriptor("IP range", NginxSyntaxHighlighter.IP_RANGE),
-        AttributesDescriptor("Keyword", NginxSyntaxHighlighter.KEYWORD),
-        AttributesDescriptor("Keyword//geo", NginxSyntaxHighlighter.GEO),
-        AttributesDescriptor("Keyword//geo default", NginxSyntaxHighlighter.GEO_DEFAULT),
-        AttributesDescriptor("Keyword//geo proxy", NginxSyntaxHighlighter.GEO_PROXY),
-        AttributesDescriptor("Keyword//geo ranges", NginxSyntaxHighlighter.GEO_RANGES),
-        AttributesDescriptor("Keyword//if", NginxSyntaxHighlighter.IF),
-        AttributesDescriptor("Keyword//return", NginxSyntaxHighlighter.RETURN),
-        AttributesDescriptor("Keyword//map", NginxSyntaxHighlighter.MAP),
-        AttributesDescriptor("Keyword//map default", NginxSyntaxHighlighter.MAP_DEFAULT),
-        AttributesDescriptor("Keyword//map hostnames", NginxSyntaxHighlighter.MAP_HOSTNAMES),
-        AttributesDescriptor("Keyword//map volatile", NginxSyntaxHighlighter.MAP_VOLATILE),
+        AttributesDescriptor("Keyword directives", NginxSyntaxHighlighter.KEYWORD),
+        AttributesDescriptor("Keyword directives//geo", NginxSyntaxHighlighter.GEO),
+        AttributesDescriptor("Keyword directives//geo//default parameter", NginxSyntaxHighlighter.GEO_DEFAULT),
+        AttributesDescriptor("Keyword directives//geo//proxy parameter", NginxSyntaxHighlighter.GEO_PROXY),
+        AttributesDescriptor("Keyword directives//geo//ranges parameter", NginxSyntaxHighlighter.GEO_RANGES),
+        AttributesDescriptor("Keyword directives//if", NginxSyntaxHighlighter.IF),
+        AttributesDescriptor("Keyword directives//return", NginxSyntaxHighlighter.RETURN),
+        AttributesDescriptor("Keyword directives//map", NginxSyntaxHighlighter.MAP),
+        AttributesDescriptor("Keyword directives//map//default parameter", NginxSyntaxHighlighter.MAP_DEFAULT),
+        AttributesDescriptor("Keyword directives//map//hostnames parameter", NginxSyntaxHighlighter.MAP_HOSTNAMES),
+        AttributesDescriptor("Keyword directives//map//volatile parameter", NginxSyntaxHighlighter.MAP_VOLATILE),
         AttributesDescriptor("Number", NginxSyntaxHighlighter.NUMBER),
         AttributesDescriptor("Number//Size", NginxSyntaxHighlighter.NUMBER_SIZE),
-        AttributesDescriptor("Number//Time", NginxSyntaxHighlighter.NUMBER_TIME),
+        AttributesDescriptor("Number//Duration", NginxSyntaxHighlighter.NUMBER_DURATION),
         AttributesDescriptor("Operator", NginxSyntaxHighlighter.OPERATOR),
         AttributesDescriptor("Parentheses", NginxSyntaxHighlighter.PAREN),
         AttributesDescriptor("Semicolon", NginxSyntaxHighlighter.SEMICOLON),
@@ -68,7 +68,7 @@ class NginxColorSettingsPage : ColorSettingsPage {
             "map_volatile" to NginxSyntaxHighlighter.MAP_VOLATILE,
             "number" to NginxSyntaxHighlighter.NUMBER,
             "number_size" to NginxSyntaxHighlighter.NUMBER_SIZE,
-            "number_time" to NginxSyntaxHighlighter.NUMBER_TIME,
+            "number_duration" to NginxSyntaxHighlighter.NUMBER_DURATION,
             "operator" to NginxSyntaxHighlighter.OPERATOR,
             "paren" to NginxSyntaxHighlighter.PAREN,
             "semicolon" to NginxSyntaxHighlighter.SEMICOLON,
@@ -132,12 +132,12 @@ class NginxColorSettingsPage : ColorSettingsPage {
     <identifier>server_name</identifier> <value>example.com</value> <value>www.example.com</value><semicolon>;</semicolon>
 
     <comment># Timeouts and sizes with units</comment>
-    <identifier>client_body_timeout</identifier> <number_time>60s</number_time><semicolon>;</semicolon>
+    <identifier>client_body_timeout</identifier> <number_duration>60s</number_duration><semicolon>;</semicolon>
     <identifier>client_max_body_size</identifier> <number_size>10M</number_size><semicolon>;</semicolon>
-    <identifier>keepalive_timeout</identifier> <number_time>75s</number_time><semicolon>;</semicolon>
-    <identifier>proxy_connect_timeout</identifier> <number_time>90s</number_time><semicolon>;</semicolon>
-    <identifier>proxy_read_timeout</identifier> <number_time>3m</number_time><semicolon>;</semicolon>
-    <identifier>send_timeout</identifier> <number_time>2m</number_time><semicolon>;</semicolon>
+    <identifier>keepalive_timeout</identifier> <number_duration>75s</number_duration><semicolon>;</semicolon>
+    <identifier>proxy_connect_timeout</identifier> <number_duration>90s</number_duration><semicolon>;</semicolon>
+    <identifier>proxy_read_timeout</identifier> <number_duration>3m</number_duration><semicolon>;</semicolon>
+    <identifier>send_timeout</identifier> <number_duration>2m</number_duration><semicolon>;</semicolon>
 
     <comment># Buffer sizes</comment>
     <identifier>proxy_buffer_size</identifier> <number_size>4k</number_size><semicolon>;</semicolon>
@@ -146,7 +146,7 @@ class NginxColorSettingsPage : ColorSettingsPage {
 
     <comment># SSL configuration</comment>
     <identifier>ssl_certificate</identifier> <string>'/etc/ssl/certs/cert.pem'</string><semicolon>;</semicolon>
-    <identifier>ssl_session_timeout</identifier> <number_time>1d</number_time><semicolon>;</semicolon>
+    <identifier>ssl_session_timeout</identifier> <number_duration>1d</number_duration><semicolon>;</semicolon>
     <identifier>ssl_session_cache</identifier> <value>shared:SSL:10M</value><semicolon>;</semicolon>
 
     <comment># Numeric rate limiting</comment>

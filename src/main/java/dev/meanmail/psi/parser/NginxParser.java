@@ -62,7 +62,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (variable_stmt | IP_ADDRESS | NUMBER | NUMBER_TIME | NUMBER_SIZE | VALUE | IDENTIFIER) +
+  // (variable_stmt | IP_ADDRESS | NUMBER | NUMBER_DURATION | NUMBER_SIZE | VALUE | IDENTIFIER) +
   public static boolean concatenated_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "concatenated_expr")) return false;
     boolean r;
@@ -77,14 +77,14 @@ public class NginxParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // variable_stmt | IP_ADDRESS | NUMBER | NUMBER_TIME | NUMBER_SIZE | VALUE | IDENTIFIER
+  // variable_stmt | IP_ADDRESS | NUMBER | NUMBER_DURATION | NUMBER_SIZE | VALUE | IDENTIFIER
   private static boolean concatenated_expr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "concatenated_expr_0")) return false;
     boolean r;
     r = variable_stmt(b, l + 1);
     if (!r) r = consumeToken(b, IP_ADDRESS);
     if (!r) r = consumeToken(b, NUMBER);
-    if (!r) r = consumeToken(b, NUMBER_TIME);
+    if (!r) r = consumeToken(b, NUMBER_DURATION);
     if (!r) r = consumeToken(b, NUMBER_SIZE);
     if (!r) r = consumeToken(b, VALUE);
     if (!r) r = consumeToken(b, IDENTIFIER);
@@ -847,7 +847,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
   //                | IP_RANGE
   //                | IP_ADDRESS
   //                | NUMBER
-  //                | NUMBER_TIME
+  //                | NUMBER_DURATION
   //                | NUMBER_SIZE
   //                | VALUE
   //                | string_stmt
@@ -861,7 +861,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, IP_RANGE);
     if (!r) r = consumeToken(b, IP_ADDRESS);
     if (!r) r = consumeToken(b, NUMBER);
-    if (!r) r = consumeToken(b, NUMBER_TIME);
+    if (!r) r = consumeToken(b, NUMBER_DURATION);
     if (!r) r = consumeToken(b, NUMBER_SIZE);
     if (!r) r = consumeToken(b, VALUE);
     if (!r) r = string_stmt(b, l + 1);

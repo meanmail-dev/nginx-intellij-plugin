@@ -26,7 +26,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
             Types.IP_ADDRESS -> IP_ADDRESS_KEYS
             Types.IP_RANGE -> IP_RANGE_KEYS
             Types.NUMBER -> NUMBER_KEYS
-            Types.NUMBER_TIME -> NUMBER_TIME_KEYS
+            Types.NUMBER_DURATION -> NUMBER_DURATION_KEYS
             Types.NUMBER_SIZE -> NUMBER_SIZE_KEYS
             Types.LOCATION -> IDENTIFIER_KEYS
             Types.STRING, Types.DQSTRING -> STRING_KEYS
@@ -63,7 +63,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
         internal val IP_ADDRESS = createTextAttributesKey("NGINX_IP_ADDRESS", DefaultLanguageHighlighterColors.NUMBER)
         internal val IP_RANGE = createTextAttributesKey("NGINX_IP_RANGE", IP_ADDRESS)
         internal val NUMBER = createTextAttributesKey("NGINX_NUMBER", DefaultLanguageHighlighterColors.NUMBER)
-        internal val NUMBER_TIME = createTextAttributesKey("NGINX_NUMBER_TIME", DefaultLanguageHighlighterColors.NUMBER)
+        internal val NUMBER_DURATION = createTextAttributesKey("NGINX_NUMBER_DURATION", DefaultLanguageHighlighterColors.NUMBER)
         internal val NUMBER_SIZE = createTextAttributesKey("NGINX_NUMBER_SIZE", DefaultLanguageHighlighterColors.NUMBER)
         internal val STRING = createTextAttributesKey("NGINX_STRING", DefaultLanguageHighlighterColors.STRING)
         internal val BRACE = createTextAttributesKey("NGINX_BRACE", DefaultLanguageHighlighterColors.BRACES)
@@ -97,7 +97,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
         private val IP_ADDRESS_KEYS = arrayOf(IP_ADDRESS)
         private val IP_RANGE_KEYS = arrayOf(IP_RANGE)
         private val NUMBER_KEYS = arrayOf(NUMBER)
-        private val NUMBER_TIME_KEYS = arrayOf(NUMBER_TIME)
+        private val NUMBER_DURATION_KEYS = arrayOf(NUMBER_DURATION)
         private val NUMBER_SIZE_KEYS = arrayOf(NUMBER_SIZE)
         private val STRING_KEYS = arrayOf(STRING)
         private val BRACE_KEYS = arrayOf(BRACE)
