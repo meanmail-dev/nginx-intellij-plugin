@@ -28,6 +28,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
             Types.NUMBER -> NUMBER_KEYS
             Types.NUMBER_TIME -> NUMBER_TIME_KEYS
             Types.NUMBER_SIZE -> NUMBER_SIZE_KEYS
+            Types.LOCATION -> IDENTIFIER_KEYS
             Types.STRING, Types.DQSTRING -> STRING_KEYS
             Types.LBRACE, Types.RBRACE -> BRACE_KEYS
             Types.LPAREN, Types.RPAREN -> PAREN_KEYS
