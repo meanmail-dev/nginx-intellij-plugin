@@ -50,12 +50,13 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
                 server<caret>
             }
         """.trimIndent(),
-            "proxy_ssl_server_name",
             "server",
             "server_name_in_redirect",
             "server_names_hash_bucket_size",
             "server_names_hash_max_size",
             "server_tokens",
+            "grpc_ssl_server_name",
+            "proxy_ssl_server_name",
             "ssl_prefer_server_ciphers",
             "uwsgi_ssl_server_name",
             strict = true

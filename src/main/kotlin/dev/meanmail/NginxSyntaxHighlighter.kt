@@ -23,6 +23,11 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
             Types.IDENTIFIER -> IDENTIFIER_KEYS
             Types.VARIABLE -> VARIABLE_KEYS
             Types.VALUE -> VALUE_KEYS
+            Types.IP_ADDRESS -> IP_ADDRESS_KEYS
+            Types.IP_RANGE -> IP_RANGE_KEYS
+            Types.NUMBER -> NUMBER_KEYS
+            Types.NUMBER_TIME -> NUMBER_TIME_KEYS
+            Types.NUMBER_SIZE -> NUMBER_SIZE_KEYS
             Types.STRING, Types.DQSTRING -> STRING_KEYS
             Types.LBRACE, Types.RBRACE -> BRACE_KEYS
             Types.LPAREN, Types.RPAREN -> PAREN_KEYS
@@ -37,6 +42,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
             Types.UNARY_OPERATOR -> OPERATOR_KEYS
             Types.BINARY_OPERATOR -> OPERATOR_KEYS
             Types.IF -> IF_KEYS
+            Types.RETURN -> RETURN_KEYS
             Types.GEO -> GEO_KEYS
             Types.GEO_DEFAULT -> GEO_DEFAULT_KEYS
             Types.GEO_PROXY -> GEO_PROXY_KEYS
@@ -47,32 +53,39 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
     }
 
     companion object {
-        private val BAD_CHARACTER = createTextAttributesKey("NGINX_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
-        private val COMMENT = createTextAttributesKey("NGINX_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
-        private val IDENTIFIER = createTextAttributesKey("NGINX_IDENTIFIER", DefaultLanguageHighlighterColors.KEYWORD)
-        private val VARIABLE =
+        internal val BAD_CHARACTER = createTextAttributesKey("NGINX_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
+        internal val COMMENT = createTextAttributesKey("NGINX_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT)
+        internal val IDENTIFIER = createTextAttributesKey("NGINX_IDENTIFIER", DefaultLanguageHighlighterColors.KEYWORD)
+        internal val VARIABLE =
             createTextAttributesKey("NGINX_VARIABLE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE)
-        private val VALUE = createTextAttributesKey("NGINX_VALUE", DefaultLanguageHighlighterColors.STRING)
-        private val STRING = createTextAttributesKey("NGINX_STRING", DefaultLanguageHighlighterColors.STRING)
-        private val BRACE = createTextAttributesKey("NGINX_BRACE", DefaultLanguageHighlighterColors.BRACES)
-        private val PAREN = createTextAttributesKey("NGINX_PAREN", DefaultLanguageHighlighterColors.PARENTHESES)
-        private val QUOTE = createTextAttributesKey("NGINX_QUOTE", DefaultLanguageHighlighterColors.STRING)
-        private val SEMICOLON = createTextAttributesKey("NGINX_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON)
-        private val LUA_BLOCK_DIRECTIVE =
-            createTextAttributesKey("NGINX_LUA_BLOCK_DIRECTIVE", DefaultLanguageHighlighterColors.KEYWORD)
-        private val MAP = createTextAttributesKey("NGINX_MAP", DefaultLanguageHighlighterColors.KEYWORD)
-        private val MAP_DEFAULT = createTextAttributesKey("NGINX_MAP_DEFAULT", DefaultLanguageHighlighterColors.KEYWORD)
-        private val MAP_VOLATILE =
-            createTextAttributesKey("NGINX_MAP_VOLATILE", DefaultLanguageHighlighterColors.KEYWORD)
-        private val MAP_HOSTNAMES =
-            createTextAttributesKey("NGINX_MAP_HOSTNAMES", DefaultLanguageHighlighterColors.KEYWORD)
-        private val OPERATOR =
+        internal val VALUE = createTextAttributesKey("NGINX_VALUE", DefaultLanguageHighlighterColors.STRING)
+        internal val IP_ADDRESS = createTextAttributesKey("NGINX_IP_ADDRESS", DefaultLanguageHighlighterColors.NUMBER)
+        internal val IP_RANGE = createTextAttributesKey("NGINX_IP_RANGE", IP_ADDRESS)
+        internal val NUMBER = createTextAttributesKey("NGINX_NUMBER", DefaultLanguageHighlighterColors.NUMBER)
+        internal val NUMBER_TIME = createTextAttributesKey("NGINX_NUMBER_TIME", DefaultLanguageHighlighterColors.NUMBER)
+        internal val NUMBER_SIZE = createTextAttributesKey("NGINX_NUMBER_SIZE", DefaultLanguageHighlighterColors.NUMBER)
+        internal val STRING = createTextAttributesKey("NGINX_STRING", DefaultLanguageHighlighterColors.STRING)
+        internal val BRACE = createTextAttributesKey("NGINX_BRACE", DefaultLanguageHighlighterColors.BRACES)
+        internal val PAREN = createTextAttributesKey("NGINX_PAREN", DefaultLanguageHighlighterColors.PARENTHESES)
+        internal val QUOTE = createTextAttributesKey("NGINX_QUOTE", DefaultLanguageHighlighterColors.STRING)
+        internal val SEMICOLON = createTextAttributesKey("NGINX_SEMICOLON", DefaultLanguageHighlighterColors.SEMICOLON)
+        internal val KEYWORD = createTextAttributesKey("NGINX_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
+        internal val LUA_BLOCK_DIRECTIVE =
+            createTextAttributesKey("NGINX_LUA_BLOCK_DIRECTIVE", IDENTIFIER)
+        internal val MAP = createTextAttributesKey("NGINX_MAP", KEYWORD)
+        internal val MAP_DEFAULT = createTextAttributesKey("NGINX_MAP_DEFAULT", KEYWORD)
+        internal val MAP_VOLATILE =
+            createTextAttributesKey("NGINX_MAP_VOLATILE", KEYWORD)
+        internal val MAP_HOSTNAMES =
+            createTextAttributesKey("NGINX_MAP_HOSTNAMES", KEYWORD)
+        internal val OPERATOR =
             createTextAttributesKey("NGINX_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN)
-        private val IF = createTextAttributesKey("NGINX_IF", DefaultLanguageHighlighterColors.KEYWORD)
-        private val GEO = createTextAttributesKey("NGINX_GEO", DefaultLanguageHighlighterColors.KEYWORD)
-        private val GEO_DEFAULT = createTextAttributesKey("NGINX_GEO_DEFAULT", DefaultLanguageHighlighterColors.KEYWORD)
-        private val GEO_PROXY = createTextAttributesKey("NGINX_GEO_PROXY", DefaultLanguageHighlighterColors.KEYWORD)
-        private val GEO_RANGES = createTextAttributesKey("NGINX_GEO_RANGES", DefaultLanguageHighlighterColors.KEYWORD)
+        internal val IF = createTextAttributesKey("NGINX_IF", KEYWORD)
+        internal val RETURN = createTextAttributesKey("NGINX_RETURN", KEYWORD)
+        internal val GEO = createTextAttributesKey("NGINX_GEO", KEYWORD)
+        internal val GEO_DEFAULT = createTextAttributesKey("NGINX_GEO_DEFAULT", KEYWORD)
+        internal val GEO_PROXY = createTextAttributesKey("NGINX_GEO_PROXY", KEYWORD)
+        internal val GEO_RANGES = createTextAttributesKey("NGINX_GEO_RANGES", KEYWORD)
 
         private val BAD_CHAR_KEYS = arrayOf(BAD_CHARACTER)
         private val COMMENT_KEYS = arrayOf(COMMENT)
@@ -80,6 +93,11 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
         private val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
         private val VARIABLE_KEYS = arrayOf(VARIABLE)
         private val VALUE_KEYS = arrayOf(VALUE)
+        private val IP_ADDRESS_KEYS = arrayOf(IP_ADDRESS)
+        private val IP_RANGE_KEYS = arrayOf(IP_RANGE)
+        private val NUMBER_KEYS = arrayOf(NUMBER)
+        private val NUMBER_TIME_KEYS = arrayOf(NUMBER_TIME)
+        private val NUMBER_SIZE_KEYS = arrayOf(NUMBER_SIZE)
         private val STRING_KEYS = arrayOf(STRING)
         private val BRACE_KEYS = arrayOf(BRACE)
         private val PAREN_KEYS = arrayOf(PAREN)
@@ -92,6 +110,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
         private val MAP_HOSTNAMES_KEYS = arrayOf(MAP_HOSTNAMES)
         private val OPERATOR_KEYS = arrayOf(OPERATOR)
         private val IF_KEYS = arrayOf(IF)
+        private val RETURN_KEYS = arrayOf(RETURN)
         private val GEO_KEYS = arrayOf(GEO)
         private val GEO_DEFAULT_KEYS = arrayOf(GEO_DEFAULT)
         private val GEO_PROXY_KEYS = arrayOf(GEO_PROXY)

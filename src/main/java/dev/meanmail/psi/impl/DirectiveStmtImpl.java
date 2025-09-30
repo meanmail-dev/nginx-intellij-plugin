@@ -1,29 +1,29 @@
 // This is a generated file. Not intended for manual editing.
 package dev.meanmail.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import com.intellij.lang.ASTNode;
-import com.intellij.openapi.util.NlsSafe;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.IncorrectOperationException;
-import dev.meanmail.psi.*;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import com.intellij.openapi.util.NlsSafe;
+import com.intellij.util.IncorrectOperationException;
+import org.jetbrains.annotations.*;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static dev.meanmail.psi.Types.*;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import dev.meanmail.psi.*;
+
 public class DirectiveStmtImpl extends ASTWrapperPsiElement implements DirectiveStmt {
 
-    public DirectiveStmtImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public DirectiveStmtImpl(@NotNull ASTNode node) {
+    super(node);
+  }
 
-    public void accept(@NotNull Visitor visitor) {
-        visitor.visitDirectiveStmt(this);
-    }
+  public void accept(@NotNull Visitor visitor) {
+    visitor.visitDirectiveStmt(this);
+  }
 
     @Override
     public void accept(@NotNull PsiElementVisitor visitor) {
@@ -31,40 +31,45 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
         else super.accept(visitor);
     }
 
-    @Override
-    @Nullable
-    public GeoDirectiveStmt getGeoDirectiveStmt() {
-        return findChildByClass(GeoDirectiveStmt.class);
-    }
+  @Override
+  @Nullable
+  public GeoDirectiveStmt getGeoDirectiveStmt() {
+    return findChildByClass(GeoDirectiveStmt.class);
+  }
 
-    @Override
-    @Nullable
-    public IfDirectiveStmt getIfDirectiveStmt() {
-        return findChildByClass(IfDirectiveStmt.class);
-    }
+  @Override
+  @Nullable
+  public IfDirectiveStmt getIfDirectiveStmt() {
+    return findChildByClass(IfDirectiveStmt.class);
+  }
 
-    @Override
-    @Nullable
-    public LocationDirectiveStmt getLocationDirectiveStmt() {
-        return findChildByClass(LocationDirectiveStmt.class);
-    }
+  @Override
+  @Nullable
+  public LocationDirectiveStmt getLocationDirectiveStmt() {
+    return findChildByClass(LocationDirectiveStmt.class);
+  }
 
-    @Override
-    @Nullable
-    public LuaDirectiveStmt getLuaDirectiveStmt() {
-        return findChildByClass(LuaDirectiveStmt.class);
-    }
+  @Override
+  @Nullable
+  public LuaDirectiveStmt getLuaDirectiveStmt() {
+    return findChildByClass(LuaDirectiveStmt.class);
+  }
 
-    @Override
-    @Nullable
-    public MapDirectiveStmt getMapDirectiveStmt() {
-        return findChildByClass(MapDirectiveStmt.class);
-    }
+  @Override
+  @Nullable
+  public MapDirectiveStmt getMapDirectiveStmt() {
+    return findChildByClass(MapDirectiveStmt.class);
+  }
 
     @Override
     @Nullable
     public RegularDirectiveStmt getRegularDirectiveStmt() {
         return findChildByClass(RegularDirectiveStmt.class);
+    }
+
+    @Override
+    public @Nullable ReturnDirectiveStmt getReturnDirectiveStmt() {
+        return findChildByClass(ReturnDirectiveStmt.class);
     }
 
     @Override
@@ -87,6 +92,10 @@ public class DirectiveStmtImpl extends ASTWrapperPsiElement implements Directive
         IfDirectiveStmt ifDirectiveStmt = getIfDirectiveStmt();
         if (ifDirectiveStmt != null) {
             return ifDirectiveStmt.getIfStmt();
+        }
+        ReturnDirectiveStmt returnDirectiveStmt = getReturnDirectiveStmt();
+        if (returnDirectiveStmt != null) {
+            return returnDirectiveStmt.getReturnStmt();
         }
         MapDirectiveStmt mapDirectiveStmt = getMapDirectiveStmt();
         if (mapDirectiveStmt != null) {

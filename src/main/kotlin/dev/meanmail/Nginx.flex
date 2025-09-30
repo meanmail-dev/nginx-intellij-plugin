@@ -73,6 +73,25 @@ BINARY_OPERATOR=(\!=|=)|(\!?\~\*?|\!?\~)
 
 LPAREN=\(
 RPAREN=\)
+
+NUMBER_INTEGER={DIGIT}+
+NUMBER_FLOAT={DIGIT}+\.{DIGIT}+
+NUMBER_TIME={DIGIT}+(ms|s|m|h|d|w|M|y)
+NUMBER_SIZE={DIGIT}+(b|B|k|K|m|M|g|G)
+NUMBER={NUMBER_FLOAT}|{NUMBER_INTEGER}
+
+IPV4_OCTET=(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)
+IPV4_ADDRESS_PLAIN={IPV4_OCTET}\.{IPV4_OCTET}\.{IPV4_OCTET}\.{IPV4_OCTET}
+IPV4_ADDRESS_CIDR={IPV4_ADDRESS_PLAIN}(\/([0-9]|[12][0-9]|3[0-2]))
+IPV6_HEX=[0-9a-fA-F]
+IPV6_SEG={IPV6_HEX}{1,4}
+IPV6_ADDRESS_PLAIN=(({IPV6_SEG}:){7}{IPV6_SEG}|({IPV6_SEG}:){1,7}:|({IPV6_SEG}:){1,6}:{IPV6_SEG}|({IPV6_SEG}:){1,5}(:{IPV6_SEG}){1,2}|({IPV6_SEG}:){1,4}(:{IPV6_SEG}){1,3}|({IPV6_SEG}:){1,3}(:{IPV6_SEG}){1,4}|({IPV6_SEG}:){1,2}(:{IPV6_SEG}){1,5}|{IPV6_SEG}:((:{IPV6_SEG}){1,6})|:((:{IPV6_SEG}){1,7}|:)|::({IPV6_SEG}:){0,5}{IPV6_SEG}|({IPV6_SEG}:){1,4}:{IPV4_ADDRESS_PLAIN})
+IPV6_ADDRESS_CIDR={IPV6_ADDRESS_PLAIN}(\/([0-9]|[1-9][0-9]|1[01][0-9]|12[0-8]))
+PORT=:[0-9]{1,5}
+IP_ADDRESS_WITH_PORT={IPV4_ADDRESS_PLAIN}{PORT}|\[{IPV6_ADDRESS_PLAIN}\]{PORT}
+IP_ADDRESS={IP_ADDRESS_WITH_PORT}|{IPV4_ADDRESS_CIDR}|{IPV6_ADDRESS_CIDR}|{IPV4_ADDRESS_PLAIN}|{IPV6_ADDRESS_PLAIN}
+IP_RANGE={IPV4_ADDRESS_PLAIN}\-{IPV4_ADDRESS_PLAIN}
+
 VALUE=[^\s;'\"\{\}\#]+
 IF_VALUE=[^\s;'\"\{\}\(\)\#]+
 ESCAPE=\\[^\n\r]
@@ -106,12 +125,18 @@ DQUOTE="\""
     geo                      { yypush(GEO_STATE); return GEO; }
     if                       { yypush(IF_STATE); return IF; }
     location                 { yypush(DIRECTIVE_STATE); return LOCATION; }
+    return                   { yypush(DIRECTIVE_STATE); return RETURN; }
     {IDENTIFIER}             { yypush(DIRECTIVE_STATE); return IDENTIFIER; }
     {RBRACE}                 { return RBRACE; }
 }
 
 <DIRECTIVE_STATE> {
     {VARIABLE}               { return VARIABLE; }
+    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_SIZE}            { return NUMBER_SIZE; }
+    {NUMBER}                 { return NUMBER; }
+    {IP_RANGE}               { return IP_RANGE; }
+    {IP_ADDRESS}             { return IP_ADDRESS; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {CARET_TILDE}            { return CARET_TILDE; }
     {BINARY_OPERATOR}        { return BINARY_OPERATOR; }
@@ -132,6 +157,10 @@ DQUOTE="\""
     {QUOTE}                       { yypush(STRING_STATE); return QUOTE; }
     {DQUOTE}                      { yypush(DQSTRING_STATE); return DQUOTE; }
     {VARIABLE}                    { return VARIABLE; }
+    {NUMBER_TIME}                 { return NUMBER_TIME; }
+    {NUMBER_SIZE}                 { return NUMBER_SIZE; }
+    {NUMBER}                      { return NUMBER; }
+    {IP_ADDRESS}                  { return IP_ADDRESS; }
     {IDENTIFIER}                  { return IDENTIFIER; }
     {UNARY_OPERATOR}              { return UNARY_OPERATOR; }
     {BINARY_OPERATOR}             { return BINARY_OPERATOR; }
@@ -169,6 +198,11 @@ DQUOTE="\""
     {QUOTE}                  { yypush(STRING_STATE); return QUOTE; }
     {DQUOTE}                 { yypush(DQSTRING_STATE); return DQUOTE; }
     {VARIABLE}               { return VARIABLE; }
+    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_SIZE}            { return NUMBER_SIZE; }
+    {NUMBER}                 { return NUMBER; }
+    {IP_RANGE}               { return IP_RANGE; }
+    {IP_ADDRESS}             { return IP_ADDRESS; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {SEMICOLON}              { return SEMICOLON; }
     {VALUE}                  { return VALUE; }
@@ -182,6 +216,11 @@ DQUOTE="\""
     include                  { return MAP_INCLUDE; }
     volatile                 { return MAP_VOLATILE; }
     hostnames                { return MAP_HOSTNAMES; }
+    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_SIZE}            { return NUMBER_SIZE; }
+    {NUMBER}                 { return NUMBER; }
+    {IP_RANGE}               { return IP_RANGE; }
+    {IP_ADDRESS}             { return IP_ADDRESS; }
     {SEMICOLON}              { return SEMICOLON; }
     {VALUE}                  { return VALUE; }
 }
@@ -191,6 +230,11 @@ DQUOTE="\""
     {QUOTE}                  { yypush(STRING_STATE); return QUOTE; }
     {DQUOTE}                 { yypush(DQSTRING_STATE); return DQUOTE; }
     {VARIABLE}               { return VARIABLE; }
+    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_SIZE}            { return NUMBER_SIZE; }
+    {NUMBER}                 { return NUMBER; }
+    {IP_RANGE}               { return IP_RANGE; }
+    {IP_ADDRESS}             { return IP_ADDRESS; }
     {IDENTIFIER}             { return IDENTIFIER; }
     {SEMICOLON}              { return SEMICOLON; }
     {VALUE}                  { return VALUE; }
@@ -205,6 +249,11 @@ DQUOTE="\""
     include                  { return GEO_INCLUDE; }
     proxy                    { return GEO_PROXY; }
     ranges                   { return GEO_RANGES; }
+    {NUMBER_TIME}            { return NUMBER_TIME; }
+    {NUMBER_SIZE}            { return NUMBER_SIZE; }
+    {NUMBER}                 { return NUMBER; }
+    {IP_RANGE}               { return IP_RANGE; }
+    {IP_ADDRESS}             { return IP_ADDRESS; }
     {SEMICOLON}              { return SEMICOLON; }
     {VALUE}                  { return VALUE; }
 }

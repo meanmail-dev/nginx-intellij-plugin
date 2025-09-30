@@ -1,27 +1,28 @@
 // This is a generated file. Not intended for manual editing.
 package dev.meanmail.psi;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.Nullable;
 
 public interface GeoBlockContent extends PsiElement {
 
-    @Nullable
-    GeoDefaultStmt getGeoDefaultStmt();
+  @Nullable
+  GeoDefaultStmt getGeoDefaultStmt();
 
-    @Nullable
-    GeoDeleteStmt getGeoDeleteStmt();
+  @Nullable
+  GeoDeleteStmt getGeoDeleteStmt();
 
-    @Nullable
-    GeoIncludeStmt getGeoIncludeStmt();
+  @Nullable
+  GeoIncludeStmt getGeoIncludeStmt();
 
-    @Nullable
-    GeoProxyStmt getGeoProxyStmt();
+  @Nullable
+  GeoProxyStmt getGeoProxyStmt();
 
-    @Nullable
-    GeoRangesStmt getGeoRangesStmt();
+  @Nullable
+  GeoRangesStmt getGeoRangesStmt();
 
-    @Nullable
-    GeoValueStmt getGeoValueStmt();
+  @Nullable
+  GeoValueStmt getGeoValueStmt();
 
 }

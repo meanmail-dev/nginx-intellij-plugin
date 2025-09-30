@@ -28,6 +28,11 @@ string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE) {pin=1}
 name_stmt ::= IDENTIFIER
 variable_stmt ::= VARIABLE
 value_stmt ::= IDENTIFIER
+               | IP_RANGE
+               | IP_ADDRESS
+               | NUMBER
+               | NUMBER_TIME
+               | NUMBER_SIZE
                | VALUE
                | string_stmt
                | variable_stmt
@@ -74,7 +79,7 @@ lua_block_stmt ::= LBRACE lua_code_stmt RBRACE {pin=1}
 lua_directive_stmt ::= lua_stmt value_stmt* lua_block_stmt {pin=1}
 
 if_stmt ::= IF
-concatenated_expr ::= (variable_stmt | VALUE | IDENTIFIER) +
+concatenated_expr ::= (variable_stmt | IP_ADDRESS | NUMBER | NUMBER_TIME | NUMBER_SIZE | VALUE | IDENTIFIER) +
 condition_expr ::= concatenated_expr | string_stmt
 condition_stmt ::= UNARY_OPERATOR condition_expr | condition_expr (BINARY_OPERATOR condition_expr)?
 if_paren_stmt ::= LPAREN condition_stmt RPAREN {pin=1}
@@ -85,6 +90,9 @@ location_modifier_stmt ::= (BINARY_OPERATOR | CARET_TILDE)?
 location_path_stmt ::= value_stmt
 location_directive_stmt ::= location_stmt location_modifier_stmt? location_path_stmt block_stmt {pin=1}
 
+return_stmt ::= RETURN
+return_directive_stmt ::= return_stmt value_stmt* SEMICOLON {pin=1}
+
 directive_stmt ::= (
                     regular_directive_stmt
                     | map_directive_stmt
@@ -92,4 +100,5 @@ directive_stmt ::= (
                     | lua_directive_stmt
                     | if_directive_stmt
                     | location_directive_stmt
+                    | return_directive_stmt
                    )

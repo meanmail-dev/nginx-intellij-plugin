@@ -135,6 +135,8 @@ Your ratings and feedback are very important. The feature will appear the faster
                 level="ERROR"
                 shortName="NginxGeoInspection"/>
         <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
+
+        <colorSettingsPage implementation="dev.meanmail.NginxColorSettingsPage"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">
