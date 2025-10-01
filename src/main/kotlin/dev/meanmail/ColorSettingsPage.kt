@@ -47,35 +47,8 @@ class NginxColorSettingsPage : ColorSettingsPage {
         return NginxSyntaxHighlighter()
     }
 
-    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey> {
-        return mapOf(
-            "brace" to NginxSyntaxHighlighter.BRACE,
-            "comment" to NginxSyntaxHighlighter.COMMENT,
-            "geo" to NginxSyntaxHighlighter.GEO,
-            "geo_default" to NginxSyntaxHighlighter.GEO_DEFAULT,
-            "geo_proxy" to NginxSyntaxHighlighter.GEO_PROXY,
-            "geo_ranges" to NginxSyntaxHighlighter.GEO_RANGES,
-            "identifier" to NginxSyntaxHighlighter.IDENTIFIER,
-            "if" to NginxSyntaxHighlighter.IF,
-            "return" to NginxSyntaxHighlighter.RETURN,
-            "ip_address" to NginxSyntaxHighlighter.IP_ADDRESS,
-            "ip_range" to NginxSyntaxHighlighter.IP_RANGE,
-            "keyword" to NginxSyntaxHighlighter.KEYWORD,
-            "lua_block" to NginxSyntaxHighlighter.LUA_BLOCK_DIRECTIVE,
-            "map" to NginxSyntaxHighlighter.MAP,
-            "map_default" to NginxSyntaxHighlighter.MAP_DEFAULT,
-            "map_hostnames" to NginxSyntaxHighlighter.MAP_HOSTNAMES,
-            "map_volatile" to NginxSyntaxHighlighter.MAP_VOLATILE,
-            "number" to NginxSyntaxHighlighter.NUMBER,
-            "number_size" to NginxSyntaxHighlighter.NUMBER_SIZE,
-            "number_duration" to NginxSyntaxHighlighter.NUMBER_DURATION,
-            "operator" to NginxSyntaxHighlighter.OPERATOR,
-            "paren" to NginxSyntaxHighlighter.PAREN,
-            "semicolon" to NginxSyntaxHighlighter.SEMICOLON,
-            "string" to NginxSyntaxHighlighter.STRING,
-            "value" to NginxSyntaxHighlighter.VALUE,
-            "variable" to NginxSyntaxHighlighter.VARIABLE
-        )
+    override fun getAdditionalHighlightingTagToDescriptorMap(): Map<String, TextAttributesKey>? {
+        return null
     }
 
     override fun getAttributeDescriptors(): Array<AttributesDescriptor> {
@@ -93,92 +66,92 @@ class NginxColorSettingsPage : ColorSettingsPage {
 
     override fun getDemoText(): String {
         return """
-<comment># Map directive</comment>
-<map>map</map> <variable>${'$'}http_user_agent</variable> <variable>${'$'}mobile</variable> <brace>{</brace>
-    <map_default>default</map_default> <number>0</number><semicolon>;</semicolon>
-    <value>~*android</value> <number>1</number><semicolon>;</semicolon>
-    <value>~*iphone</value> <number>1</number><semicolon>;</semicolon>
-<brace>}</brace>
+# Map directive
+map ${'$'}http_user_agent ${'$'}mobile {
+    default 0;
+    ~*android 1;
+    ~*iphone 1;
+}
 
-<comment># Geo directive with IP addresses</comment>
-<geo>geo</geo> <variable>${'$'}country</variable> <brace>{</brace>
-    <geo_default>default</geo_default> <value>ZZ</value><semicolon>;</semicolon>
-    <ip_address>127.0.0.1</ip_address> <value>US</value><semicolon>;</semicolon>
-    <ip_address>10.0.0.0/8</ip_address> <value>INTERNAL</value><semicolon>;</semicolon>
-    <ip_address>192.168.1.0/24</ip_address> <value>LAN</value><semicolon>;</semicolon>
-    <ip_address>2001:db8::1</ip_address> <value>IPv6</value><semicolon>;</semicolon>
-<brace>}</brace>
+# Geo directive with IP addresses
+geo ${'$'}country {
+    default ZZ;
+    127.0.0.1 US;
+    10.0.0.0/8 INTERNAL;
+    192.168.1.0/24 LAN;
+    2001:db8::1 IPv6;
+}
 
-<comment># Geo directive with IP ranges</comment>
-<geo>geo</geo> <variable>${'$'}region</variable><brace>{</brace>
-    <geo_ranges>ranges</geo_ranges><semicolon>;</semicolon>
-    <geo_default>default</geo_default> <value>unknown</value><semicolon>;</semicolon>
-    <ip_range>10.0.0.0-10.255.255.255</ip_range> <value>internal</value><semicolon>;</semicolon>
-    <ip_range>192.168.0.0-192.168.255.255</ip_range> <value>lan</value><semicolon>;</semicolon>
-<brace>}</brace>
+# Geo directive with IP ranges
+geo ${'$'}region {
+    ranges;
+    default unknown;
+    10.0.0.0-10.255.255.255 internal;
+    192.168.0.0-192.168.255.255 lan;
+}
 
-<comment># Upstream with IP addresses and ports</comment>
-<identifier>upstream</identifier> <value>backend</value> <brace>{</brace>
-    <identifier>server</identifier> <ip_address>192.168.1.10:8080</ip_address><semicolon>;</semicolon>
-    <identifier>server</identifier> <ip_address>192.168.1.11:8080</ip_address><semicolon>;</semicolon>
-    <identifier>server</identifier> <ip_address>[2001:db8::1]:9000</ip_address><semicolon>;</semicolon>
-<brace>}</brace>
+# Upstream with IP addresses and ports
+upstream backend {
+    server 192.168.1.10:8080;
+    server 192.168.1.11:8080;
+    server [2001:db8::1]:9000;
+}
 
-<comment># Main server configuration</comment>
-<identifier>server</identifier> <brace>{</brace>
-    <comment># Listen directives with port numbers</comment>
-    <identifier>listen</identifier> <ip_address>192.168.1.100:443</ip_address> <value>ssl</value> <value>http2</value><semicolon>;</semicolon>
-    <identifier>listen</identifier> <number>80</number><semicolon>;</semicolon>
-    <identifier>server_name</identifier> <value>example.com</value> <value>www.example.com</value><semicolon>;</semicolon>
+# Main server configuration
+server {
+    # Listen directives with port numbers
+    listen 192.168.1.100:443 ssl http2;
+    listen 80;
+    server_name example.com www.example.com;
 
-    <comment># Timeouts and sizes with units</comment>
-    <identifier>client_body_timeout</identifier> <number_duration>60s</number_duration><semicolon>;</semicolon>
-    <identifier>client_max_body_size</identifier> <number_size>10M</number_size><semicolon>;</semicolon>
-    <identifier>keepalive_timeout</identifier> <number_duration>75s</number_duration><semicolon>;</semicolon>
-    <identifier>proxy_connect_timeout</identifier> <number_duration>90s</number_duration><semicolon>;</semicolon>
-    <identifier>proxy_read_timeout</identifier> <number_duration>3m</number_duration><semicolon>;</semicolon>
-    <identifier>send_timeout</identifier> <number_duration>2m</number_duration><semicolon>;</semicolon>
+    # Timeouts and sizes with units
+    client_body_timeout 60s;
+    client_max_body_size 10M;
+    keepalive_timeout 75s;
+    proxy_connect_timeout 90s;
+    proxy_read_timeout 3m;
+    send_timeout 2m;
 
-    <comment># Buffer sizes</comment>
-    <identifier>proxy_buffer_size</identifier> <number_size>4k</number_size><semicolon>;</semicolon>
-    <identifier>proxy_buffers</identifier> <number>8</number> <number_size>8k</number_size><semicolon>;</semicolon>
-    <identifier>client_body_buffer_size</identifier> <number_size>128k</number_size><semicolon>;</semicolon>
+    # Buffer sizes
+    proxy_buffer_size 4k;
+    proxy_buffers 8 8k;
+    client_body_buffer_size 128k;
 
-    <comment># SSL configuration</comment>
-    <identifier>ssl_certificate</identifier> <string>'/etc/ssl/certs/cert.pem'</string><semicolon>;</semicolon>
-    <identifier>ssl_session_timeout</identifier> <number_duration>1d</number_duration><semicolon>;</semicolon>
-    <identifier>ssl_session_cache</identifier> <value>shared:SSL:10M</value><semicolon>;</semicolon>
+    # SSL configuration
+    ssl_certificate '/etc/ssl/certs/cert.pem';
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:10M;
 
-    <comment># Numeric rate limiting</comment>
-    <identifier>limit_rate</identifier> <number_size>500k</number_size><semicolon>;</semicolon>
-    <identifier>limit_rate_after</identifier> <number_size>5M</number_size><semicolon>;</semicolon>
+    # Numeric rate limiting
+    limit_rate 500k;
+    limit_rate_after 5M;
 
-    <comment># Conditional redirect</comment>
-    <if>if</if> <paren>(</paren><variable>${'$'}scheme</variable> <operator>!=</operator> <string>"https"</string><paren>)</paren> <brace>{</brace>
-        <return>return</return> <number>301</number> <value>https://</value><variable>${'$'}server_name</variable><variable>${'$'}request_uri</variable><semicolon>;</semicolon>
-    <brace>}</brace>
+    # Conditional redirect
+    if (${'$'}scheme != "https") {
+        return 301 https://${'$'}server_name${'$'}request_uri;
+    }
 
-    <comment># Location block with Lua</comment>
-    <identifier>location</identifier> <value>/api</value> <brace>{</brace>
-        <comment># Lua block directive</comment>
-        <lua_block>content_by_lua_block</lua_block> <brace>{</brace>
+    # Location block with Lua
+    location /api {
+        # Lua block directive
+        content_by_lua_block {
             ngx.say("Hello from Lua")
             ngx.log(ngx.INFO, "Request: " .. ngx.var.request_uri)
-        <brace>}</brace>
-    <brace>}</brace>
+        }
+    }
 
-    <comment># Location with numbers and IP access control</comment>
-    <identifier>location</identifier> <value>/api</value> <brace>{</brace>
-        <identifier>allow</identifier> <ip_address>192.168.1.0/24</ip_address><semicolon>;</semicolon>
-        <identifier>allow</identifier> <ip_address>10.0.0.0/8</ip_address><semicolon>;</semicolon>
-        <identifier>deny</identifier> <value>all</value><semicolon>;</semicolon>
+    # Location with numbers and IP access control
+    location /api {
+        allow 192.168.1.0/24;
+        allow 10.0.0.0/8;
+        deny all;
 
-        <comment># Return codes</comment>
-        <if>if</if> <paren>(</paren><operator>!-f</operator> <variable>${'$'}request_filename</variable><paren>)</paren> <brace>{</brace>
-            <return>return</return> <number>404</number><semicolon>;</semicolon>
-        <brace>}</brace>
-    <brace>}</brace>
-<brace>}</brace>
+        # Return codes
+        if (!-f ${'$'}request_filename) {
+            return 404;
+        }
+    }
+}
 """.trimIndent()
     }
 }
