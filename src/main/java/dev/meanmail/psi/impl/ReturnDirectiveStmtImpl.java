@@ -11,14 +11,14 @@ import static dev.meanmail.psi.Types.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import dev.meanmail.psi.*;
 
-public class MapDefaultStmtImpl extends ASTWrapperPsiElement implements MapDefaultStmt {
+public class ReturnDirectiveStmtImpl extends ASTWrapperPsiElement implements ReturnDirectiveStmt {
 
-  public MapDefaultStmtImpl(@NotNull ASTNode node) {
+  public ReturnDirectiveStmtImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull Visitor visitor) {
-    visitor.visitMapDefaultStmt(this);
+    visitor.visitReturnDirectiveStmt(this);
   }
 
   @Override
@@ -28,9 +28,15 @@ public class MapDefaultStmtImpl extends ASTWrapperPsiElement implements MapDefau
   }
 
   @Override
-  @Nullable
-  public ValueStmt getValueStmt() {
-    return findChildByClass(ValueStmt.class);
+  @NotNull
+  public ReturnStmt getReturnStmt() {
+    return findNotNullChildByClass(ReturnStmt.class);
+  }
+
+  @Override
+  @NotNull
+  public List<ValueStmt> getValueStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ValueStmt.class);
   }
 
 }

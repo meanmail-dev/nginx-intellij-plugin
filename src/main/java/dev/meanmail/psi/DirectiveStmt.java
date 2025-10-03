@@ -1,31 +1,31 @@
 // This is a generated file. Not intended for manual editing.
 package dev.meanmail.psi;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.List;
+import org.jetbrains.annotations.*;
+import com.intellij.psi.PsiElement;
 
 public interface DirectiveStmt extends WithPathElement {
 
-    @Nullable
-    GeoDirectiveStmt getGeoDirectiveStmt();
+  @Nullable
+  GeoDirectiveStmt getGeoDirectiveStmt();
 
-    @Nullable
-    IfDirectiveStmt getIfDirectiveStmt();
+  @Nullable
+  IfDirectiveStmt getIfDirectiveStmt();
 
-    @Nullable
-    LocationDirectiveStmt getLocationDirectiveStmt();
+  @Nullable
+  LocationDirectiveStmt getLocationDirectiveStmt();
 
-    @Nullable
-    LuaDirectiveStmt getLuaDirectiveStmt();
+  @Nullable
+  LuaDirectiveStmt getLuaDirectiveStmt();
 
-    @Nullable
-    MapDirectiveStmt getMapDirectiveStmt();
+  @Nullable
+  MapDirectiveStmt getMapDirectiveStmt();
 
-    @Nullable
-    RegularDirectiveStmt getRegularDirectiveStmt();
+  @Nullable
+  RegularDirectiveStmt getRegularDirectiveStmt();
 
-    @NotNull
-    List<String> getPath();
+  @Nullable
+  ReturnDirectiveStmt getReturnDirectiveStmt();
+
 }

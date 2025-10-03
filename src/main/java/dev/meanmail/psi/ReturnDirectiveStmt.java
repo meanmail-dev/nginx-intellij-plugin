@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface GeoDefaultStmt extends PsiElement {
+public interface ReturnDirectiveStmt extends PsiElement {
 
-  @Nullable
-  ValueStmt getValueStmt();
+  @NotNull
+  ReturnStmt getReturnStmt();
+
+  @NotNull
+  List<ValueStmt> getValueStmtList();
 
 }

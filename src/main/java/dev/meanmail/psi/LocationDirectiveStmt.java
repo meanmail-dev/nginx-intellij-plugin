@@ -1,22 +1,22 @@
 // This is a generated file. Not intended for manual editing.
 package dev.meanmail.psi;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface LocationDirectiveStmt extends PsiElement {
 
-    @Nullable
-    BlockStmt getBlockStmt();
+  @Nullable
+  BlockStmt getBlockStmt();
 
-    @Nullable
-    LocationModifierStmt getLocationModifierStmt();
+  @Nullable
+  LocationModifierStmt getLocationModifierStmt();
 
-    @Nullable
-    LocationPathStmt getLocationPathStmt();
+  @Nullable
+  LocationPathStmt getLocationPathStmt();
 
-    @NotNull
-    LocationStmt getLocationStmt();
+  @NotNull
+  LocationStmt getLocationStmt();
 
 }
