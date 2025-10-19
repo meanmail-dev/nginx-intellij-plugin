@@ -50,6 +50,7 @@ class NginxCompletionContributorTest : BasePlatformTestCase() {
                 server<caret>
             }
         """.trimIndent(),
+            "grpc_ssl_server_name",
             "proxy_ssl_server_name",
             "server",
             "server_name_in_redirect",
