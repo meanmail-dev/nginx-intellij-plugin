@@ -290,17 +290,36 @@ fun determineFileContext(file: PsiFile): Set<Directive>? {
         .filterIsInstance<DirectiveStmt>()
 
     // Try to find a directive with a valid context
-    var context = mutableSetOf<Directive>()
+    var context: MutableSet<Directive>? = null
     for (directive in directives) {
         val matchingDirectives = Directive.all.filter { it.name == directive.name }
         if (matchingDirectives.isEmpty()) {
             continue
         }
-        val matchingDirectivesContext = matchingDirectives.map { it.context }.flatten().toSet()
-        if (context.isEmpty()) {
+        val matchingDirectivesContext = matchingDirectives
+            .flatMap { matchedDirective ->
+                matchedDirective.context.flatMap { ctx ->
+                    when (ctx) {
+                        any -> emptyList()
+                        self -> listOf(matchedDirective)
+                        else -> listOf(ctx)
+                    }
+                }
+            }
+            .toSet()
+
+        // Directives that only allow wildcard contexts (e.g. include) don't help narrow scope
+        if (matchingDirectivesContext.isEmpty()) {
+            continue
+        }
+
+        if (context == null) {
+            // The one and only include directive exposes the wildcard context any and no other directives do,
+            // so the first match still captures all directive-specific contexts
             context = matchingDirectivesContext.toMutableSet()
             continue
         }
+
         val newContext = context.intersect(matchingDirectivesContext)
         if (newContext.isEmpty()) {
             return context
@@ -311,5 +330,5 @@ fun determineFileContext(file: PsiFile): Set<Directive>? {
 
     // If no directives with context found, return null
     // any context is allowed
-    return null
+    return context
 }
