@@ -1,3 +1,7 @@
+## 2025.21 (November, 18, 2025)
+
+* Fix context for allow and deny directives
+
 ## 2025.20 (September, 16, 2025)
 
 * Update Nginx support to 1.29.1: added `early_hints` and `ssl_certificate_compression` directives

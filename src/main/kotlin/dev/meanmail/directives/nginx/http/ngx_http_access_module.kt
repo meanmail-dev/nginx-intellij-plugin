@@ -24,7 +24,7 @@ val allow = Directive(
             required = true
         )
     ),
-    context = listOf(http, server, location),
+    context = listOf(http, server, location, limitExcept),
     module = ngx_http_access_module
 )
 
@@ -39,6 +39,6 @@ val deny = Directive(
             required = true
         )
     ),
-    context = listOf(http, server, location),
+    context = listOf(http, server, location, limitExcept),
     module = ngx_http_access_module
 )
