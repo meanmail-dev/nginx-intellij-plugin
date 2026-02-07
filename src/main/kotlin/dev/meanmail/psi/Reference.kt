@@ -5,7 +5,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiReferenceBase
-import dev.meanmail.resolveFile
+import dev.meanmail.resolveFile as resolveFileUtil
 
 interface ReferenceElement : NamedElement {
     val ref: String
@@ -14,17 +14,17 @@ interface ReferenceElement : NamedElement {
 class Reference(element: ReferenceElement) :
     PsiReferenceBase<ReferenceElement>(element, null, false) {
     override fun resolve(): PsiElement? {
-        return resolveFile(element.ref)
+        return resolveToFile(element.ref)
     }
 
-    private fun resolveFile(ref: String): PsiElement? {
+    private fun resolveToFile(ref: String): PsiElement? {
         if (ref.startsWith("http://") || ref.startsWith("https://")) {
             return WebReference(element, ref).resolve()
         }
         if (ref.isEmpty()) return null
         val directory = element.containingFile
             ?.containingDirectory?.virtualFile ?: return null
-        val file = resolveFile(ref, directory) ?: return null
+        val file = resolveFileUtil(ref, directory) ?: return null
 
         return PsiManager.getInstance(element.project).findFile(file)
     }
