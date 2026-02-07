@@ -2,7 +2,6 @@ package dev.meanmail.directives.catalog.nginx.stream.upstream
 
 import dev.meanmail.directives.catalog.Directive
 import dev.meanmail.directives.catalog.NginxModule
-import dev.meanmail.directives.catalog.nginx.http.upstream.upstream
 
 // https://nginx.org/en/docs/stream/ngx_stream_upstream_hc_module.html
 
@@ -21,13 +20,13 @@ val streamUpstreamHealthCheck = Directive(
 val streamUpstreamHealthCheckTimeout = Directive(
     name = "health_check_timeout",
     description = "Sets the timeout for server health checks in stream context",
-    context = listOf(upstream),
+    context = listOf(streamUpstream),
     module = ngx_stream_upstream_hc_module
 )
 
 val streamUpstreamMatch = Directive(
     name = "match",
     description = "Defines criteria for a successful server health check in stream context",
-    context = listOf(upstream),
+    context = listOf(streamUpstream),
     module = ngx_stream_upstream_hc_module
 )
