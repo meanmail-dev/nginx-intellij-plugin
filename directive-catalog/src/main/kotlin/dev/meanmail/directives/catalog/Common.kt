@@ -4,22 +4,17 @@ import dev.meanmail.directives.catalog.nginx.core.ngx_core_module
 import dev.meanmail.directives.catalog.nginx.google.ngx_google_perftools_module
 import dev.meanmail.directives.catalog.nginx.http.*
 import dev.meanmail.directives.catalog.nginx.http.auth.ngx_http_auth_basic_module
-import dev.meanmail.directives.catalog.nginx.http.auth.ngx_http_auth_jwt_module
 import dev.meanmail.directives.catalog.nginx.http.auth.ngx_http_auth_request_module
-import dev.meanmail.directives.catalog.nginx.http.auth.ngx_http_auth_require_module
 import dev.meanmail.directives.catalog.nginx.http.gzip.ngx_http_gzip_module
 import dev.meanmail.directives.catalog.nginx.http.gzip.ngx_http_gzip_static_module
 import dev.meanmail.directives.catalog.nginx.http.limit.ngx_http_limit_conn_module
 import dev.meanmail.directives.catalog.nginx.http.limit.ngx_http_limit_req_module
-import dev.meanmail.directives.catalog.nginx.http.upstream.ngx_http_upstream_conf_module
-import dev.meanmail.directives.catalog.nginx.http.upstream.ngx_http_upstream_hc_module
 import dev.meanmail.directives.catalog.nginx.http.upstream.ngx_http_upstream_module
 import dev.meanmail.directives.catalog.nginx.mail.*
 import dev.meanmail.directives.catalog.nginx.ngx_otel_module
 import dev.meanmail.directives.catalog.nginx.stream.*
 import dev.meanmail.directives.catalog.nginx.stream.ssl.ngx_stream_ssl_module
 import dev.meanmail.directives.catalog.nginx.stream.ssl.ngx_stream_ssl_preread_module
-import dev.meanmail.directives.catalog.nginx.stream.upstream.ngx_stream_upstream_hc_module
 import dev.meanmail.directives.catalog.nginx.stream.upstream.ngx_stream_upstream_module
 
 open class Directive(
@@ -86,9 +81,7 @@ open class Directive(
             *ngx_google_perftools_module.directives.toTypedArray(),
             *ngx_http_access_module.directives.toTypedArray(),
             *ngx_http_addition_module.directives.toTypedArray(),
-            *ngx_http_api_module.directives.toTypedArray(),
             *ngx_http_auth_basic_module.directives.toTypedArray(),
-            *ngx_http_auth_jwt_module.directives.toTypedArray(),
             *ngx_http_auth_request_module.directives.toTypedArray(),
             *ngx_http_autoindex_module.directives.toTypedArray(),
             *ngx_http_browser_module.directives.toTypedArray(),
@@ -96,7 +89,6 @@ open class Directive(
             *ngx_http_core_module.directives.toTypedArray(),
             *ngx_http_dav_module.directives.toTypedArray(),
             *ngx_http_empty_gif_module.directives.toTypedArray(),
-            *ngx_http_f4f_module.directives.toTypedArray(),
             *ngx_http_fastcgi_module.directives.toTypedArray(),
             *ngx_http_flv_module.directives.toTypedArray(),
             *ngx_http_geo_module.directives.toTypedArray(),
@@ -106,11 +98,9 @@ open class Directive(
             *ngx_http_gzip_module.directives.toTypedArray(),
             *ngx_http_gzip_static_module.directives.toTypedArray(),
             *ngx_http_headers_module.directives.toTypedArray(),
-            *ngx_http_hls_module.directives.toTypedArray(),
             *ngx_http_image_filter_module.directives.toTypedArray(),
             *ngx_http_index_module.directives.toTypedArray(),
             *ngx_http_js_module.directives.toTypedArray(),
-            *ngx_http_keyval_module.directives.toTypedArray(),
             *ngx_http_limit_conn_module.directives.toTypedArray(),
             *ngx_http_limit_req_module.directives.toTypedArray(),
             *ngx_http_log_module.directives.toTypedArray(),
@@ -126,17 +116,13 @@ open class Directive(
             *ngx_http_rewrite_module.directives.toTypedArray(),
             *ngx_http_scgi_module.directives.toTypedArray(),
             *ngx_http_secure_link_module.directives.toTypedArray(),
-            *ngx_http_session_log_module.directives.toTypedArray(),
             *ngx_http_slice_module.directives.toTypedArray(),
             *ngx_http_spdy_module.directives.toTypedArray(),
             *ngx_http_split_clients_module.directives.toTypedArray(),
             *ngx_http_ssi_module.directives.toTypedArray(),
             *ngx_http_ssl_module.directives.toTypedArray(),
-            *ngx_http_status_module.directives.toTypedArray(),
             *ngx_http_stub_status_module.directives.toTypedArray(),
             *ngx_http_sub_module.directives.toTypedArray(),
-            *ngx_http_upstream_conf_module.directives.toTypedArray(),
-            *ngx_http_upstream_hc_module.directives.toTypedArray(),
             *ngx_http_upstream_module.directives.toTypedArray(),
             *ngx_http_userid_module.directives.toTypedArray(),
             *ngx_http_uwsgi_module.directives.toTypedArray(),
@@ -144,10 +130,6 @@ open class Directive(
             *ngx_http_v3_module.directives.toTypedArray(),
             *ngx_http_xslt_module.directives.toTypedArray(),
             *ngx_http_acme_module.directives.toTypedArray(),
-            *ngx_http_internal_redirect_module.directives.toTypedArray(),
-            *ngx_http_auth_require_module.directives.toTypedArray(),
-            *ngx_http_num_map_module.directives.toTypedArray(),
-
             // OpenTelemetry
             *ngx_otel_module.directives.toTypedArray(),
 
@@ -157,7 +139,6 @@ open class Directive(
             *ngx_stream_geo_module.directives.toTypedArray(),
             *ngx_stream_geoip_module.directives.toTypedArray(),
             *ngx_stream_js_module.directives.toTypedArray(),
-            *ngx_stream_keyval_module.directives.toTypedArray(),
             *ngx_stream_limit_conn_module.directives.toTypedArray(),
             *ngx_stream_log_module.directives.toTypedArray(),
             *ngx_stream_map_module.directives.toTypedArray(),
@@ -169,10 +150,7 @@ open class Directive(
             *ngx_stream_split_clients_module.directives.toTypedArray(),
             *ngx_stream_ssl_module.directives.toTypedArray(),
             *ngx_stream_ssl_preread_module.directives.toTypedArray(),
-            *ngx_stream_upstream_hc_module.directives.toTypedArray(),
             *ngx_stream_upstream_module.directives.toTypedArray(),
-            *ngx_stream_zone_sync_module.directives.toTypedArray(),
-            *ngx_stream_num_map_module.directives.toTypedArray(),
 
             // Mail modules
             *ngx_mail_auth_http_module.directives.toTypedArray(),

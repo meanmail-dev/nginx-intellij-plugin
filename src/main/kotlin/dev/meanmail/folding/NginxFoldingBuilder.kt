@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import dev.meanmail.psi.BlockStmt
 import dev.meanmail.psi.LuaBlockStmt
+import dev.meanmail.psi.TypesBlockStmt
 
 
 class NginxFoldingBuilder : FoldingBuilderEx(), DumbAware {
@@ -22,7 +23,8 @@ class NginxFoldingBuilder : FoldingBuilderEx(), DumbAware {
         val blocks = PsiTreeUtil.findChildrenOfAnyType(
             root,
             BlockStmt::class.java,
-            LuaBlockStmt::class.java
+            LuaBlockStmt::class.java,
+            TypesBlockStmt::class.java
         )
         for (block in blocks) {
             // Only create folding region if block has content (more than just braces)
