@@ -23,6 +23,7 @@ group = config("group")
 version = config("version")
 
 dependencies {
+    implementation(project(":directive-catalog"))
     testImplementation(libs.junit)
 
     intellijPlatform {

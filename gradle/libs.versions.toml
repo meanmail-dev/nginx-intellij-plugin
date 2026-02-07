@@ -4,9 +4,9 @@ junit = "4.13.2"
 
 # plugins
 # https://github.com/JetBrains/intellij-platform-gradle-plugin
-intelliJPlatform = "2.9.0"
+intelliJPlatform = "2.10.5"
 # https://plugins.jetbrains.com/docs/intellij/using-kotlin.html#bundled-stdlib-versions
-kotlin = "2.0.21"
+kotlin = "2.1.20"
 
 
 [libraries]

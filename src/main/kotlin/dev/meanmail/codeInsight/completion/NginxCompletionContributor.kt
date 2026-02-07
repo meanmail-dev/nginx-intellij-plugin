@@ -5,8 +5,8 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.findParentOfType
 import com.intellij.util.ProcessingContext
-import dev.meanmail.directives.Directive
-import dev.meanmail.directives.findDirectives
+import dev.meanmail.directives.catalog.Directive
+import dev.meanmail.directives.catalog.findDirectives
 import dev.meanmail.psi.DirectiveStmt
 import dev.meanmail.psi.NameStmt
 
