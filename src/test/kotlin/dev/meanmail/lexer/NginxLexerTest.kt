@@ -250,6 +250,26 @@ class NginxLexerTest {
     }
 
     @Test
+    fun testBracedVariableInValue() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/45
+        val tokens = tokenize(
+            "ssl_certificate /etc/letsencrypt/live/\${SERVER_NAME}/fullchain.pem;"
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "ssl_certificate",
+            "VALUE" to "/etc/letsencrypt/live/\${SERVER_NAME}/fullchain.pem",
+            "SEMICOLON" to ";"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
     fun testTypesDirective() {
         // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/43
         val tokens = tokenize(

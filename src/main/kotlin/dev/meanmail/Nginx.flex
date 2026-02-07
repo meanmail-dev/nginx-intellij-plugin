@@ -81,7 +81,8 @@ BINARY_OPERATOR=(\!=|=)|(\!?\~\*?|\!?\~)
 
 LPAREN=\(
 RPAREN=\)
-VALUE=[^\s;'\"\{\}\#=]+
+BRACED_VAR=\$\{{IDENTIFIER}\}
+VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#=])+
 EQUAL==
 IF_VALUE=[^\s;'\"\{\}\(\)\#]+
 ESCAPE=\\[^\n\r]
