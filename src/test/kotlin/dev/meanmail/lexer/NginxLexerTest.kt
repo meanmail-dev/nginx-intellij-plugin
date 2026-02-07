@@ -250,6 +250,42 @@ class NginxLexerTest {
     }
 
     @Test
+    fun testIfDirectiveWithNestedParentheses() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/40
+        val tokens = tokenize(
+            """
+            if (${'$'}args ~ [\&\?]stream.*?=(.*)) {
+                return 403;
+            }
+        """.trimIndent()
+        )
+
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}args",
+            "BINARY_OPERATOR" to "~",
+            "VALUE" to "[\\&\\?]stream.*?=",
+            "VALUE" to "(",          // nested paren treated as VALUE
+            "CONCAT_JOIN" to "",
+            "VALUE" to ".*",
+            "VALUE" to ")",          // closing nested paren treated as VALUE
+            "RPAREN" to ")",         // actual closing paren
+            "LBRACE" to "{",
+            "IDENTIFIER" to "return",
+            "VALUE" to "403",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
     fun testGeoDirective() {
         val tokens = tokenize(
             """
