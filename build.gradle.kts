@@ -1,3 +1,5 @@
+import org.jetbrains.grammarkit.tasks.GenerateLexerTask
+import org.jetbrains.grammarkit.tasks.GenerateParserTask
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -17,6 +19,7 @@ plugins {
 // https://plugins.jetbrains.com/docs/intellij/using-kotlin.html#kotlin-standard-library
     alias(libs.plugins.kotlin) // Kotlin support
     alias(libs.plugins.intelliJPlatform) // IntelliJ Platform Gradle Plugin
+    alias(libs.plugins.grammarKit)
 }
 
 group = config("group")
@@ -120,5 +123,32 @@ tasks {
         useJUnit()
 
         maxHeapSize = "1G"
+
+        // Fix JNA library version conflict on macOS
+        // Known issue with IntelliJ Platform 2025.2.x on macOS
+        // See: https://youtrack.jetbrains.com/issue/IDEA-364535
+        jvmArgs("-Djna.nosys=true")
+    }
+
+    val generateNginxLexer by registering(GenerateLexerTask::class) {
+        sourceFile.set(file("src/main/kotlin/dev/meanmail/Nginx.flex"))
+        targetOutputDir.set(file("src/main/java/dev/meanmail"))
+        purgeOldFiles.set(false)
+    }
+
+    val generateNginxParser by registering(GenerateParserTask::class) {
+        sourceFile.set(file("src/main/kotlin/dev/meanmail/Nginx.bnf"))
+        targetRootOutputDir.set(file("src/main/java"))
+        pathToParser.set("src/main/java/dev/meanmail/psi/parser/NginxParser.java")
+        pathToPsiRoot.set("src/main/java")
+        purgeOldFiles.set(false)
+        outputs.upToDateWhen { false }
+    }
+
+    withType<JavaCompile> {
+        dependsOn(generateNginxLexer, generateNginxParser)
+    }
+    withType<KotlinCompile> {
+        dependsOn(generateNginxLexer, generateNginxParser)
     }
 }

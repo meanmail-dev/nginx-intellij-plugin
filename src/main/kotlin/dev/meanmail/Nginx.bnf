@@ -1,8 +1,9 @@
 {
   parserClass="dev.meanmail.psi.parser.NginxParser"
-  parserUtilClass="com.intellij.lang.parser.GeneratedParserUtilBase"
+  // ParserUtil may be kept for other predicates, but concatenation uses CONCAT_JOIN from lexer now
+  parserUtilClass="dev.meanmail.psi.parser.NginxParserUtil"
 
-  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  extends="dev.meanmail.psi.NginxCompositeElementBase"
 
   psiClassPrefix=""
   psiImplClassSuffix="Impl"
@@ -16,8 +17,13 @@
   psiImplUtilClass="dev.meanmail.psi.PsiImplUtil"
 
   implements("directive_stmt")="dev.meanmail.psi.WithPathElement"
+  extends("directive_stmt")="dev.meanmail.psi.DirectiveStmtElement"
   implements("lua_code_stmt")="com.intellij.psi.PsiLanguageInjectionHost"
+  extends("lua_code_stmt")="dev.meanmail.psi.LuaCodeStmtElement"
   implements("value_stmt")="dev.meanmail.psi.ReferenceElement"
+  extends("value_stmt")="dev.meanmail.psi.ValueStmtElement"
+  extends("regular_directive_stmt")="dev.meanmail.psi.RegularDirectiveStmtElement"
+  extends("variable_stmt")="dev.meanmail.psi.VariableStmtElementBase"
 }
 
 nginxFile ::= statement*
@@ -27,14 +33,20 @@ private statement ::= directive_stmt [COMMENT]
 string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE) {pin=1}
 name_stmt ::= IDENTIFIER
 variable_stmt ::= VARIABLE
-value_stmt ::= IDENTIFIER
-               | VALUE
-               | string_stmt
-               | variable_stmt
-               | concatenated_expr
+private part_value_stmt ::=
+                           // Prefer concatenation when two or more value parts go consecutively (e.g. ${var}suffix)
+                           concatenated_expr
+                           | VALUE EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr)
+                           | IDENTIFIER !EQUAL
+                           | VALUE
+                           | string_stmt
+                           | variable_stmt
+named_value_stmt ::= IDENTIFIER EQUAL part_value_stmt
+value_stmt ::= named_value_stmt
+               | part_value_stmt
 
 block_stmt ::= LBRACE statement* RBRACE {pin=1}
-regular_directive_stmt ::= name_stmt BINARY_OPERATOR? value_stmt* (SEMICOLON | block_stmt) {pin=1}
+regular_directive_stmt ::= name_stmt (BINARY_OPERATOR | EQUAL)? value_stmt* (SEMICOLON | block_stmt) {pin=1}
 
 map_stmt ::= MAP
 map_volatile_stmt ::= MAP_VOLATILE SEMICOLON {pin=1}
@@ -42,7 +54,7 @@ map_default_stmt ::= MAP_DEFAULT value_stmt SEMICOLON {pin=1}
 map_hostnames_stmt ::= MAP_HOSTNAMES SEMICOLON {pin=1}
 map_include_stmt ::= MAP_INCLUDE value_stmt SEMICOLON {pin=1}
 map_value_stmt ::= value_stmt value_stmt SEMICOLON {pin=1}
-map_block_content ::= 
+map_block_content ::=
     map_volatile_stmt |
     map_default_stmt |
     map_hostnames_stmt |
@@ -51,6 +63,19 @@ map_block_content ::=
 map_block_stmt ::= LBRACE map_block_content* RBRACE {pin=1}
 map_directive_stmt ::= map_stmt value_stmt value_stmt map_block_stmt {pin=1}
 
+num_map_stmt ::= NUM_MAP
+num_map_volatile_stmt ::= NUM_MAP_VOLATILE SEMICOLON {pin=1}
+num_map_default_stmt ::= NUM_MAP_DEFAULT value_stmt SEMICOLON {pin=1}
+num_map_include_stmt ::= NUM_MAP_INCLUDE value_stmt SEMICOLON {pin=1}
+num_map_value_stmt ::= value_stmt value_stmt SEMICOLON {pin=1}
+num_map_block_content ::=
+    num_map_volatile_stmt |
+    num_map_default_stmt |
+    num_map_include_stmt |
+    num_map_value_stmt
+num_map_block_stmt ::= LBRACE num_map_block_content* RBRACE {pin=1}
+num_map_directive_stmt ::= num_map_stmt value_stmt value_stmt num_map_block_stmt {pin=1}
+
 geo_stmt ::= GEO
 geo_delete_stmt ::= GEO_DELETE value_stmt SEMICOLON {pin=1}
 geo_default_stmt ::= GEO_DEFAULT value_stmt SEMICOLON {pin=1}
@@ -58,7 +83,7 @@ geo_proxy_stmt ::= GEO_PROXY value_stmt SEMICOLON {pin=1}
 geo_ranges_stmt ::= GEO_RANGES SEMICOLON {pin=1}
 geo_include_stmt ::= GEO_INCLUDE value_stmt SEMICOLON {pin=1}
 geo_value_stmt ::= value_stmt value_stmt SEMICOLON {pin=1}
-geo_block_content ::= 
+geo_block_content ::=
     geo_delete_stmt |
     geo_default_stmt |
     geo_proxy_stmt |
@@ -68,28 +93,62 @@ geo_block_content ::=
 geo_block_stmt ::= LBRACE geo_block_content* RBRACE {pin=1}
 geo_directive_stmt ::= geo_stmt variable_stmt [variable_stmt] geo_block_stmt {pin=1}
 
+// types directive (ngx_http_core_module#types)
+types_stmt ::= TYPES
+types_include_stmt ::= TYPES_INCLUDE value_stmt SEMICOLON {pin=1}
+types_mapping_stmt ::= value_stmt+ SEMICOLON {pin=1}
+types_block_content ::= types_include_stmt | types_mapping_stmt
+types_block_stmt ::= LBRACE types_block_content* RBRACE {pin=1}
+types_directive_stmt ::= types_stmt types_block_stmt {pin=1}
+
 lua_stmt ::= LUA_BLOCK_DIRECTIVE
 lua_code_stmt ::= LUA+ {pin=1}
 lua_block_stmt ::= LBRACE lua_code_stmt RBRACE {pin=1}
 lua_directive_stmt ::= lua_stmt value_stmt* lua_block_stmt {pin=1}
 
 if_stmt ::= IF
-concatenated_expr ::= (variable_stmt | VALUE | IDENTIFIER) +
-condition_expr ::= concatenated_expr | string_stmt
-condition_stmt ::= UNARY_OPERATOR condition_expr | condition_expr (BINARY_OPERATOR condition_expr)?
+// Concatenation is only when pieces go without separators (no whitespace/comments)
+// This avoids accidental gluing across spaces. Adjacency is provided by lexer via CONCAT_JOIN token.
+// Important: do not consume the start of a named argument (IDENTIFIER '=')
+// Concatenation atoms: identifiers (that are not named-arg keys), plain values, variables, or strings
+private concat_atom ::= (IDENTIFIER !EQUAL | VALUE | variable_stmt | string_stmt)
+
+// Concatenation requires explicit join tokens emitted by lexer when two atoms are adjacent (no spaces/comments)
+concatenated_expr ::= concat_atom (CONCAT_JOIN concat_atom)+
+// Allow single-token operands too (e.g. $var, VALUE, IDENTIFIER). Prefer single tokens first to avoid false-positive concatenation
+condition_expr ::= string_stmt | variable_stmt | VALUE | IDENTIFIER | concatenated_expr
+
+// Right-hand side expression that can represent an unquoted regular expression with nested groups
+// Used to correctly parse constructs like: if ($var ~* ((https://example\.com))$ ) { ... }
+// It allows a sequence of tokens and nested parentheses without consuming the closing RPAREN of the outer if-parens.
+regex_group ::= LPAREN regex_expr? RPAREN
+regex_atom  ::= string_stmt | variable_stmt | VALUE | IDENTIFIER | regex_group
+// Accept atoms separated either by whitespace or by CONCAT_JOIN (adjacent tokens with no spaces)
+regex_expr  ::= regex_atom ((CONCAT_JOIN)? regex_atom)*
+
+// Support regex-like RHS after binary operators (e.g., ~, ~*), while keeping '=' simple on the RHS
+// Important: prefer regex_expr over condition_expr after a binary operator to correctly handle patterns
+// like ((...))$ and avoid gluing them into a generic concatenation expression
+condition_stmt ::= UNARY_OPERATOR condition_expr
+                 | condition_expr (EQUAL condition_expr | BINARY_OPERATOR regex_expr)?
 if_paren_stmt ::= LPAREN condition_stmt RPAREN {pin=1}
 if_directive_stmt ::= if_stmt if_paren_stmt block_stmt {pin=1}
 
 location_stmt ::= LOCATION
-location_modifier_stmt ::= (BINARY_OPERATOR | CARET_TILDE)?
+location_modifier_stmt ::= (BINARY_OPERATOR | EQUAL | CARET_TILDE)?
 location_path_stmt ::= value_stmt
 location_directive_stmt ::= location_stmt location_modifier_stmt? location_path_stmt block_stmt {pin=1}
+
+var_stmt ::= variable_stmt value_stmt* SEMICOLON {pin=1}
 
 directive_stmt ::= (
                     regular_directive_stmt
                     | map_directive_stmt
+                    | num_map_directive_stmt
                     | geo_directive_stmt
+                    | types_directive_stmt
                     | lua_directive_stmt
                     | if_directive_stmt
                     | location_directive_stmt
+                    | var_stmt
                    )

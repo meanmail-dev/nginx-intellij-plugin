@@ -229,7 +229,7 @@ class NginxLexerTest {
             "IF" to "if",
             "LPAREN" to "(",
             "VARIABLE" to "${'$'}http_x_forwarded_proto",
-            "BINARY_OPERATOR" to "=",
+            "EQUAL" to "=",
             "QUOTE" to "'",
             "STRING" to "https",
             "QUOTE" to "'",

@@ -34,6 +34,12 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
             Types.MAP_VOLATILE -> MAP_VOLATILE_KEYS
             Types.MAP_HOSTNAMES -> MAP_HOSTNAMES_KEYS
             Types.MAP_INCLUDE -> IDENTIFIER_KEYS
+            Types.TYPES -> TYPES_KEYS
+            Types.TYPES_INCLUDE -> IDENTIFIER_KEYS
+            Types.NUM_MAP -> NUM_MAP_KEYS
+            Types.NUM_MAP_DEFAULT -> NUM_MAP_DEFAULT_KEYS
+            Types.NUM_MAP_VOLATILE -> NUM_MAP_VOLATILE_KEYS
+            Types.NUM_MAP_INCLUDE -> IDENTIFIER_KEYS
             Types.UNARY_OPERATOR -> OPERATOR_KEYS
             Types.BINARY_OPERATOR -> OPERATOR_KEYS
             Types.IF -> IF_KEYS
@@ -73,6 +79,12 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
         private val GEO_DEFAULT = createTextAttributesKey("NGINX_GEO_DEFAULT", DefaultLanguageHighlighterColors.KEYWORD)
         private val GEO_PROXY = createTextAttributesKey("NGINX_GEO_PROXY", DefaultLanguageHighlighterColors.KEYWORD)
         private val GEO_RANGES = createTextAttributesKey("NGINX_GEO_RANGES", DefaultLanguageHighlighterColors.KEYWORD)
+        private val TYPES = createTextAttributesKey("NGINX_TYPES", DefaultLanguageHighlighterColors.KEYWORD)
+        private val NUM_MAP = createTextAttributesKey("NGINX_NUM_MAP", DefaultLanguageHighlighterColors.KEYWORD)
+        private val NUM_MAP_DEFAULT =
+            createTextAttributesKey("NGINX_NUM_MAP_DEFAULT", DefaultLanguageHighlighterColors.KEYWORD)
+        private val NUM_MAP_VOLATILE =
+            createTextAttributesKey("NGINX_NUM_MAP_VOLATILE", DefaultLanguageHighlighterColors.KEYWORD)
 
         private val BAD_CHAR_KEYS = arrayOf(BAD_CHARACTER)
         private val COMMENT_KEYS = arrayOf(COMMENT)
@@ -96,5 +108,9 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
         private val GEO_DEFAULT_KEYS = arrayOf(GEO_DEFAULT)
         private val GEO_PROXY_KEYS = arrayOf(GEO_PROXY)
         private val GEO_RANGES_KEYS = arrayOf(GEO_RANGES)
+        private val TYPES_KEYS = arrayOf(TYPES)
+        private val NUM_MAP_KEYS = arrayOf(NUM_MAP)
+        private val NUM_MAP_DEFAULT_KEYS = arrayOf(NUM_MAP_DEFAULT)
+        private val NUM_MAP_VOLATILE_KEYS = arrayOf(NUM_MAP_VOLATILE)
     }
 }

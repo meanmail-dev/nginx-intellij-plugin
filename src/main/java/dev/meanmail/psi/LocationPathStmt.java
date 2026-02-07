@@ -1,12 +1,13 @@
 // This is a generated file. Not intended for manual editing.
 package dev.meanmail.psi;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import org.jetbrains.annotations.NotNull;
 
 public interface LocationPathStmt extends PsiElement {
 
-    @NotNull
-    ValueStmt getValueStmt();
+  @NotNull
+  ValueStmt getValueStmt();
 
 }

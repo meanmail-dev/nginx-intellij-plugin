@@ -1,35 +1,36 @@
 // This is a generated file. Not intended for manual editing.
 package dev.meanmail.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
-import dev.meanmail.psi.GeoDeleteStmt;
-import dev.meanmail.psi.ValueStmt;
-import dev.meanmail.psi.Visitor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.intellij.psi.util.PsiTreeUtil;
+import static dev.meanmail.psi.Types.*;
+import dev.meanmail.psi.NginxCompositeElementBase;
+import dev.meanmail.psi.*;
 
-public class GeoDeleteStmtImpl extends ASTWrapperPsiElement implements GeoDeleteStmt {
+public class GeoDeleteStmtImpl extends NginxCompositeElementBase implements GeoDeleteStmt {
 
-    public GeoDeleteStmtImpl(@NotNull ASTNode node) {
-        super(node);
-    }
+  public GeoDeleteStmtImpl(ASTNode node) {
+    super(node);
+  }
 
-    public void accept(@NotNull Visitor visitor) {
-        visitor.visitGeoDeleteStmt(this);
-    }
+  public void accept(@NotNull Visitor visitor) {
+    visitor.visitGeoDeleteStmt(this);
+  }
 
-    @Override
-    public void accept(@NotNull PsiElementVisitor visitor) {
-        if (visitor instanceof Visitor) accept((Visitor) visitor);
-        else super.accept(visitor);
-    }
+  @Override
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof Visitor) accept((Visitor)visitor);
+    else super.accept(visitor);
+  }
 
-    @Override
-    @Nullable
-    public ValueStmt getValueStmt() {
-        return findChildByClass(ValueStmt.class);
-    }
+  @Override
+  @Nullable
+  public ValueStmt getValueStmt() {
+    return findChildByClass(ValueStmt.class);
+  }
 
 }
