@@ -250,6 +250,38 @@ class NginxLexerTest {
     }
 
     @Test
+    fun testTypesDirective() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/43
+        val tokens = tokenize(
+            """
+            types {
+                application/json json;
+                text/html html htm;
+            }
+        """.trimIndent()
+        )
+
+        val expectedTokens = listOf(
+            "TYPES" to "types",
+            "LBRACE" to "{",
+            "VALUE" to "application/json",
+            "VALUE" to "json",
+            "SEMICOLON" to ";",
+            "VALUE" to "text/html",
+            "VALUE" to "html",
+            "VALUE" to "htm",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
     fun testIfDirectiveWithNestedParentheses() {
         // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/40
         val tokens = tokenize(
