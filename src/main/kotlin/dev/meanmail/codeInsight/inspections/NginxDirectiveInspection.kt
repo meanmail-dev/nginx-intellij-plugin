@@ -101,7 +101,7 @@ class NginxDirectiveInspection : LocalInspectionTool() {
 
         val context: Set<Directive> = determineFileContext(directiveStmt.containingFile) ?: return emptyList()
         // Check if directive's context intersects with current context
-        val matchingDirectivesContext = matchingDirectives.map { it.context }.flatten().toSet()
+        val matchingDirectivesContext = matchingDirectives.flatMap { it.context }.toSet()
         if (matchingDirectivesContext.intersect(context).isEmpty()) {
             return listOf(
                 manager.createProblemDescriptor(

@@ -14,7 +14,7 @@ fun determineFileContext(file: PsiFile): Set<Directive>? {
         if (matchingDirectives.isEmpty()) {
             continue
         }
-        val matchingDirectivesContext = matchingDirectives.map { it.context }.flatten().toSet()
+        val matchingDirectivesContext = matchingDirectives.flatMap { it.context }.toSet()
         if (context.isEmpty()) {
             context = matchingDirectivesContext.toMutableSet()
             continue

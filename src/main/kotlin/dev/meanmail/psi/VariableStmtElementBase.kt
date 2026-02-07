@@ -9,7 +9,7 @@ abstract class VariableStmtElementBase(node: ASTNode) : NginxCompositeElementBas
     override fun getName(): String? {
         val text = text ?: return null
         // Strip $ prefix and optional { } braces
-        return text.removePrefix("\$").removePrefix("{").removeSuffix("}")
+        return text.removePrefix("$").removePrefix("{").removeSuffix("}")
     }
 
     override fun getNameIdentifier(): PsiElement {
