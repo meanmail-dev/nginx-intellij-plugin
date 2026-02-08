@@ -35,8 +35,8 @@ class NginxDirectiveInspection : LocalInspectionTool() {
                 problems.add(
                     manager.createProblemDescriptor(
                         nameElement,
-                        "Unknown directive",
-                        UnknownDirectiveQuickFix(),
+                        "Unknown directive '${nameElement.text}'. It may be available in Nginx Pro",
+                        UnknownDirectiveQuickFix(nameElement.text),
                         ProblemHighlightType.ERROR,
                         isOnTheFly
                     )
@@ -124,19 +124,22 @@ class NginxDirectiveInspection : LocalInspectionTool() {
     /**
      * Quick Fix that suggests installing the Pro version for unknown directives
      */
-    private class UnknownDirectiveQuickFix : LocalQuickFix {
-        override fun getName(): String = "Check if this directive is available in Pro version"
+    private class UnknownDirectiveQuickFix(
+        private val directiveName: String
+    ) : LocalQuickFix {
+        override fun getName(): String = "Directive '$directiveName' may be supported in Pro version"
 
         override fun getFamilyName(): String = "NGINX Pro Features"
 
         override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
-            // Avoid side effects during intention preview (runs on a copy). See IDEA SideEffectGuard.
             if (IntentionPreviewUtils.isPreviewElement(descriptor.psiElement)) {
                 return
             }
 
+            val url = "https://meanmail.dev/nginx-pro?utm_source=free_plugin&utm_medium=quickfix&utm_term=$directiveName"
+
             ApplicationManager.getApplication().invokeLater {
-                BrowserUtil.browse("https://plugins.jetbrains.com/plugin/18280-nginx-configuration-pro")
+                BrowserUtil.browse(url)
             }
         }
     }

@@ -15,7 +15,7 @@
         <th>Feature</th>
         <th>Free Version</th>
         <th><strong><a
-                href="https://plugins.jetbrains.com/plugin/18280-nginx-configuration-pro">Pro version</a></strong></th>
+                href="https://meanmail.dev/nginx-pro?utm_source=free_plugin&utm_medium=plugin_description">Pro version</a></strong></th>
     </tr>
     </thead>
     <tbody>
@@ -135,6 +135,8 @@ Your ratings and feedback are very important. The feature will appear the faster
                 level="ERROR"
                 shortName="NginxGeoInspection"/>
         <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
+        <notificationGroup id="Nginx Pro Features" displayType="BALLOON" isLogByDefault="false"/>
+        <postFormatProcessor implementation="dev.meanmail.codeInsight.NginxProFormatNotifier"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">
@@ -148,6 +150,10 @@ Your ratings and feedback are very important. The feature will appear the faster
                    implementationClass="dev.meanmail.NginxCommenter"/>
         <foldingBuilder language="Nginx Configuration"
                         implementationClass="dev.meanmail.folding.NginxFoldingBuilder"/>
+        <documentationProvider language="Nginx Configuration"
+                               implementationClass="dev.meanmail.codeInsight.NginxDocumentationProvider"/>
+        <formatter language="Nginx Configuration"
+                   implementationClass="dev.meanmail.codeInsight.NginxFormattingModelBuilder"/>
 
     </extensions>
 
