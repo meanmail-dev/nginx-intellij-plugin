@@ -32,7 +32,7 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
         assertEquals(1, children.size)
         assertTrue(children[0] is NginxStructureViewElement)
-        assertEquals("worker_processes", children[0].presentation.presentableText)
+        assertEquals("worker_processes 1", children[0].presentation.presentableText)
     }
 
     fun testNestedDirectives() {
@@ -60,14 +60,14 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
         val httpChildren = children[0].children
         assertEquals(1, httpChildren.size)
         assertTrue(httpChildren[0] is NginxStructureViewElement)
-        assertEquals("server", httpChildren[0].presentation.presentableText)
+        assertEquals("server :80 (localhost)", httpChildren[0].presentation.presentableText)
 
         // Check server level
         val serverChildren = httpChildren[0].children
         assertEquals(2, serverChildren.size)
         assertTrue(serverChildren.all { it is NginxStructureViewElement })
-        assertEquals("listen", serverChildren[0].presentation.presentableText)
-        assertEquals("server_name", serverChildren[1].presentation.presentableText)
+        assertEquals("listen 80", serverChildren[0].presentation.presentableText)
+        assertEquals("server_name localhost", serverChildren[1].presentation.presentableText)
     }
 
     fun testLocationDirective() {
@@ -88,12 +88,12 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
         val element = NginxStructureViewElement(myFixture.file as NavigatablePsiElement)
         val locationElement = element.children[0].children[0].children[0]
 
-        assertEquals("location", locationElement.presentation.presentableText)
+        assertEquals("location /", locationElement.presentation.presentableText)
 
         val locationChildren = locationElement.children
         assertEquals(2, locationChildren.size)
-        assertEquals("root", locationChildren[0].presentation.presentableText)
-        assertEquals("index", locationChildren[1].presentation.presentableText)
+        assertEquals("root /usr/share/nginx/html", locationChildren[0].presentation.presentableText)
+        assertEquals("index index.html", locationChildren[1].presentation.presentableText)
     }
 
     fun testIfDirective() {
@@ -113,11 +113,11 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
         val element = NginxStructureViewElement(myFixture.file as NavigatablePsiElement)
         val ifElement = element.children[0].children[0].children[0]
 
-        assertEquals("if", ifElement.presentation.presentableText)
+        assertEquals("if (${'$'}request_method = POST)", ifElement.presentation.presentableText)
 
         val ifChildren = ifElement.children
         assertEquals(1, ifChildren.size)
-        assertEquals("return", ifChildren[0].presentation.presentableText)
+        assertEquals("return 405", ifChildren[0].presentation.presentableText)
     }
 
     fun testNavigationAndPresentation() {
@@ -143,8 +143,8 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
 
         // Check presentation
         assertEquals("http", httpElement.presentation.presentableText)
-        assertEquals("server", serverElement.presentation.presentableText)
-        assertEquals("listen", listenElement.presentation.presentableText)
+        assertEquals("server :80", serverElement.presentation.presentableText)
+        assertEquals("listen 80", listenElement.presentation.presentableText)
 
         // Check alpha sort key
         assertEquals("http", (httpElement.value as NavigationItem).name)
@@ -182,12 +182,12 @@ class NginxStructureViewElementTest : BasePlatformTestCase() {
         val serverChildren = httpChildren[0].children
         assertEquals(1, serverChildren.size)
         assertTrue(serverChildren[0] is NginxStructureViewElement)
-        assertEquals("location", serverChildren[0].presentation.presentableText)
+        assertEquals("location /", serverChildren[0].presentation.presentableText)
 
         // Check location level - root should be visible
         val locationChildren = serverChildren[0].children
         assertEquals(1, locationChildren.size)
         assertTrue(locationChildren[0] is NginxStructureViewElement)
-        assertEquals("root", locationChildren[0].presentation.presentableText)
+        assertEquals("root /usr/share/nginx/html", locationChildren[0].presentation.presentableText)
     }
 }

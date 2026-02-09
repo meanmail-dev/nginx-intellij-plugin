@@ -35,7 +35,7 @@ class NginxStructureViewElement(private val element: NavigatablePsiElement) : St
 
     private fun getDirectivePresentation(directive: DirectiveStmt): String {
         directive.getLocationDirectiveStmt()?.let { location ->
-            val modifier = location.locationModifierStmt?.text?.let { "$it " } ?: ""
+            val modifier = location.locationModifierStmt?.text?.takeIf { it.isNotBlank() }?.let { "$it " } ?: ""
             val path = location.locationPathStmt?.text ?: ""
             return "location $modifier$path".trim()
         }

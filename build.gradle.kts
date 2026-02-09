@@ -28,6 +28,7 @@ version = config("version")
 dependencies {
     implementation(project(":directive-catalog"))
     testImplementation(libs.junit)
+    testImplementation("net.java.dev.jna:jna:5.17.0")
 
     intellijPlatform {
         create(config("platformType"), config("platformVersion"))

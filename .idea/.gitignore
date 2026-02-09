@@ -7,3 +7,5 @@
 /dataSources/
 /dataSources.local.xml
 /deployment.xml
+# Django PowerTools cache (generated)
+/djangoPowerTools/
