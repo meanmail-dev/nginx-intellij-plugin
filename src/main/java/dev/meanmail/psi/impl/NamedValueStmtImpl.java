@@ -40,9 +40,9 @@ public class NamedValueStmtImpl extends NginxCompositeElementBase implements Nam
   }
 
   @Override
-  @Nullable
-  public VariableStmt getVariableStmt() {
-    return findChildByClass(VariableStmt.class);
+  @NotNull
+  public List<VariableStmt> getVariableStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, VariableStmt.class);
   }
 
 }

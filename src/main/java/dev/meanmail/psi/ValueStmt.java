@@ -16,7 +16,7 @@ public interface ValueStmt extends ReferenceElement {
   @Nullable
   StringStmt getStringStmt();
 
-  @Nullable
-  VariableStmt getVariableStmt();
+  @NotNull
+  List<VariableStmt> getVariableStmtList();
 
 }

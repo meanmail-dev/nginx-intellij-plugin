@@ -36,7 +36,7 @@ variable_stmt ::= VARIABLE
 private part_value_stmt ::=
                            // Prefer concatenation when two or more value parts go consecutively (e.g. ${var}suffix)
                            concatenated_expr
-                           | VALUE EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr)
+                           | VALUE EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr) (EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr))*
                            | IDENTIFIER !EQUAL
                            | VALUE
                            | string_stmt

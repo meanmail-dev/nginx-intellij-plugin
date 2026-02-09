@@ -13,7 +13,7 @@ public interface NamedValueStmt extends PsiElement {
   @Nullable
   StringStmt getStringStmt();
 
-  @Nullable
-  VariableStmt getVariableStmt();
+  @NotNull
+  List<VariableStmt> getVariableStmtList();
 
 }

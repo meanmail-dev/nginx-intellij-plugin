@@ -1,3 +1,7 @@
+## 2026.1.3 (February, 9, 2026)
+
+* Fix parsing of unquoted URLs containing multiple `=` signs in directives like `error_page` and `proxy_pass` ([#48](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/48))
+
 ## 2025.21 (November, 18, 2025)
 
 * Fix context for allow and deny directives
