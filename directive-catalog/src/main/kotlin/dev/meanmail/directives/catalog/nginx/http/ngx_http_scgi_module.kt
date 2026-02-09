@@ -301,7 +301,7 @@ val scgiPass = Directive(
         
         Can also specify a server group defined in the upstream block.
     """.trimIndent(),
-    context = listOf(location, `if`),
+    context = listOf(location, locationIf),
     module = ngx_http_scgi_module
 )
 
