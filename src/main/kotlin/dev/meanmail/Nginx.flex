@@ -164,6 +164,12 @@ DQUOTE="\""
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = false; yypush(DQSTRING_STATE); return DQUOTE;
     }
+    // URL with scheme (e.g. http://example.com/path?v=1&a=2) — includes '=' in the token
+    // so the entire URL is a single VALUE. Excludes '$' so variables remain separate tokens.
+    [a-z]+"://"({BRACED_VAR}|[^\s;'\"\{\}\#\$])+ {
+        if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; return VALUE;
+    }
     {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;

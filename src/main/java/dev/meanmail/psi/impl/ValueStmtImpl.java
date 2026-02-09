@@ -46,9 +46,9 @@ public class ValueStmtImpl extends ValueStmtElement implements ValueStmt {
   }
 
   @Override
-  @Nullable
-  public VariableStmt getVariableStmt() {
-    return findChildByClass(VariableStmt.class);
+  @NotNull
+  public List<VariableStmt> getVariableStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, VariableStmt.class);
   }
 
 }
