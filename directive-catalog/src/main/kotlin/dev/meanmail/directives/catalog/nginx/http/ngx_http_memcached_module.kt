@@ -69,7 +69,7 @@ val memcachedNextUpstreamTries = Directive(
 val memcachedPass = Directive(
     name = "memcached_pass",
     description = "Defines the Memcached server address for retrieving cached content",
-    context = listOf(http, server, location),
+    context = listOf(location, locationIf),
     module = ngx_http_memcached_module
 )
 
