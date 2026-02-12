@@ -1,3 +1,7 @@
+## 2026.1.4 (February, 12, 2026)
+
+* Fix parsing of unquoted strings with trailing `=` in query strings (e.g. `try_files $uri /index.php?=;`) ([#54](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/54))
+
 ## 2026.1.3 (February, 9, 2026)
 
 * Fix parsing of unquoted URLs containing multiple `=` signs in directives like `error_page` and `proxy_pass` ([#48](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/48))

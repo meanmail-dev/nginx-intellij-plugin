@@ -170,6 +170,12 @@ DQUOTE="\""
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
+    // Path with query string (e.g. /index.php?=, /path?key=value&b=) — includes '=' after '?'
+    // so the entire path+query is a single VALUE. Excludes '$' so variables remain separate tokens.
+    ({BRACED_VAR}|[^\s;'\"\{\}\#=\$])+"?"({BRACED_VAR}|[^\s;'\"\{\}\#\$])* {
+        if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; return VALUE;
+    }
     {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
