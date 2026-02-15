@@ -85,7 +85,7 @@ BRACED_VAR=\$\{{IDENTIFIER}\}
 VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#=])+
 MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#])+
 EQUAL==
-IF_VALUE=[^\s;'\"\{\}\(\)\#]+
+IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)\#])+
 ESCAPE=\\[^\n\r]
 STRING=([^'\\]|{ESCAPE})+
 DQSTRING=([^\"\\]|{ESCAPE})+

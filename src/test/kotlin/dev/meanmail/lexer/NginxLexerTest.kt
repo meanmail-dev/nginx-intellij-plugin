@@ -477,4 +477,36 @@ class NginxLexerTest {
             assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
         }
     }
+
+    @Test
+    fun testIfDirectiveWithEscapedParentheses() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/52
+        val tokens = tokenize(
+            """
+            if (${'$'}args ~ tt\( ) {
+                return 403;
+            }
+        """.trimIndent()
+        )
+
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}args",
+            "BINARY_OPERATOR" to "~",
+            "VALUE" to "tt\\(",       // escaped paren is part of VALUE
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "IDENTIFIER" to "return",
+            "VALUE" to "403",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
 }

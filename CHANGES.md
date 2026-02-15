@@ -4,6 +4,7 @@
 * Fix parsing of unquoted strings with trailing `=` in query strings (e.g. `try_files $uri /index.php?=;`) ([#54](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/54))
 * Fix `error_page` directive context to allow usage inside `if` in `location` ([#55](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/55))
 * Fix `memcached_pass` directive context ([#56](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/56))
+* Fix parsing of unquoted strings with escaped `(` in `if` condition (e.g. `if ($args ~ tt\( )`) ([#52](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/52))
 
 ## 2026.1.3 (February, 9, 2026)
 
