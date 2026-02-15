@@ -12,14 +12,14 @@ val ngx_http_rewrite_module = NginxModule(
 val locationIf = Directive(
     name = "if",
     description = "Creates a conditional block within a location context, executing directives when the specified condition is true",
-    context = listOf(location, self),
+    context = listOf(location),
     module = ngx_http_rewrite_module
 )
 
 val `if` = Directive(
     name = "if",
     description = "Creates a conditional configuration block that executes directives when the specified condition is true",
-    context = listOf(server, location, self),
+    context = listOf(server, location),
     module = ngx_http_rewrite_module
 )
 
