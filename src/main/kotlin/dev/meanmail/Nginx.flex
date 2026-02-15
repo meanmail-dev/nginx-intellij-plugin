@@ -83,6 +83,7 @@ LPAREN=\(
 RPAREN=\)
 BRACED_VAR=\$\{{IDENTIFIER}\}
 VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#=])+
+MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#])+
 EQUAL==
 IF_VALUE=[^\s;'\"\{\}\(\)\#]+
 ESCAPE=\\[^\n\r]
@@ -279,7 +280,8 @@ DQUOTE="\""
     volatile                 { return MAP_VOLATILE; }
     hostnames                { return MAP_HOSTNAMES; }
     {SEMICOLON}              { return SEMICOLON; }
-    {VALUE}                  { return VALUE; }
+    // Use MAP_BLOCK_VALUE to allow '=' in unquoted map values (e.g. &a=1)
+    {MAP_BLOCK_VALUE}        { return VALUE; }
 }
 
 <GEO_STATE> {
