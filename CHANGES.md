@@ -1,6 +1,9 @@
-## 2026.1.4 (February, 12, 2026)
+## 2026.1.4 (February, 15, 2026)
 
+* Fix parsing of unquoted strings with `=` in map directive values (e.g. `default &a=1;`) ([#53](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/53))
 * Fix parsing of unquoted strings with trailing `=` in query strings (e.g. `try_files $uri /index.php?=;`) ([#54](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/54))
+* Fix `error_page` directive context to allow usage inside `if` in `location` ([#55](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/55))
+* Fix `memcached_pass` directive context ([#56](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/56))
 
 ## 2026.1.3 (February, 9, 2026)
 
