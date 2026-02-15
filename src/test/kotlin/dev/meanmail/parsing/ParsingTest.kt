@@ -75,6 +75,10 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    fun testProxyPassVariable() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")

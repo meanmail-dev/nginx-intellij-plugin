@@ -179,6 +179,41 @@ DQUOTE="\""
     }
     {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        // Check if the matched VALUE contains a bare $variable reference (not braced ${VAR})
+        // that should be a separate VARIABLE token due to longest-match consuming too much.
+        // Braced vars ${VAR} are already part of VALUE pattern and should NOT be split out.
+        String text = yytext().toString();
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '$' && i + 1 < text.length()) {
+                char next = text.charAt(i + 1);
+                if (next == '{') {
+                    // Braced variable ${VAR} — skip to closing brace, it's part of VALUE
+                    int closeBrace = text.indexOf('}', i + 2);
+                    if (closeBrace >= 0) { i = closeBrace; }
+                    continue;
+                }
+                if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') || next == '_') {
+                    // Bare $variable found — split VALUE before it
+                    if (i > 0) {
+                        yypushback(text.length() - i);
+                        joinPending = false; prevConcatEligible = true; return VALUE;
+                    } else {
+                        // VALUE starts with $variable — find end of variable name and push back the rest
+                        int varEnd = i + 1;
+                        while (varEnd < text.length()) {
+                            char c = text.charAt(varEnd);
+                            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9')) {
+                                varEnd++;
+                            } else {
+                                break;
+                            }
+                        }
+                        yypushback(text.length() - varEnd);
+                        joinPending = false; prevConcatEligible = true; return VARIABLE;
+                    }
+                }
+            }
+        }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
 }

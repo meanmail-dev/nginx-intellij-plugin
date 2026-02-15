@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface NamedValueStmt extends PsiElement {
 
-  @Nullable
-  ConcatenatedExpr getConcatenatedExpr();
+  @NotNull
+  List<ConcatenatedExpr> getConcatenatedExprList();
 
   @Nullable
   StringStmt getStringStmt();

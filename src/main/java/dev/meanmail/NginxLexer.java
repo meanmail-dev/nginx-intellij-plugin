@@ -131,18 +131,19 @@ public class NginxLexer implements FlexLexer {
     "\1\45\1\40\1\45\1\46\1\47\1\12\1\50\3\12"+
     "\1\51\1\0\2\4\1\52\4\4\1\0\1\3\1\0"+
     "\1\3\1\53\2\0\4\12\1\0\4\12\1\37\1\54"+
-    "\1\0\1\55\2\40\1\46\2\40\1\56\2\0\1\57"+
-    "\1\40\1\46\4\12\1\51\1\4\1\60\1\4\1\61"+
-    "\2\4\2\53\1\0\4\12\1\0\5\12\2\54\1\0"+
-    "\2\40\1\0\2\56\1\0\1\40\4\12\4\4\1\53"+
-    "\11\12\4\0\1\56\1\62\4\12\3\4\1\63\7\12"+
-    "\1\64\1\12\2\0\4\12\3\4\5\12\1\65\1\12"+
-    "\1\66\1\0\4\12\2\4\1\67\1\70\1\12\1\71"+
-    "\1\12\1\72\1\73\1\74\1\75\1\76\1\12\1\4"+
-    "\1\77\1\12\1\100\1\101\1\4\1\102\4\4\1\103";
+    "\1\0\1\55\1\40\1\56\1\46\2\40\1\57\2\0"+
+    "\1\60\1\40\1\46\4\12\1\51\1\4\1\61\1\4"+
+    "\1\62\2\4\2\53\1\0\4\12\1\0\5\12\2\54"+
+    "\1\0\1\40\1\56\1\0\2\57\1\0\1\40\4\12"+
+    "\4\4\1\53\11\12\4\0\1\57\1\63\1\40\4\12"+
+    "\3\4\1\64\7\12\1\65\1\12\2\0\4\12\3\4"+
+    "\5\12\1\66\1\12\1\67\1\0\4\12\2\4\1\70"+
+    "\1\71\1\12\1\72\1\12\1\73\1\74\1\75\1\76"+
+    "\1\77\1\12\1\4\1\100\1\12\1\101\1\102\1\4"+
+    "\1\103\4\4\1\104";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[255];
+    int [] result = new int[256];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -190,18 +191,18 @@ public class NginxLexer implements FlexLexer {
     "\0\u1710\0\u1740\0\u1770\0\u0300\0\u17a0\0\u17d0\0\u1800\0\u1830"+
     "\0\u1860\0\u1890\0\u18c0\0\u18f0\0\u1920\0\u1950\0\u1980\0\u0660"+
     "\0\u19b0\0\u19e0\0\u1a10\0\u1a40\0\u1a70\0\u1aa0\0\u1ad0\0\u1b00"+
-    "\0\u1b30\0\u1b60\0\u1b90\0\u1bc0\0\u1bf0\0\u0ab0\0\u0300\0\u1c20"+
-    "\0\u1c50\0\u1c80\0\u1cb0\0\u1ce0\0\u1d10\0\u1d40\0\u03f0\0\u1d70"+
-    "\0\u1da0\0\u1dd0\0\u1e00\0\u1e30\0\u1e60\0\u1e90\0\u0660\0\u1ec0"+
-    "\0\u1ef0\0\u1f20\0\u1f50\0\u1f80\0\u1fb0\0\u1fe0\0\u2010\0\u2040"+
-    "\0\u2070\0\u20a0\0\u20d0\0\u2100\0\u2130\0\u2160\0\u0660\0\u2190"+
-    "\0\u0660\0\u21c0\0\u21f0\0\u2220\0\u2250\0\u2280\0\u22b0\0\u22e0"+
-    "\0\u03f0\0\u0750\0\u2310\0\u0750\0\u2340\0\u0660\0\u0660\0\u0660"+
-    "\0\u0660\0\u0660\0\u2370\0\u23a0\0\u03f0\0\u23d0\0\u0750\0\u0660"+
-    "\0\u2400\0\u0750\0\u2430\0\u2460\0\u2490\0\u24c0\0\u03f0";
+    "\0\u1b30\0\u1b60\0\u1b90\0\u1bc0\0\u1bf0\0\u0ab0\0\u0300\0\u11a0"+
+    "\0\u1c20\0\u1c50\0\u1c80\0\u1cb0\0\u1ce0\0\u1d10\0\u1d40\0\u03f0"+
+    "\0\u1d70\0\u1da0\0\u1dd0\0\u1e00\0\u1e30\0\u1e60\0\u1e90\0\u0660"+
+    "\0\u1ec0\0\u1ef0\0\u1f20\0\u1f50\0\u1f80\0\u1fb0\0\u1fe0\0\u2010"+
+    "\0\u2040\0\u2070\0\u20a0\0\u20d0\0\u2100\0\u2130\0\u2160\0\u0660"+
+    "\0\u2190\0\u0660\0\u21c0\0\u21f0\0\u2220\0\u2250\0\u2280\0\u22b0"+
+    "\0\u22e0\0\u03f0\0\u0750\0\u2310\0\u0750\0\u2340\0\u0660\0\u0660"+
+    "\0\u0660\0\u0660\0\u0660\0\u2370\0\u23a0\0\u03f0\0\u23d0\0\u0750"+
+    "\0\u0660\0\u2400\0\u0750\0\u2430\0\u2460\0\u2490\0\u24c0\0\u03f0";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[255];
+    int [] result = new int[256];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -392,100 +393,100 @@ public class NginxLexer implements FlexLexer {
     "\2\0\1\274\1\0\7\242\1\0\35\242\2\0\1\242"+
     "\22\0\1\275\2\0\30\275\20\0\1\245\4\0\1\245"+
     "\2\0\30\245\1\0\1\276\16\0\1\277\42\0\1\115"+
-    "\2\0\1\115\2\0\1\173\1\0\4\115\1\174\2\115"+
+    "\2\0\1\115\2\0\1\173\1\0\4\115\1\300\2\115"+
     "\2\0\1\174\33\115\2\0\1\115\1\46\2\0\1\46"+
-    "\2\0\1\72\1\0\7\46\2\0\20\46\1\300\13\46"+
+    "\2\0\1\72\1\0\7\46\2\0\20\46\1\301\13\46"+
     "\2\0\2\46\2\0\1\46\2\0\1\72\1\0\7\46"+
-    "\2\0\5\46\1\301\26\46\2\0\2\46\2\0\1\46"+
-    "\2\0\1\72\1\0\7\46\2\0\20\46\1\302\13\46"+
+    "\2\0\5\46\1\302\26\46\2\0\2\46\2\0\1\46"+
+    "\2\0\1\72\1\0\7\46\2\0\20\46\1\303\13\46"+
     "\2\0\2\46\2\0\1\46\2\0\1\72\1\0\7\46"+
-    "\2\0\5\46\1\303\26\46\2\0\1\46\15\0\1\25"+
-    "\4\0\1\25\2\0\1\304\27\26\20\0\1\25\4\0"+
-    "\1\25\2\0\1\140\22\26\1\305\4\26\20\0\1\25"+
-    "\4\0\1\25\2\0\1\140\1\26\1\213\12\26\1\306"+
+    "\2\0\5\46\1\304\26\46\2\0\1\46\15\0\1\25"+
+    "\4\0\1\25\2\0\1\305\27\26\20\0\1\25\4\0"+
+    "\1\25\2\0\1\140\22\26\1\306\4\26\20\0\1\25"+
+    "\4\0\1\25\2\0\1\140\1\26\1\213\12\26\1\307"+
     "\12\26\20\0\1\25\4\0\1\25\2\0\1\140\21\26"+
-    "\1\307\5\26\3\0\1\62\2\0\1\62\2\0\1\63"+
-    "\1\0\7\62\1\0\31\62\1\310\3\62\2\0\2\62"+
+    "\1\310\5\26\3\0\1\62\2\0\1\62\2\0\1\63"+
+    "\1\0\7\62\1\0\31\62\1\311\3\62\2\0\2\62"+
     "\2\0\1\62\2\0\1\63\1\0\7\62\1\0\23\62"+
-    "\1\311\11\62\2\0\2\62\2\0\1\62\2\0\1\63"+
-    "\1\0\7\62\1\0\31\62\1\312\3\62\2\0\2\62"+
+    "\1\312\11\62\2\0\2\62\2\0\1\62\2\0\1\63"+
+    "\1\0\7\62\1\0\31\62\1\313\3\62\2\0\2\62"+
     "\2\0\1\62\2\0\1\63\1\0\7\62\1\0\30\62"+
-    "\1\313\4\62\2\0\1\62\1\46\2\0\1\46\2\0"+
-    "\1\72\1\0\7\46\2\0\30\46\1\314\3\46\2\0"+
+    "\1\314\4\62\2\0\1\62\1\46\2\0\1\46\2\0"+
+    "\1\72\1\0\7\46\2\0\30\46\1\315\3\46\2\0"+
     "\2\46\2\0\1\46\2\0\1\72\1\0\7\46\2\0"+
-    "\27\46\1\315\4\46\2\0\2\46\2\0\1\46\2\0"+
-    "\1\72\1\0\7\46\2\0\30\46\1\316\3\46\2\0"+
+    "\27\46\1\316\4\46\2\0\2\46\2\0\1\46\2\0"+
+    "\1\72\1\0\7\46\2\0\30\46\1\317\3\46\2\0"+
     "\2\46\2\0\1\46\2\0\1\72\1\0\7\46\2\0"+
-    "\33\46\1\317\2\0\2\46\2\0\1\46\2\0\1\72"+
-    "\1\0\7\46\2\0\11\46\1\320\22\46\2\0\1\46"+
+    "\33\46\1\320\2\0\2\46\2\0\1\46\2\0\1\72"+
+    "\1\0\7\46\2\0\11\46\1\321\22\46\2\0\1\46"+
     "\15\0\1\272\4\0\1\272\2\0\30\272\1\0\1\115"+
-    "\23\0\1\321\2\0\30\321\60\0\1\322\17\0\1\275"+
+    "\23\0\1\322\2\0\30\322\60\0\1\323\17\0\1\275"+
     "\4\0\1\275\2\0\30\275\1\0\1\176\1\0\1\46"+
     "\2\0\1\46\2\0\1\72\1\0\7\46\2\0\30\46"+
-    "\1\323\3\46\2\0\2\46\2\0\1\46\2\0\1\72"+
-    "\1\0\7\46\2\0\30\46\1\324\3\46\2\0\2\46"+
+    "\1\324\3\46\2\0\2\46\2\0\1\46\2\0\1\72"+
+    "\1\0\7\46\2\0\30\46\1\325\3\46\2\0\2\46"+
     "\2\0\1\46\2\0\1\72\1\0\7\46\2\0\30\46"+
-    "\1\325\3\46\2\0\2\46\2\0\1\46\2\0\1\72"+
-    "\1\0\7\46\2\0\27\46\1\326\4\46\2\0\1\46"+
+    "\1\326\3\46\2\0\2\46\2\0\1\46\2\0\1\72"+
+    "\1\0\7\46\2\0\27\46\1\327\4\46\2\0\1\46"+
     "\15\0\1\25\4\0\1\25\2\0\1\140\1\26\1\213"+
-    "\11\26\1\327\13\26\20\0\1\25\4\0\1\25\2\0"+
-    "\1\140\10\26\1\330\16\26\20\0\1\25\4\0\1\25"+
-    "\2\0\1\140\1\331\26\26\3\0\1\62\2\0\1\62"+
-    "\2\0\1\63\1\0\7\62\1\0\21\62\1\332\13\62"+
+    "\11\26\1\330\13\26\20\0\1\25\4\0\1\25\2\0"+
+    "\1\140\10\26\1\331\16\26\20\0\1\25\4\0\1\25"+
+    "\2\0\1\140\1\332\26\26\3\0\1\62\2\0\1\62"+
+    "\2\0\1\63\1\0\7\62\1\0\21\62\1\333\13\62"+
     "\2\0\2\62\2\0\1\62\2\0\1\63\1\0\7\62"+
-    "\1\0\6\62\1\333\26\62\2\0\2\62\2\0\1\62"+
-    "\2\0\1\63\1\0\7\62\1\0\11\62\1\334\23\62"+
+    "\1\0\6\62\1\334\26\62\2\0\2\62\2\0\1\62"+
+    "\2\0\1\63\1\0\7\62\1\0\11\62\1\335\23\62"+
     "\2\0\2\62\2\0\1\62\2\0\1\63\1\0\7\62"+
-    "\1\0\16\62\1\335\16\62\2\0\1\62\1\46\2\0"+
-    "\1\46\2\0\1\72\1\0\7\46\2\0\20\46\1\336"+
+    "\1\0\16\62\1\336\16\62\2\0\1\62\1\46\2\0"+
+    "\1\46\2\0\1\72\1\0\7\46\2\0\20\46\1\337"+
     "\13\46\2\0\2\46\2\0\1\46\2\0\1\72\1\0"+
-    "\7\46\2\0\11\46\1\337\22\46\2\0\2\46\2\0"+
-    "\1\46\2\0\1\72\1\0\7\46\2\0\10\46\1\340"+
+    "\7\46\2\0\11\46\1\340\22\46\2\0\2\46\2\0"+
+    "\1\46\2\0\1\72\1\0\7\46\2\0\10\46\1\341"+
     "\23\46\2\0\2\46\2\0\1\46\2\0\1\72\1\0"+
-    "\7\46\2\0\26\46\1\341\5\46\2\0\1\46\15\0"+
-    "\1\321\4\0\1\321\2\0\30\321\1\0\1\174\23\0"+
-    "\1\342\2\0\30\342\3\0\1\46\2\0\1\46\2\0"+
-    "\1\72\1\0\7\46\2\0\10\46\1\343\23\46\2\0"+
+    "\7\46\2\0\26\46\1\342\5\46\2\0\1\46\15\0"+
+    "\1\322\4\0\1\322\2\0\30\322\1\0\1\174\23\0"+
+    "\1\343\2\0\30\343\3\0\1\46\2\0\1\46\2\0"+
+    "\1\72\1\0\7\46\2\0\10\46\1\344\23\46\2\0"+
     "\2\46\2\0\1\46\2\0\1\72\1\0\7\46\2\0"+
-    "\20\46\1\344\13\46\2\0\2\46\2\0\1\46\2\0"+
-    "\1\72\1\0\7\46\2\0\10\46\1\345\23\46\2\0"+
+    "\20\46\1\345\13\46\2\0\2\46\2\0\1\46\2\0"+
+    "\1\72\1\0\7\46\2\0\10\46\1\346\23\46\2\0"+
     "\2\46\2\0\1\46\2\0\1\72\1\0\7\46\2\0"+
-    "\15\46\1\346\16\46\2\0\1\46\15\0\1\25\4\0"+
-    "\1\25\2\0\1\140\23\26\1\347\3\26\20\0\1\25"+
-    "\4\0\1\25\2\0\1\140\16\26\1\350\10\26\20\0"+
-    "\1\25\4\0\1\25\2\0\1\140\17\26\1\351\7\26"+
+    "\15\46\1\347\16\46\2\0\1\46\15\0\1\25\4\0"+
+    "\1\25\2\0\1\140\23\26\1\350\3\26\20\0\1\25"+
+    "\4\0\1\25\2\0\1\140\16\26\1\351\10\26\20\0"+
+    "\1\25\4\0\1\25\2\0\1\140\17\26\1\352\7\26"+
     "\3\0\1\62\2\0\1\62\2\0\1\63\1\0\7\62"+
-    "\1\0\30\62\1\352\4\62\2\0\2\62\2\0\1\62"+
-    "\2\0\1\63\1\0\7\62\1\0\22\62\1\353\12\62"+
+    "\1\0\30\62\1\353\4\62\2\0\2\62\2\0\1\62"+
+    "\2\0\1\63\1\0\7\62\1\0\22\62\1\354\12\62"+
     "\2\0\2\62\2\0\1\62\2\0\1\63\1\0\7\62"+
-    "\1\0\12\62\1\354\22\62\2\0\2\62\2\0\1\62"+
-    "\2\0\1\63\1\0\7\62\1\0\21\62\1\355\13\62"+
+    "\1\0\12\62\1\355\22\62\2\0\2\62\2\0\1\62"+
+    "\2\0\1\63\1\0\7\62\1\0\21\62\1\356\13\62"+
     "\2\0\1\62\1\46\2\0\1\46\2\0\1\72\1\0"+
-    "\7\46\2\0\27\46\1\356\4\46\2\0\2\46\2\0"+
-    "\1\46\2\0\1\72\1\0\7\46\2\0\11\46\1\357"+
-    "\22\46\2\0\1\46\15\0\1\342\4\0\1\342\2\0"+
-    "\30\342\1\0\1\242\1\0\1\46\2\0\1\46\2\0"+
-    "\1\72\1\0\7\46\2\0\11\46\1\360\22\46\2\0"+
+    "\7\46\2\0\27\46\1\357\4\46\2\0\2\46\2\0"+
+    "\1\46\2\0\1\72\1\0\7\46\2\0\11\46\1\360"+
+    "\22\46\2\0\1\46\15\0\1\343\4\0\1\343\2\0"+
+    "\30\343\1\0\1\242\1\0\1\46\2\0\1\46\2\0"+
+    "\1\72\1\0\7\46\2\0\11\46\1\361\22\46\2\0"+
     "\2\46\2\0\1\46\2\0\1\72\1\0\7\46\2\0"+
-    "\27\46\1\361\4\46\2\0\2\46\2\0\1\46\2\0"+
-    "\1\72\1\0\7\46\2\0\11\46\1\362\22\46\2\0"+
+    "\27\46\1\362\4\46\2\0\2\46\2\0\1\46\2\0"+
+    "\1\72\1\0\7\46\2\0\11\46\1\363\22\46\2\0"+
     "\2\46\2\0\1\46\2\0\1\72\1\0\7\46\2\0"+
-    "\20\46\1\363\13\46\2\0\1\46\15\0\1\25\4\0"+
-    "\1\25\2\0\1\140\1\364\26\26\20\0\1\25\4\0"+
-    "\1\25\2\0\1\140\15\26\1\365\11\26\3\0\1\62"+
+    "\20\46\1\364\13\46\2\0\1\46\15\0\1\25\4\0"+
+    "\1\25\2\0\1\140\1\365\26\26\20\0\1\25\4\0"+
+    "\1\25\2\0\1\140\15\26\1\366\11\26\3\0\1\62"+
     "\2\0\1\62\2\0\1\63\1\0\7\62\1\0\12\62"+
-    "\1\366\22\62\2\0\2\62\2\0\1\62\2\0\1\63"+
-    "\1\0\7\62\1\0\12\62\1\367\22\62\2\0\1\62"+
+    "\1\367\22\62\2\0\2\62\2\0\1\62\2\0\1\63"+
+    "\1\0\7\62\1\0\12\62\1\370\22\62\2\0\1\62"+
     "\1\46\2\0\1\46\2\0\1\72\1\0\7\46\2\0"+
-    "\11\46\1\370\22\46\2\0\1\46\15\0\1\25\4\0"+
-    "\1\25\2\0\1\371\27\26\3\0\1\62\2\0\1\62"+
-    "\2\0\1\63\1\0\7\62\1\0\27\62\1\372\5\62"+
+    "\11\46\1\371\22\46\2\0\1\46\15\0\1\25\4\0"+
+    "\1\25\2\0\1\372\27\26\3\0\1\62\2\0\1\62"+
+    "\2\0\1\63\1\0\7\62\1\0\27\62\1\373\5\62"+
     "\2\0\1\62\15\0\1\25\4\0\1\25\2\0\1\140"+
-    "\1\26\1\373\25\26\20\0\1\25\4\0\1\25\2\0"+
-    "\1\140\13\26\1\374\12\26\1\254\20\0\1\25\4\0"+
-    "\1\25\2\0\1\140\16\26\1\375\10\26\20\0\1\25"+
-    "\4\0\1\25\2\0\1\140\2\26\1\376\24\26\20\0"+
-    "\1\25\4\0\1\25\2\0\1\140\12\26\1\377\14\26"+
+    "\1\26\1\374\25\26\20\0\1\25\4\0\1\25\2\0"+
+    "\1\140\13\26\1\375\12\26\1\254\20\0\1\25\4\0"+
+    "\1\25\2\0\1\140\16\26\1\376\10\26\20\0\1\25"+
+    "\4\0\1\25\2\0\1\140\2\26\1\377\24\26\20\0"+
+    "\1\25\4\0\1\25\2\0\1\140\12\26\1\u0100\14\26"+
     "\3\0";
 
   private static int [] zzUnpacktrans() {
@@ -535,11 +536,11 @@ public class NginxLexer implements FlexLexer {
     "\4\1\1\0\6\1\1\0\3\1\1\11\3\1\2\0"+
     "\7\1\1\11\6\1\1\11\1\1\1\0\4\1\1\0"+
     "\5\1\1\11\1\1\1\0\2\1\1\0\1\11\1\1"+
-    "\1\0\23\1\4\0\1\1\1\11\21\1\2\0\17\1"+
+    "\1\0\23\1\4\0\1\1\1\11\22\1\2\0\17\1"+
     "\1\0\35\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[255];
+    int [] result = new int[256];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -911,88 +912,88 @@ public class NginxLexer implements FlexLexer {
             { yyinitial(); return BAD_CHARACTER;
             }
           // fall through
-          case 68: break;
+          case 69: break;
           case 2:
             { prevConcatEligible = false; joinPending = false; return WHITE_SPACE;
             }
           // fall through
-          case 69: break;
+          case 70: break;
           case 3:
             { prevConcatEligible = false; joinPending = false; return COMMENT;
             }
           // fall through
-          case 70: break;
+          case 71: break;
           case 4:
             { yypush(DIRECTIVE_STATE); return IDENTIFIER;
             }
           // fall through
-          case 71: break;
+          case 72: break;
           case 5:
             { prevConcatEligible = false; joinPending = false; return RBRACE;
             }
           // fall through
-          case 72: break;
+          case 73: break;
           case 6:
             { return STRING;
             }
           // fall through
-          case 73: break;
+          case 74: break;
           case 7:
             { yypop(); prevConcatEligible = true; return QUOTE;
             }
           // fall through
-          case 74: break;
+          case 75: break;
           case 8:
             { return DQSTRING;
             }
           // fall through
-          case 75: break;
+          case 76: break;
           case 9:
             { yypop(); prevConcatEligible = true; return DQUOTE;
             }
           // fall through
-          case 76: break;
+          case 77: break;
           case 10:
             { return VALUE;
             }
           // fall through
-          case 77: break;
+          case 78: break;
           case 11:
             { yypush(DQSTRING_STATE); return DQUOTE;
             }
           // fall through
-          case 78: break;
+          case 79: break;
           case 12:
             { yypush(STRING_STATE); return QUOTE;
             }
           // fall through
-          case 79: break;
+          case 80: break;
           case 13:
             { return SEMICOLON;
             }
           // fall through
-          case 80: break;
+          case 81: break;
           case 14:
             { return IDENTIFIER;
             }
           // fall through
-          case 81: break;
+          case 82: break;
           case 15:
             { yypush(LUA_STATE); return LBRACE;
             }
           // fall through
-          case 82: break;
+          case 83: break;
           case 16:
             { return LUA;
             }
           // fall through
-          case 83: break;
+          case 84: break;
           case 17:
             { yypush(LUA_STATE);
           return LUA;
             }
           // fall through
-          case 84: break;
+          case 85: break;
           case 18:
             { yypop();
           if (yycurrentState() == LUA_STATE) return LUA;
@@ -1000,22 +1001,22 @@ public class NginxLexer implements FlexLexer {
           return RBRACE;
             }
           // fall through
-          case 85: break;
+          case 86: break;
           case 19:
             { yypush(MAP_BLOCK_STATE); return LBRACE;
             }
           // fall through
-          case 86: break;
+          case 87: break;
           case 20:
             { yypop(); yypop(); return RBRACE;
             }
           // fall through
-          case 87: break;
+          case 88: break;
           case 21:
             { yypush(GEO_BLOCK_STATE); return LBRACE;
             }
           // fall through
-          case 88: break;
+          case 89: break;
           case 22:
             { // Enter condition parentheses; reset nested depth
           ifParenDepth = 0;
@@ -1023,155 +1024,196 @@ public class NginxLexer implements FlexLexer {
           return LPAREN;
             }
           // fall through
-          case 89: break;
+          case 90: break;
           case 23:
             { yypop(); joinPending = false; prevConcatEligible = false; return LBRACE;
             }
           // fall through
-          case 90: break;
+          case 91: break;
           case 24:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
           joinPending = false; prevConcatEligible = true; return VALUE;
             }
           // fall through
-          case 91: break;
+          case 92: break;
           case 25:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
           joinPending = false; prevConcatEligible = false; yypush(DQSTRING_STATE); return DQUOTE;
             }
           // fall through
-          case 92: break;
+          case 93: break;
           case 26:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
           joinPending = false; prevConcatEligible = false; yypush(STRING_STATE); return QUOTE;
             }
           // fall through
-          case 93: break;
+          case 94: break;
           case 27:
             { ifParenDepth++; return VALUE;
             }
           // fall through
-          case 94: break;
+          case 95: break;
           case 28:
             { if (ifParenDepth > 0) { ifParenDepth--; return VALUE; }
           yypop();
           return RPAREN;
             }
           // fall through
-          case 95: break;
+          case 96: break;
           case 29:
             { return EQUAL;
             }
           // fall through
-          case 96: break;
+          case 97: break;
           case 30:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
           joinPending = false; prevConcatEligible = true; return IDENTIFIER;
             }
           // fall through
-          case 97: break;
+          case 98: break;
           case 31:
             { return BINARY_OPERATOR;
             }
           // fall through
-          case 98: break;
+          case 99: break;
           case 32:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        // Check if the matched VALUE contains a bare $variable reference (not braced ${VAR})
+        // that should be a separate VARIABLE token due to longest-match consuming too much.
+        // Braced vars ${VAR} are already part of VALUE pattern and should NOT be split out.
+        String text = yytext().toString();
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '$' && i + 1 < text.length()) {
+                char next = text.charAt(i + 1);
+                if (next == '{') {
+                    // Braced variable ${VAR} — skip to closing brace, it's part of VALUE
+                    int closeBrace = text.indexOf('}', i + 2);
+                    if (closeBrace >= 0) { i = closeBrace; }
+                    continue;
+                }
+                if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') || next == '_') {
+                    // Bare $variable found — split VALUE before it
+                    if (i > 0) {
+                        yypushback(text.length() - i);
+                        joinPending = false; prevConcatEligible = true; return VALUE;
+                    } else {
+                        // VALUE starts with $variable — find end of variable name and push back the rest
+                        int varEnd = i + 1;
+                        while (varEnd < text.length()) {
+                            char c = text.charAt(varEnd);
+                            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9')) {
+                                varEnd++;
+                            } else {
+                                break;
+                            }
+                        }
+                        yypushback(text.length() - varEnd);
+                        joinPending = false; prevConcatEligible = true; return VARIABLE;
+                    }
+                }
+            }
+        }
         joinPending = false; prevConcatEligible = true; return VALUE;
             }
           // fall through
-          case 99: break;
+          case 100: break;
           case 33:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = false; yypush(DQSTRING_STATE); return DQUOTE;
             }
           // fall through
-          case 100: break;
+          case 101: break;
           case 34:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = false; yypush(STRING_STATE); return QUOTE;
             }
           // fall through
-          case 101: break;
+          case 102: break;
           case 35:
             { yypop(); joinPending = false; prevConcatEligible = false; return SEMICOLON;
             }
           // fall through
-          case 102: break;
+          case 103: break;
           case 36:
             { joinPending = false; prevConcatEligible = false; return EQUAL;
             }
           // fall through
-          case 103: break;
+          case 104: break;
           case 37:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return IDENTIFIER;
             }
           // fall through
-          case 104: break;
+          case 105: break;
           case 38:
             { joinPending = false; prevConcatEligible = false; return BINARY_OPERATOR;
             }
           // fall through
-          case 105: break;
+          case 106: break;
           case 39:
             { yypush(TYPES_BLOCK_STATE); return LBRACE;
             }
           // fall through
-          case 106: break;
+          case 107: break;
           case 40:
             { yypush(NUM_MAP_BLOCK_STATE); return LBRACE;
             }
           // fall through
-          case 107: break;
+          case 108: break;
           case 41:
             { yypush(DIRECTIVE_STATE); return VARIABLE;
             }
           // fall through
-          case 108: break;
+          case 109: break;
           case 42:
             { yypush(IF_STATE); return IF;
             }
           // fall through
-          case 109: break;
+          case 110: break;
           case 43:
             { return VARIABLE;
             }
           // fall through
-          case 110: break;
+          case 111: break;
           case 44:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
           joinPending = false; prevConcatEligible = true; return VARIABLE;
             }
           // fall through
-          case 111: break;
+          case 112: break;
           case 45:
             { return UNARY_OPERATOR;
             }
           // fall through
-          case 112: break;
+          case 113: break;
           case 46:
+            { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; return VALUE;
+            }
+          // fall through
+          case 114: break;
+          case 47:
             { if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VARIABLE;
             }
           // fall through
-          case 113: break;
-          case 47:
+          case 115: break;
+          case 48:
             { joinPending = false; prevConcatEligible = false; return CARET_TILDE;
             }
           // fall through
-          case 114: break;
-          case 48:
+          case 116: break;
+          case 49:
             { yypush(GEO_STATE); return GEO;
             }
           // fall through
-          case 115: break;
-          case 49:
+          case 117: break;
+          case 50:
             { yypush(MAP_STATE); return MAP;
             }
           // fall through
-          case 116: break;
-          case 50:
+          case 118: break;
+          case 51:
             { if (prevConcatEligible && !joinPending) {
             // Previous token was adjacent (no space) - this is a named parameter like "max=200"
             // Push back all but the '=' and return EQUAL token
@@ -1184,92 +1226,92 @@ public class NginxLexer implements FlexLexer {
         joinPending = false; prevConcatEligible = true; return VALUE;
             }
           // fall through
-          case 117: break;
-          case 51:
+          case 119: break;
+          case 52:
             { yypush(TYPES_STATE); return TYPES;
             }
           // fall through
-          case 118: break;
-          case 52:
+          case 120: break;
+          case 53:
             { return GEO_PROXY;
             }
           // fall through
-          case 119: break;
-          case 53:
+          case 121: break;
+          case 54:
             { return GEO_DELETE;
             }
           // fall through
-          case 120: break;
-          case 54:
+          case 122: break;
+          case 55:
             { return GEO_RANGES;
             }
           // fall through
-          case 121: break;
-          case 55:
+          case 123: break;
+          case 56:
             { yypush(NUM_MAP_STATE); return NUM_MAP;
             }
           // fall through
-          case 122: break;
-          case 56:
+          case 124: break;
+          case 57:
             { return MAP_DEFAULT;
             }
           // fall through
-          case 123: break;
-          case 57:
+          case 125: break;
+          case 58:
             { return MAP_INCLUDE;
             }
           // fall through
-          case 124: break;
-          case 58:
+          case 126: break;
+          case 59:
             { return GEO_DEFAULT;
             }
           // fall through
-          case 125: break;
-          case 59:
+          case 127: break;
+          case 60:
             { return GEO_INCLUDE;
             }
           // fall through
-          case 126: break;
-          case 60:
+          case 128: break;
+          case 61:
             { return TYPES_INCLUDE;
             }
           // fall through
-          case 127: break;
-          case 61:
+          case 129: break;
+          case 62:
             { return NUM_MAP_DEFAULT;
             }
           // fall through
-          case 128: break;
-          case 62:
+          case 130: break;
+          case 63:
             { return NUM_MAP_INCLUDE;
             }
           // fall through
-          case 129: break;
-          case 63:
+          case 131: break;
+          case 64:
             { yypush(DIRECTIVE_STATE); return LOCATION;
             }
           // fall through
-          case 130: break;
-          case 64:
+          case 132: break;
+          case 65:
             { return MAP_VOLATILE;
             }
           // fall through
-          case 131: break;
-          case 65:
+          case 133: break;
+          case 66:
             { return NUM_MAP_VOLATILE;
             }
           // fall through
-          case 132: break;
-          case 66:
+          case 134: break;
+          case 67:
             { return MAP_HOSTNAMES;
             }
           // fall through
-          case 133: break;
-          case 67:
+          case 135: break;
+          case 68:
             { yypush(LUA_BLOCK_STATE); return LUA_BLOCK_DIRECTIVE;
             }
           // fall through
-          case 134: break;
+          case 136: break;
           default:
             zzScanError(ZZ_NO_MATCH);
           }

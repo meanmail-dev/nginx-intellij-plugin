@@ -5,6 +5,7 @@
 * Fix `error_page` directive context to allow usage inside `if` in `location` ([#55](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/55))
 * Fix `memcached_pass` directive context ([#56](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/56))
 * Fix parsing of unquoted strings with escaped `(` in `if` condition (e.g. `if ($args ~ tt\( )`) ([#52](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/52))
+* Fix parsing of unquoted URL in `proxy_pass` with variables and multiple `=` (e.g. `proxy_pass http://backend/path?v=$arg_v&a=2;`) ([#51](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/51))
 
 ## 2026.1.3 (February, 9, 2026)
 
