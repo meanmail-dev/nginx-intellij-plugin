@@ -147,3 +147,4 @@ token.txt
 .intellijPlatform
 .kotlin
 .DS_Store
+.shellarium/
