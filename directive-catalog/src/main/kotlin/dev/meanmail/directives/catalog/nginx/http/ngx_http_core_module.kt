@@ -152,7 +152,7 @@ val disableSymlinks = Directive(
 val errorPage = Directive(
     "error_page",
     description = "Defines custom error pages for specific HTTP status codes",
-    context = listOf(http, server, location),
+    context = listOf(http, server, location, locationIf),
     module = ngx_http_core_module
 )
 
