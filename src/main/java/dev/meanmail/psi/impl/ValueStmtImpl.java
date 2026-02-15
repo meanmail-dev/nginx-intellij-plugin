@@ -28,9 +28,9 @@ public class ValueStmtImpl extends ValueStmtElement implements ValueStmt {
   }
 
   @Override
-  @Nullable
-  public ConcatenatedExpr getConcatenatedExpr() {
-    return findChildByClass(ConcatenatedExpr.class);
+  @NotNull
+  public List<ConcatenatedExpr> getConcatenatedExprList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ConcatenatedExpr.class);
   }
 
   @Override

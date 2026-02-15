@@ -237,7 +237,11 @@ class NginxLexerTest {
             "LBRACE" to "{",
             "IDENTIFIER" to "return",
             "VALUE" to "301",
-            "VALUE" to "https://${'$'}host${'$'}request_uri",
+            "VALUE" to "https://",
+            "CONCAT_JOIN" to "",
+            "VARIABLE" to "${'$'}host",
+            "CONCAT_JOIN" to "",
+            "VARIABLE" to "${'$'}request_uri",
             "SEMICOLON" to ";",
             "RBRACE" to "}"
         )

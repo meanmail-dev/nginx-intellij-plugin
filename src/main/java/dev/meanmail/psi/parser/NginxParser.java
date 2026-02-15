@@ -907,7 +907,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // concatenated_expr
+  // concatenated_expr (EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr))*
   //                            | VALUE EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr) (EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr))*
   //                            | IDENTIFIER !EQUAL
   //                            | VALUE
@@ -917,13 +917,57 @@ public class NginxParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(builder_, level_, "part_value_stmt")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = concatenated_expr(builder_, level_ + 1);
+    result_ = part_value_stmt_0(builder_, level_ + 1);
     if (!result_) result_ = part_value_stmt_1(builder_, level_ + 1);
     if (!result_) result_ = part_value_stmt_2(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, VALUE);
     if (!result_) result_ = string_stmt(builder_, level_ + 1);
     if (!result_) result_ = variable_stmt(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // concatenated_expr (EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr))*
+  private static boolean part_value_stmt_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "part_value_stmt_0")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = concatenated_expr(builder_, level_ + 1);
+    result_ = result_ && part_value_stmt_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // (EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr))*
+  private static boolean part_value_stmt_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "part_value_stmt_0_1")) return false;
+    while (true) {
+      int pos_ = current_position_(builder_);
+      if (!part_value_stmt_0_1_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "part_value_stmt_0_1", pos_)) break;
+    }
+    return true;
+  }
+
+  // EQUAL (IDENTIFIER | VALUE | variable_stmt | concatenated_expr)
+  private static boolean part_value_stmt_0_1_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "part_value_stmt_0_1_0")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, EQUAL);
+    result_ = result_ && part_value_stmt_0_1_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // IDENTIFIER | VALUE | variable_stmt | concatenated_expr
+  private static boolean part_value_stmt_0_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "part_value_stmt_0_1_0_1")) return false;
+    boolean result_;
+    result_ = consumeToken(builder_, IDENTIFIER);
+    if (!result_) result_ = consumeToken(builder_, VALUE);
+    if (!result_) result_ = variable_stmt(builder_, level_ + 1);
+    if (!result_) result_ = concatenated_expr(builder_, level_ + 1);
     return result_;
   }
 
