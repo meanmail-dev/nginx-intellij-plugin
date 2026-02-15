@@ -383,6 +383,68 @@ class NginxLexerTest {
     }
 
     @Test
+    fun testMapDirectiveWithEqualsInValue() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/53
+        val tokens = tokenize(
+            """
+            map ${'$'}request_uri ${'$'}append_args {
+                default &a=1;
+            }
+        """.trimIndent()
+        )
+
+        val expectedTokens = listOf(
+            "MAP" to "map",
+            "VARIABLE" to "${'$'}request_uri",
+            "VARIABLE" to "${'$'}append_args",
+            "LBRACE" to "{",
+            "MAP_DEFAULT" to "default",
+            "VALUE" to "&a=1",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testMapDirectiveWithMultipleEqualsInValue() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/53
+        val tokens = tokenize(
+            """
+            map ${'$'}request_uri ${'$'}append_args {
+                default &a=1&b=2;
+                ~^/api /api?key=value;
+            }
+        """.trimIndent()
+        )
+
+        val expectedTokens = listOf(
+            "MAP" to "map",
+            "VARIABLE" to "${'$'}request_uri",
+            "VARIABLE" to "${'$'}append_args",
+            "LBRACE" to "{",
+            "MAP_DEFAULT" to "default",
+            "VALUE" to "&a=1&b=2",
+            "SEMICOLON" to ";",
+            "VALUE" to "~^/api",
+            "VALUE" to "/api?key=value",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
     fun testSimpleGeoDirective() {
         val tokens = tokenize(
             """

@@ -83,6 +83,7 @@ LPAREN=\(
 RPAREN=\)
 BRACED_VAR=\$\{{IDENTIFIER}\}
 VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#=])+
+MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#])+
 EQUAL==
 IF_VALUE=[^\s;'\"\{\}\(\)\#]+
 ESCAPE=\\[^\n\r]
@@ -167,6 +168,12 @@ DQUOTE="\""
     // URL with scheme (e.g. http://example.com/path?v=1&a=2) — includes '=' in the token
     // so the entire URL is a single VALUE. Excludes '$' so variables remain separate tokens.
     [a-z]+"://"({BRACED_VAR}|[^\s;'\"\{\}\#\$])+ {
+        if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; return VALUE;
+    }
+    // Path with query string (e.g. /index.php?=, /path?key=value&b=) — includes '=' after '?'
+    // so the entire path+query is a single VALUE. Excludes '$' so variables remain separate tokens.
+    ({BRACED_VAR}|[^\s;'\"\{\}\#=\$])+"?"({BRACED_VAR}|[^\s;'\"\{\}\#\$])* {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
@@ -273,7 +280,8 @@ DQUOTE="\""
     volatile                 { return MAP_VOLATILE; }
     hostnames                { return MAP_HOSTNAMES; }
     {SEMICOLON}              { return SEMICOLON; }
-    {VALUE}                  { return VALUE; }
+    // Use MAP_BLOCK_VALUE to allow '=' in unquoted map values (e.g. &a=1)
+    {MAP_BLOCK_VALUE}        { return VALUE; }
 }
 
 <GEO_STATE> {
