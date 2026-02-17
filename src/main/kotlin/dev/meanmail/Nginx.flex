@@ -82,10 +82,13 @@ BINARY_OPERATOR=(\!=|=)|(\!?\~\*?|\!?\~)
 LPAREN=\(
 RPAREN=\)
 BRACED_VAR=\$\{{IDENTIFIER}\}
-VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#=])+
-MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#])+
+// '#' is NOT excluded from value patterns: in nginx, '#' starts a comment only after
+// whitespace, not inside a token. The global COMMENT rule handles '#' after whitespace
+// because WHITE_SPACE is matched first, then COMMENT wins by longest-match.
+VALUE=({BRACED_VAR}|[^\s;'\"\{\}=])+
+MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}])+
 EQUAL==
-IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)\#])+
+IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)])+
 ESCAPE=\\[^\n\r]
 STRING=([^'\\]|{ESCAPE})+
 DQSTRING=([^\"\\]|{ESCAPE})+
@@ -175,13 +178,13 @@ DQUOTE="\""
     }
     // Path with query string (e.g. /index.php?=, /path?key=value&b=) — includes '=' after '?'
     // so the entire path+query is a single VALUE. Excludes '$' so variables remain separate tokens.
-    ({BRACED_VAR}|[^\s;'\"\{\}\#=\$])+"?"({BRACED_VAR}|[^\s;'\"\{\}\#\$])* {
+    ({BRACED_VAR}|[^\s;'\"\{\}=\$])+"?"({BRACED_VAR}|[^\s;'\"\{\}\$])* {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
     // Bare query string (e.g. ?x=, ?key=value) — typically concatenated after a variable like $uri?x=
     // Includes '=' after '?' so the entire query is a single VALUE token.
-    "?"({BRACED_VAR}|[^\s;'\"\{\}\#\$])+ {
+    "?"({BRACED_VAR}|[^\s;'\"\{\}\$])+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
