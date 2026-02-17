@@ -12,7 +12,7 @@ val ngx_http_charset_module = NginxModule(
 val charset = Directive(
     name = "charset",
     description = "Sets the character set for responses",
-    context = listOf(http, server, location),
+    context = listOf(http, server, location, locationIf),
     module = ngx_http_charset_module
 )
 
@@ -40,6 +40,6 @@ val overrideCharset = Directive(
 val sourceCharset = Directive(
     name = "source_charset",
     description = "Specifies the source character set for conversion",
-    context = listOf(http, server, location),
+    context = listOf(http, server, location, locationIf),
     module = ngx_http_charset_module
 )

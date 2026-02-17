@@ -19,6 +19,6 @@ val gunzip = Directive(
 val gunzipBuffers = Directive(
     name = "gunzip_buffers",
     description = "Configures the number and size of buffers used for decompressing gzipped responses. This directive allows fine-tuning memory allocation for gunzip operations.",
-    context = listOf(location),
+    context = listOf(http, server, location),
     module = ngx_http_gunzip_module
 )

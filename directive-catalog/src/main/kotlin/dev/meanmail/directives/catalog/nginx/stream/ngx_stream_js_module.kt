@@ -133,7 +133,7 @@ val streamJsPath = Directive(
 val streamJsPeriodic = Directive(
     name = "js_periodic",
     description = "Configures periodic JavaScript tasks in stream context",
-    context = listOf(stream, streamServer),
+    context = listOf(streamServer),
     module = ngx_stream_js_module
 )
 

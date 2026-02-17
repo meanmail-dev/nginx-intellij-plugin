@@ -124,14 +124,14 @@ val proxyCacheMinUses = Directive(
 val proxyCachePath = Directive(
     name = "proxy_cache_path",
     description = "Sets the path and configuration for the cache",
-    context = listOf(http, server, location),
+    context = listOf(http),
     module = ngx_http_proxy_module
 )
 
 val proxyCachePurge = Directive(
     name = "proxy_cache_purge",
     description = "Defines conditions for purging cache entries",
-    context = listOf(http),
+    context = listOf(http, server, location),
     module = ngx_http_proxy_module
 )
 

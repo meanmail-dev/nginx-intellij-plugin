@@ -149,7 +149,7 @@ val scgiCacheMinUses = Directive(
 val scgiCachePath = Directive(
     name = "scgi_cache_path",
     description = "Defines the path for caching SCGI server responses",
-    context = listOf(http, server, location),
+    context = listOf(http),
     module = ngx_http_scgi_module
 )
 

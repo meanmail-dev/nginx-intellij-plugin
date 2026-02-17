@@ -16,7 +16,7 @@ val ngx_http_limit_req_module = NginxModule(
 val limitReqZone = Directive(
     name = "limit_req_zone",
     description = "Defines a shared memory zone for tracking request rate limits",
-    context = listOf(http, server, location),
+    context = listOf(http),
     module = ngx_http_limit_req_module
 )
 

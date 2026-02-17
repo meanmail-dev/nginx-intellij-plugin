@@ -124,7 +124,7 @@ val fastcgiCachePath = Directive(
 val fastcgiCachePurge = Directive(
     name = "fastcgi_cache_purge",
     description = "Defines conditions for purging cached content",
-    context = listOf(http, location),
+    context = listOf(http, server, location),
     module = ngx_http_fastcgi_module
 )
 
@@ -369,7 +369,7 @@ val fastcgiStoreAccess = Directive(
 val fastcgiTempPath = Directive(
     name = "fastcgi_temp_path",
     description = "Defines the directory for storing temporary files when buffering FastCGI server responses",
-    context = listOf(http),
+    context = listOf(http, server, location),
     module = ngx_http_fastcgi_module
 )
 
