@@ -112,10 +112,10 @@ class NginxDirectiveInspection : LocalInspectionTool() {
                 manager.createProblemDescriptor(
                     nameElement,
                     "Directive '$directiveName' cannot be used in this context. " +
-                            "Current file context is '${context.joinToString(", ") { it.name }}' " +
+                            "Current file context is '${formatDirectiveNames(context)}' " +
                             "(determined by the context of existing directives), " +
                             "but '${directiveName}' block can only be defined in: " +
-                            "${matchingDirectivesContext.joinToString(", ") { it.name }}.",
+                            "${formatDirectiveNames(matchingDirectivesContext)}.",
                     true,
                     ProblemHighlightType.ERROR,
                     isOnTheFly
@@ -124,6 +124,17 @@ class NginxDirectiveInspection : LocalInspectionTool() {
         }
 
         return emptyList()
+    }
+
+    private fun formatDirectiveNames(directives: Collection<Directive>): String {
+        val grouped = directives.groupBy { it.name }
+        return grouped.flatMap { (name, group) ->
+            if (group.size == 1) {
+                listOf(name)
+            } else {
+                group.map { "${it.name} (${it.module.name})" }
+            }
+        }.joinToString(", ")
     }
 
     /**
