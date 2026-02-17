@@ -83,6 +83,8 @@ LPAREN=\(
 RPAREN=\)
 BRACED_VAR=\$\{{IDENTIFIER}\}
 VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#=])+
+// Like VALUE but allows '#' — used in DIRECTIVE_STATE where '#' is only a comment after whitespace.
+DIRECTIVE_VALUE=({BRACED_VAR}|[^\s;'\"\{\}=])+
 MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#])+
 EQUAL==
 IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)\#])+
@@ -185,7 +187,9 @@ DQUOTE="\""
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
-    {VALUE}                  {
+    // Use DIRECTIVE_VALUE to allow '#' in unquoted values (e.g. regex patterns in location).
+    // In DIRECTIVE_STATE, '#' only starts a comment after whitespace, not inside a value.
+    {DIRECTIVE_VALUE}        {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         // Check if the matched VALUE contains a bare $variable reference (not braced ${VAR})
         // that should be a separate VARIABLE token due to longest-match consuming too much.
