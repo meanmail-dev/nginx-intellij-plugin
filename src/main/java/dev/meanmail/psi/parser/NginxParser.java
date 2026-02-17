@@ -367,6 +367,19 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // GEO_DELETE | GEO_DEFAULT | GEO_INCLUDE | GEO_PROXY | GEO_RANGES
+  static boolean geo_keyword_as_value(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "geo_keyword_as_value")) return false;
+    boolean result_;
+    result_ = consumeToken(builder_, GEO_DELETE);
+    if (!result_) result_ = consumeToken(builder_, GEO_DEFAULT);
+    if (!result_) result_ = consumeToken(builder_, GEO_INCLUDE);
+    if (!result_) result_ = consumeToken(builder_, GEO_PROXY);
+    if (!result_) result_ = consumeToken(builder_, GEO_RANGES);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // GEO_PROXY value_stmt SEMICOLON
   public static boolean geo_proxy_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "geo_proxy_stmt")) return false;
@@ -407,17 +420,26 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // value_stmt value_stmt SEMICOLON
+  // value_stmt (value_stmt | geo_keyword_as_value) SEMICOLON
   public static boolean geo_value_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "geo_value_stmt")) return false;
     boolean result_, pinned_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, GEO_VALUE_STMT, "<geo value stmt>");
     result_ = value_stmt(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, value_stmt(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, geo_value_stmt_1(builder_, level_ + 1));
     result_ = pinned_ && consumeToken(builder_, SEMICOLON) && result_;
     exit_section_(builder_, level_, marker_, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // value_stmt | geo_keyword_as_value
+  private static boolean geo_value_stmt_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "geo_value_stmt_1")) return false;
+    boolean result_;
+    result_ = value_stmt(builder_, level_ + 1);
+    if (!result_) result_ = geo_keyword_as_value(builder_, level_ + 1);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -703,6 +725,18 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // MAP_DEFAULT | MAP_INCLUDE | MAP_VOLATILE | MAP_HOSTNAMES
+  static boolean map_keyword_as_value(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "map_keyword_as_value")) return false;
+    boolean result_;
+    result_ = consumeToken(builder_, MAP_DEFAULT);
+    if (!result_) result_ = consumeToken(builder_, MAP_INCLUDE);
+    if (!result_) result_ = consumeToken(builder_, MAP_VOLATILE);
+    if (!result_) result_ = consumeToken(builder_, MAP_HOSTNAMES);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // MAP
   public static boolean map_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "map_stmt")) return false;
@@ -715,17 +749,26 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // value_stmt value_stmt SEMICOLON
+  // value_stmt (value_stmt | map_keyword_as_value) SEMICOLON
   public static boolean map_value_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "map_value_stmt")) return false;
     boolean result_, pinned_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, MAP_VALUE_STMT, "<map value stmt>");
     result_ = value_stmt(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, value_stmt(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, map_value_stmt_1(builder_, level_ + 1));
     result_ = pinned_ && consumeToken(builder_, SEMICOLON) && result_;
     exit_section_(builder_, level_, marker_, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // value_stmt | map_keyword_as_value
+  private static boolean map_value_stmt_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "map_value_stmt_1")) return false;
+    boolean result_;
+    result_ = value_stmt(builder_, level_ + 1);
+    if (!result_) result_ = map_keyword_as_value(builder_, level_ + 1);
+    return result_;
   }
 
   /* ********************************************************** */
@@ -868,6 +911,17 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // NUM_MAP_DEFAULT | NUM_MAP_INCLUDE | NUM_MAP_VOLATILE
+  static boolean num_map_keyword_as_value(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "num_map_keyword_as_value")) return false;
+    boolean result_;
+    result_ = consumeToken(builder_, NUM_MAP_DEFAULT);
+    if (!result_) result_ = consumeToken(builder_, NUM_MAP_INCLUDE);
+    if (!result_) result_ = consumeToken(builder_, NUM_MAP_VOLATILE);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // NUM_MAP
   public static boolean num_map_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "num_map_stmt")) return false;
@@ -880,17 +934,26 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // value_stmt value_stmt SEMICOLON
+  // value_stmt (value_stmt | num_map_keyword_as_value) SEMICOLON
   public static boolean num_map_value_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "num_map_value_stmt")) return false;
     boolean result_, pinned_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, NUM_MAP_VALUE_STMT, "<num map value stmt>");
     result_ = value_stmt(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, value_stmt(builder_, level_ + 1));
+    result_ = result_ && report_error_(builder_, num_map_value_stmt_1(builder_, level_ + 1));
     result_ = pinned_ && consumeToken(builder_, SEMICOLON) && result_;
     exit_section_(builder_, level_, marker_, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // value_stmt | num_map_keyword_as_value
+  private static boolean num_map_value_stmt_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "num_map_value_stmt_1")) return false;
+    boolean result_;
+    result_ = value_stmt(builder_, level_ + 1);
+    if (!result_) result_ = num_map_keyword_as_value(builder_, level_ + 1);
+    return result_;
   }
 
   /* ********************************************************** */

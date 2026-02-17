@@ -71,6 +71,18 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    fun testMapKeywordAsValue() {
+        doTest(true)
+    }
+
+    fun testGeoKeywordAsValue() {
+        doTest(true)
+    }
+
+    fun testNumMapKeywordAsValue() {
+        doTest(true)
+    }
+
     fun testIfEscapedParens() {
         doTest(true)
     }
