@@ -99,6 +99,10 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    fun testCommentsWithHash() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")
