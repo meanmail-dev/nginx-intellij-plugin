@@ -1,0 +1,9 @@
+try_files $uri $uri/ =404;
+
+if ($request_method = POST) {
+    return 405;
+}
+
+location /api {
+    proxy_pass http://backend;
+}

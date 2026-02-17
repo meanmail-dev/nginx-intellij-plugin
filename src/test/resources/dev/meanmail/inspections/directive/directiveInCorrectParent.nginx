@@ -1,0 +1,10 @@
+http {
+    server {
+        listen 80;
+        server_name example.com;
+
+        location / {
+            try_files $uri $uri/ =404;
+        }
+    }
+}

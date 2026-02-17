@@ -1,0 +1,7 @@
+events {
+    <error descr="Directive 'listen' is not allowed in this context. 
+Allowed contexts:
+  - listen(context: server)
+  - listen(context: server)
+  - listen(context: server)">listen</error> 80;
+}

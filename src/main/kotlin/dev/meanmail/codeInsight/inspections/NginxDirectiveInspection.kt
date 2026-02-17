@@ -13,6 +13,7 @@ import dev.meanmail.NginxFileType
 import dev.meanmail.directives.catalog.Directive
 import dev.meanmail.directives.catalog.any
 import dev.meanmail.directives.catalog.findDirectives
+import dev.meanmail.directives.catalog.self
 import dev.meanmail.directives.determineFileContext
 import dev.meanmail.psi.DirectiveStmt
 
@@ -101,7 +102,11 @@ class NginxDirectiveInspection : LocalInspectionTool() {
 
         val context: Set<Directive> = determineFileContext(directiveStmt.containingFile) ?: return emptyList()
         // Check if directive's context intersects with current context
-        val matchingDirectivesContext = matchingDirectives.flatMap { it.context }.toSet()
+        val matchingDirectivesContext = matchingDirectives.flatMap { matchingDirective ->
+            matchingDirective.context.map { ctx ->
+                if (ctx == self) matchingDirective else ctx
+            }
+        }.toSet()
         if (matchingDirectivesContext.intersect(context).isEmpty()) {
             return listOf(
                 manager.createProblemDescriptor(

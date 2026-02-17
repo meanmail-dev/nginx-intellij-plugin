@@ -1,0 +1,4 @@
+listen 80;
+server_name example.com;
+
+<error descr="Directive 'worker_connections' cannot be used in this context. Current file context is 'server, server' (determined by the context of existing directives), but 'worker_connections' block can only be defined in: events.">worker_connections</error> 1024;
