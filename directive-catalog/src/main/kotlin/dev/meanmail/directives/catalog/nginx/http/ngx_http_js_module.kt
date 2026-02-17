@@ -26,7 +26,7 @@ val jsInclude = Directive(
 val jsPath = Directive(
     name = "js_path",
     description = "Sets the search path for JavaScript modules used in Nginx configuration",
-    context = listOf(http),
+    context = listOf(http, server, location),
     module = ngx_http_js_module
 )
 
@@ -47,14 +47,14 @@ val jsPreloadObject = Directive(
 val jsBodyFilter = Directive(
     name = "js_body_filter",
     description = "Applies a JavaScript function to modify the response body before sending to the client",
-    context = listOf(http, server, location),
+    context = listOf(location, locationIf, limitExcept),
     module = ngx_http_js_module
 )
 
 val jsContent = Directive(
     name = "js_content",
     description = "Specifies a JavaScript function to handle request content",
-    context = listOf(http, server, location),
+    context = listOf(location, locationIf, limitExcept),
     module = ngx_http_js_module
 )
 
@@ -131,7 +131,7 @@ val jsFetchVerifyDepth = Directive(
 val jsHeaderFilter = Directive(
     name = "js_header_filter",
     description = "Applies a JavaScript function to modify response headers before sending to the client",
-    context = listOf(http, server, location),
+    context = listOf(location, locationIf, limitExcept),
     module = ngx_http_js_module
 )
 

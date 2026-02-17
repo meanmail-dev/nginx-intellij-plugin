@@ -13,6 +13,6 @@ val ngx_stream_set_module = NginxModule(
 val streamSet = Directive(
     name = "set",
     description = "Sets a value of a variable in stream context",
-    context = listOf(stream, streamServer),
+    context = listOf(streamServer),
     module = ngx_stream_set_module
 )

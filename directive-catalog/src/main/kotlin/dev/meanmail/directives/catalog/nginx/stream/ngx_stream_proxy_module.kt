@@ -69,7 +69,7 @@ val streamProxyNextUpstreamTries = Directive(
 val streamProxyPass = Directive(
     name = "proxy_pass",
     description = "Defines the destination server or server group for proxying stream connections",
-    context = listOf(stream, streamServer),
+    context = listOf(streamServer),
     module = ngx_stream_proxy_module
 )
 

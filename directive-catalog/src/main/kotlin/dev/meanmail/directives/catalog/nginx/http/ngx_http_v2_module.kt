@@ -82,7 +82,7 @@ val http2PushPreload = Directive(
 val http2RecvBufferSize = Directive(
     name = "http2_recv_buffer_size",
     description = "Sets the size of the receive buffer for HTTP/2 connections",
-    context = listOf(http, server),
+    context = listOf(http),
     module = ngx_http_v2_module
 )
 

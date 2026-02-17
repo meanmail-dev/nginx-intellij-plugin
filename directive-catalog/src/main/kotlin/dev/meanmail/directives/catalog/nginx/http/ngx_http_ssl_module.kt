@@ -114,7 +114,7 @@ val sslOcsp = Directive(
 val sslOcspCache = Directive(
     name = "ssl_ocsp_cache",
     description = "Configures the storage of OCSP responses for SSL connections",
-    context = listOf(http),
+    context = listOf(http, server),
     module = ngx_http_ssl_module
 )
 

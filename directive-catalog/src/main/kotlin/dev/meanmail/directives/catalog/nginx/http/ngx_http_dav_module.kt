@@ -12,7 +12,7 @@ val ngx_http_dav_module = NginxModule(
 val createFullPutPath = Directive(
     "create_full_put_path",
     "Enables creation of intermediate directories during PUT requests",
-    context = listOf(location),
+    context = listOf(http, server, location),
     module = ngx_http_dav_module
 )
 
@@ -26,13 +26,13 @@ val davAccess = Directive(
 val davMethods = Directive(
     name = "dav_methods",
     description = "Enables WebDAV HTTP methods for the location",
-    context = listOf(location),
+    context = listOf(http, server, location),
     module = ngx_http_dav_module
 )
 
 val minDeleteDepth = Directive(
     name = "min_delete_depth",
     description = "Sets the minimum directory depth allowed for DELETE requests",
-    context = listOf(location),
+    context = listOf(http, server, location),
     module = ngx_http_dav_module
 )

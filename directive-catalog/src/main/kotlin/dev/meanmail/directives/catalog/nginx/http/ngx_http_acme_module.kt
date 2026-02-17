@@ -48,7 +48,7 @@ val acmeAccountKey = Directive(
 val acmeCertificate = Directive(
     name = "acme_certificate",
     description = "Defines a certificate with domain identifiers for automatic management",
-    context = listOf(http),
+    context = listOf(server),
     module = ngx_http_acme_module
 )
 

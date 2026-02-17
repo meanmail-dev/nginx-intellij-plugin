@@ -27,6 +27,6 @@ val logFormat = Directive(
 val openLogFileCache = Directive(
     name = "open_log_file_cache",
     description = "Configures caching of log file descriptors to improve performance",
-    context = listOf(http),
+    context = listOf(http, server, location),
     module = ngx_http_log_module
 )
