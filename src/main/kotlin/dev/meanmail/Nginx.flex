@@ -179,6 +179,12 @@ DQUOTE="\""
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
+    // Bare query string (e.g. ?x=, ?key=value) — typically concatenated after a variable like $uri?x=
+    // Includes '=' after '?' so the entire query is a single VALUE token.
+    "?"({BRACED_VAR}|[^\s;'\"\{\}\#\$])+ {
+        if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; return VALUE;
+    }
     {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         // Check if the matched VALUE contains a bare $variable reference (not braced ${VAR})
