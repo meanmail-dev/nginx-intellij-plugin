@@ -41,6 +41,8 @@ private part_value_stmt ::=
                            | IDENTIFIER !EQUAL
                            | VALUE
                            | string_stmt
+                           // Allow variable with optional trailing EQUAL (e.g. $uri= in try_files/error_page)
+                           | variable_stmt EQUAL
                            | variable_stmt
 named_value_stmt ::= IDENTIFIER EQUAL part_value_stmt
 value_stmt ::= named_value_stmt
