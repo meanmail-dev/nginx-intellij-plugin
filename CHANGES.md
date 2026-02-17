@@ -1,6 +1,7 @@
 ## 2026.1.6 (February, 17, 2026)
 
 * Fix parsing of unquoted string with variable and trailing `=` (e.g. `$uri=`) in `try_files` and `error_page` directives ([#67](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/67))
+* Fix parsing of unquoted values containing `#` (e.g. `location ~* (?:#.*#)`) — `#` now only starts a comment after whitespace, matching nginx behavior ([#68](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/68))
 
 ## 2026.1.5 (February, 17, 2026)
 
