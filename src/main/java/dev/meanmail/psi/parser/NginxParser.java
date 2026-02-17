@@ -912,6 +912,8 @@ public class NginxParser implements PsiParser, LightPsiParser {
   //                            | IDENTIFIER !EQUAL
   //                            | VALUE
   //                            | string_stmt
+  //                            // Allow variable with optional trailing EQUAL (e.g. $uri= in try_files/error_page)
+  //                            | variable_stmt EQUAL
   //                            | variable_stmt
   static boolean part_value_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "part_value_stmt")) return false;
@@ -922,6 +924,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
     if (!result_) result_ = part_value_stmt_2(builder_, level_ + 1);
     if (!result_) result_ = consumeToken(builder_, VALUE);
     if (!result_) result_ = string_stmt(builder_, level_ + 1);
+    if (!result_) result_ = part_value_stmt_5(builder_, level_ + 1);
     if (!result_) result_ = variable_stmt(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -1045,6 +1048,17 @@ public class NginxParser implements PsiParser, LightPsiParser {
     Marker marker_ = enter_section_(builder_, level_, _NOT_);
     result_ = !consumeToken(builder_, EQUAL);
     exit_section_(builder_, level_, marker_, result_, false, null);
+    return result_;
+  }
+
+  // variable_stmt EQUAL
+  private static boolean part_value_stmt_5(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "part_value_stmt_5")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = variable_stmt(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, EQUAL);
+    exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
