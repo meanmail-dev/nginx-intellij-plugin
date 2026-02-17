@@ -56,7 +56,8 @@ map_volatile_stmt ::= MAP_VOLATILE SEMICOLON {pin=1}
 map_default_stmt ::= MAP_DEFAULT value_stmt SEMICOLON {pin=1}
 map_hostnames_stmt ::= MAP_HOSTNAMES SEMICOLON {pin=1}
 map_include_stmt ::= MAP_INCLUDE value_stmt SEMICOLON {pin=1}
-map_value_stmt ::= value_stmt value_stmt SEMICOLON {pin=1}
+private map_keyword_as_value ::= MAP_DEFAULT | MAP_INCLUDE | MAP_VOLATILE | MAP_HOSTNAMES
+map_value_stmt ::= value_stmt (value_stmt | map_keyword_as_value) SEMICOLON {pin=1}
 map_block_content ::=
     map_volatile_stmt |
     map_default_stmt |
@@ -70,7 +71,8 @@ num_map_stmt ::= NUM_MAP
 num_map_volatile_stmt ::= NUM_MAP_VOLATILE SEMICOLON {pin=1}
 num_map_default_stmt ::= NUM_MAP_DEFAULT value_stmt SEMICOLON {pin=1}
 num_map_include_stmt ::= NUM_MAP_INCLUDE value_stmt SEMICOLON {pin=1}
-num_map_value_stmt ::= value_stmt value_stmt SEMICOLON {pin=1}
+private num_map_keyword_as_value ::= NUM_MAP_DEFAULT | NUM_MAP_INCLUDE | NUM_MAP_VOLATILE
+num_map_value_stmt ::= value_stmt (value_stmt | num_map_keyword_as_value) SEMICOLON {pin=1}
 num_map_block_content ::=
     num_map_volatile_stmt |
     num_map_default_stmt |
@@ -85,7 +87,8 @@ geo_default_stmt ::= GEO_DEFAULT value_stmt SEMICOLON {pin=1}
 geo_proxy_stmt ::= GEO_PROXY value_stmt SEMICOLON {pin=1}
 geo_ranges_stmt ::= GEO_RANGES SEMICOLON {pin=1}
 geo_include_stmt ::= GEO_INCLUDE value_stmt SEMICOLON {pin=1}
-geo_value_stmt ::= value_stmt value_stmt SEMICOLON {pin=1}
+private geo_keyword_as_value ::= GEO_DELETE | GEO_DEFAULT | GEO_INCLUDE | GEO_PROXY | GEO_RANGES
+geo_value_stmt ::= value_stmt (value_stmt | geo_keyword_as_value) SEMICOLON {pin=1}
 geo_block_content ::=
     geo_delete_stmt |
     geo_default_stmt |
