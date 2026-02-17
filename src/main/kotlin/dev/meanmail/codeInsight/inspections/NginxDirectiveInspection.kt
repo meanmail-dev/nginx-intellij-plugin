@@ -13,6 +13,7 @@ import dev.meanmail.NginxFileType
 import dev.meanmail.directives.catalog.Directive
 import dev.meanmail.directives.catalog.any
 import dev.meanmail.directives.catalog.findDirectives
+import dev.meanmail.directives.catalog.self
 import dev.meanmail.directives.determineFileContext
 import dev.meanmail.psi.DirectiveStmt
 
@@ -101,16 +102,20 @@ class NginxDirectiveInspection : LocalInspectionTool() {
 
         val context: Set<Directive> = determineFileContext(directiveStmt.containingFile) ?: return emptyList()
         // Check if directive's context intersects with current context
-        val matchingDirectivesContext = matchingDirectives.flatMap { it.context }.toSet()
+        val matchingDirectivesContext = matchingDirectives.flatMap { matchingDirective ->
+            matchingDirective.context.map { ctx ->
+                if (ctx == self) matchingDirective else ctx
+            }
+        }.toSet()
         if (matchingDirectivesContext.intersect(context).isEmpty()) {
             return listOf(
                 manager.createProblemDescriptor(
                     nameElement,
                     "Directive '$directiveName' cannot be used in this context. " +
-                            "Current file context is '${context.joinToString(", ") { it.name }}' " +
+                            "Current file context is '${formatDirectiveNames(context)}' " +
                             "(determined by the context of existing directives), " +
                             "but '${directiveName}' block can only be defined in: " +
-                            "${matchingDirectivesContext.joinToString(", ") { it.name }}.",
+                            "${formatDirectiveNames(matchingDirectivesContext)}.",
                     true,
                     ProblemHighlightType.ERROR,
                     isOnTheFly
@@ -119,6 +124,17 @@ class NginxDirectiveInspection : LocalInspectionTool() {
         }
 
         return emptyList()
+    }
+
+    private fun formatDirectiveNames(directives: Collection<Directive>): String {
+        val grouped = directives.groupBy { it.name }
+        return grouped.flatMap { (name, group) ->
+            if (group.size == 1) {
+                listOf(name)
+            } else {
+                group.map { "${it.name} (${it.module.name})" }
+            }
+        }.joinToString(", ")
     }
 
     /**

@@ -1,0 +1,5 @@
+try_files $uri $uri/ /index.php;
+
+location ~ \.php$ {
+    include fastcgi.conf;
+}
