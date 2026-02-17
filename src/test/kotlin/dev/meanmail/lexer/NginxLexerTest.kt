@@ -483,6 +483,49 @@ class NginxLexerTest {
     }
 
     @Test
+    fun testVariableWithQueryStringEquals() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/63
+        val tokens = tokenize(
+            """
+            server {
+                location / {
+                    error_page 400 ${'$'}uri?x=;
+                    try_files ${'$'}uri ${'$'}uri?x=;
+                }
+            }
+        """.trimIndent()
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "server",
+            "LBRACE" to "{",
+            "LOCATION" to "location",
+            "VALUE" to "/",
+            "LBRACE" to "{",
+            "IDENTIFIER" to "error_page",
+            "VALUE" to "400",
+            "VARIABLE" to "${'$'}uri",
+            "CONCAT_JOIN" to "",
+            "VALUE" to "?x=",
+            "SEMICOLON" to ";",
+            "IDENTIFIER" to "try_files",
+            "VARIABLE" to "${'$'}uri",
+            "VARIABLE" to "${'$'}uri",
+            "CONCAT_JOIN" to "",
+            "VALUE" to "?x=",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}",
+            "RBRACE" to "}"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
     fun testIfDirectiveWithEscapedParentheses() {
         // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/52
         val tokens = tokenize(

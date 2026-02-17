@@ -83,6 +83,10 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    fun testVariableQueryEquals() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")
