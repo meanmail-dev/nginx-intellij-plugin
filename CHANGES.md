@@ -4,6 +4,7 @@
 
 ## 2026.1.5 (February, 17, 2026)
 
+* Fix directive context mismatches for 33 directives to match nginx.org reference docs ([#64](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/64))
 * Fix parsing of unquoted string with variable and trailing `=` in `try_files` and `error_page` (e.g. `try_files $uri $uri?x=;`) ([#63](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/63))
 
 ## 2026.1.4 (February, 15, 2026)
