@@ -82,12 +82,13 @@ BINARY_OPERATOR=(\!=|=)|(\!?\~\*?|\!?\~)
 LPAREN=\(
 RPAREN=\)
 BRACED_VAR=\$\{{IDENTIFIER}\}
-VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#=])+
-// Like VALUE but allows '#' — used in DIRECTIVE_STATE where '#' is only a comment after whitespace.
-DIRECTIVE_VALUE=({BRACED_VAR}|[^\s;'\"\{\}=])+
-MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}\#])+
+// '#' is NOT excluded from value patterns: in nginx, '#' starts a comment only after
+// whitespace, not inside a token. The global COMMENT rule handles '#' after whitespace
+// because WHITE_SPACE is matched first, then COMMENT wins by longest-match.
+VALUE=({BRACED_VAR}|[^\s;'\"\{\}=])+
+MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}])+
 EQUAL==
-IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)\#])+
+IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)])+
 ESCAPE=\\[^\n\r]
 STRING=([^'\\]|{ESCAPE})+
 DQSTRING=([^\"\\]|{ESCAPE})+
@@ -177,19 +178,17 @@ DQUOTE="\""
     }
     // Path with query string (e.g. /index.php?=, /path?key=value&b=) — includes '=' after '?'
     // so the entire path+query is a single VALUE. Excludes '$' so variables remain separate tokens.
-    ({BRACED_VAR}|[^\s;'\"\{\}\#=\$])+"?"({BRACED_VAR}|[^\s;'\"\{\}\#\$])* {
+    ({BRACED_VAR}|[^\s;'\"\{\}=\$])+"?"({BRACED_VAR}|[^\s;'\"\{\}\$])* {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
     // Bare query string (e.g. ?x=, ?key=value) — typically concatenated after a variable like $uri?x=
     // Includes '=' after '?' so the entire query is a single VALUE token.
-    "?"({BRACED_VAR}|[^\s;'\"\{\}\#\$])+ {
+    "?"({BRACED_VAR}|[^\s;'\"\{\}\$])+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
-    // Use DIRECTIVE_VALUE to allow '#' in unquoted values (e.g. regex patterns in location).
-    // In DIRECTIVE_STATE, '#' only starts a comment after whitespace, not inside a value.
-    {DIRECTIVE_VALUE}        {
+    {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         // Check if the matched VALUE contains a bare $variable reference (not braced ${VAR})
         // that should be a separate VARIABLE token due to longest-match consuming too much.
