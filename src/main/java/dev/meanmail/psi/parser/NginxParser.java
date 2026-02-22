@@ -458,7 +458,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LPAREN condition_stmt RPAREN
+  // LPAREN condition_stmt (RPAREN | &LBRACE)
   public static boolean if_paren_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "if_paren_stmt")) return false;
     if (!nextTokenIs(builder_, LPAREN)) return false;
@@ -467,9 +467,30 @@ public class NginxParser implements PsiParser, LightPsiParser {
     result_ = consumeToken(builder_, LPAREN);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, condition_stmt(builder_, level_ + 1));
-    result_ = pinned_ && consumeToken(builder_, RPAREN) && result_;
+    result_ = pinned_ && if_paren_stmt_2(builder_, level_ + 1) && result_;
     exit_section_(builder_, level_, marker_, result_, pinned_, null);
     return result_ || pinned_;
+  }
+
+  // RPAREN | &LBRACE
+  private static boolean if_paren_stmt_2(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "if_paren_stmt_2")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, RPAREN);
+    if (!result_) result_ = if_paren_stmt_2_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // &LBRACE
+  private static boolean if_paren_stmt_2_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "if_paren_stmt_2_1")) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_, level_, _AND_);
+    result_ = consumeToken(builder_, LBRACE);
+    exit_section_(builder_, level_, marker_, result_, false, null);
+    return result_;
   }
 
   /* ********************************************************** */

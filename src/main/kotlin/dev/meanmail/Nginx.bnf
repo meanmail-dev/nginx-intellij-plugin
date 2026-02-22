@@ -137,7 +137,11 @@ regex_expr  ::= regex_atom ((CONCAT_JOIN)? regex_atom)*
 // like ((...))$ and avoid gluing them into a generic concatenation expression
 condition_stmt ::= UNARY_OPERATOR condition_expr
                  | condition_expr (EQUAL condition_expr | BINARY_OPERATOR regex_expr)?
-if_paren_stmt ::= LPAREN condition_stmt RPAREN {pin=1}
+// nginx quirk (issue #77): nginx if-handler strips trailing ')' from the last condition token
+// rather than tracking paren depth. So if ($arg ~ "x)"{  is valid — the ')' inside "x)" serves
+// as the closing paren. RPAREN may be absent when LBRACE follows directly; the lexer only
+// produces LBRACE here when a quoted string in the condition actually contained ')'.
+if_paren_stmt ::= LPAREN condition_stmt (RPAREN | &LBRACE) {pin=1}
 if_directive_stmt ::= if_stmt if_paren_stmt block_stmt {pin=1}
 
 location_stmt ::= LOCATION

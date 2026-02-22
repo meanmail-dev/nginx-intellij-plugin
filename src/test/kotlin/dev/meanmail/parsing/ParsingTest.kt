@@ -283,6 +283,20 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    // --- Issue #77: Unmatched closing parenthesis ---
+
+    fun testIfRegexQuotedCloseParen() {
+        doTest(true)
+    }
+
+    fun testIfRegexQuotedCloseParenNginxQuirk() {
+        doTest(true)
+    }
+
+    fun testIfRegexUnquotedCloseParen() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")
