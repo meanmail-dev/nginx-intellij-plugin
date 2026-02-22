@@ -693,6 +693,22 @@ public class NginxLexer implements FlexLexer {
   // See also: IF_STRING_STATE, IF_DQSTRING_STATE, and the LBRACE rule in IF_PAREN_STATE.
   boolean ifCloseParenInString = false;
 
+  // Check if string ends with an unbalanced ')'.
+  // nginx strips trailing ')' from the last token regardless of balance,
+  // so "x)" has an unbalanced ')' (nginx strips it), but "(x)" is balanced (nginx strips it too,
+  // breaking the regex). We only set the quirk flag when the string ends with ')' AND
+  // closing parens outnumber opening ones — i.e. there's an "extra" ')' at the end.
+  private boolean endsWithUnbalancedParen(String s) {
+      if (!s.endsWith(")")) return false;
+      int depth = 0;
+      for (int i = 0; i < s.length(); i++) {
+          char c = s.charAt(i);
+          if (c == '(') depth++;
+          else if (c == ')') depth--;
+      }
+      return depth < 0;
+  }
+
   // Concatenation join handling: emit a synthetic CONCAT_JOIN token
   // between two adjacent atoms (VARIABLE/IDENTIFIER/VALUE/STRING) with no separators.
   boolean joinPending = false;           // true when we pushed back current token to emit CONCAT_JOIN
@@ -1178,13 +1194,13 @@ public class NginxLexer implements FlexLexer {
           // fall through
           case 103: break;
           case 33:
-            { if (yytext().toString().indexOf(')') >= 0) { ifCloseParenInString = true; }
+            { if (endsWithUnbalancedParen(yytext().toString())) { ifCloseParenInString = true; }
           return STRING;
             }
           // fall through
           case 104: break;
           case 34:
-            { if (yytext().toString().indexOf(')') >= 0) { ifCloseParenInString = true; }
+            { if (endsWithUnbalancedParen(yytext().toString())) { ifCloseParenInString = true; }
           return DQSTRING;
             }
           // fall through
