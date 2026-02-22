@@ -1,5 +1,6 @@
 ## 2026.1.7 (February, 22, 2026)
 
+* Fix parsing of unquoted string with multiple `&` and variables in directives like `proxy_cache_key` (e.g. `proxy_cache_key $uri?a=$arg_a&b=$arg_b&c=$arg_c;`) ([#76](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/76))
 * Fix parsing of `if` condition when a quoted string contains `)` — nginx's parser quirk treats `)` inside quotes as the closing paren of `if()`, so `if ($arg ~ "x)"{` is now accepted and `if ($arg ~ "x)") {` correctly shows an error ([#77](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/77))
 
 ## 2026.1.6 (February, 17, 2026)
