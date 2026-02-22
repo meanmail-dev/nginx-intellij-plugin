@@ -22,6 +22,18 @@ import static dev.meanmail.psi.Types.*;
   // Track nested parentheses depth inside IF_PAREN_STATE
   int ifParenDepth = 0;
 
+  // nginx quirk (issue #77): nginx's if-directive handler does NOT track parenthesis depth.
+  // Instead, it tokenizes the condition normally (respecting quotes), then strips a trailing ')'
+  // from the LAST token before '{' to use as the closing paren of if(...).
+  //
+  // Example: if ($arg_a ~ "x)"{  — nginx tokenizes "x)" as token 'x)', strips trailing ')' →
+  // regex becomes 'x', and '{' opens the block. No explicit ')' needed after the string.
+  //
+  // Our lexer uses ifParenDepth tracking which is more correct, but to match nginx behavior
+  // we allow '{' in IF_PAREN_STATE when a quoted string in the condition contained ')'.
+  // See also: IF_STRING_STATE, IF_DQSTRING_STATE, and the LBRACE rule in IF_PAREN_STATE.
+  boolean ifCloseParenInString = false;
+
   // Concatenation join handling: emit a synthetic CONCAT_JOIN token
   // between two adjacent atoms (VARIABLE/IDENTIFIER/VALUE/STRING) with no separators.
   boolean joinPending = false;           // true when we pushed back current token to emit CONCAT_JOIN
@@ -111,6 +123,8 @@ DQUOTE="\""
 %state GEO_BLOCK_STATE
 %state IF_STATE
 %state IF_PAREN_STATE
+%state IF_STRING_STATE
+%state IF_DQSTRING_STATE
 %state DIRECTIVE_STATE
 %state TYPES_STATE
 %state TYPES_BLOCK_STATE
@@ -234,6 +248,7 @@ DQUOTE="\""
     {LPAREN}                 {
           // Enter condition parentheses; reset nested depth
           ifParenDepth = 0;
+          ifCloseParenInString = false;
           yypush(IF_PAREN_STATE);
           return LPAREN;
       }
@@ -249,11 +264,11 @@ DQUOTE="\""
       }
     {QUOTE}                       {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-          joinPending = false; prevConcatEligible = false; yypush(STRING_STATE); return QUOTE;
+          joinPending = false; prevConcatEligible = false; yypush(IF_STRING_STATE); return QUOTE;
       }
     {DQUOTE}                      {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-          joinPending = false; prevConcatEligible = false; yypush(DQSTRING_STATE); return DQUOTE;
+          joinPending = false; prevConcatEligible = false; yypush(IF_DQSTRING_STATE); return DQUOTE;
       }
     {VARIABLE}                    {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
@@ -270,6 +285,20 @@ DQUOTE="\""
     {IF_VALUE}                    {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
           joinPending = false; prevConcatEligible = true; return VALUE;
+      }
+    // nginx quirk: { before ) — the closing ) is embedded in the last condition token.
+    // Only accept { when a quoted string in this condition contained ')'.
+    {LBRACE}                      {
+          if (ifCloseParenInString) {
+              yypop(); // pop IF_PAREN_STATE -> IF_STATE
+              yypop(); // pop IF_STATE -> YYINITIAL
+              joinPending = false; prevConcatEligible = false;
+              ifCloseParenInString = false;
+              return LBRACE;
+          }
+          // No ) was in any string — { is genuinely invalid here
+          yyinitial();
+          return BAD_CHARACTER;
       }
 }
 
@@ -305,6 +334,24 @@ DQUOTE="\""
 <DQSTRING_STATE> {
     {DQUOTE}                 { yypop(); prevConcatEligible = true; return DQUOTE; }
     {DQSTRING}               { return DQSTRING; }
+}
+
+// String states for if-condition context: identical to normal string states,
+// but track whether the string content contains ')' (nginx quirk flag).
+<IF_STRING_STATE> {
+    {QUOTE}                  { yypop(); prevConcatEligible = true; return QUOTE; }
+    {STRING}                 {
+          if (yytext().toString().indexOf(')') >= 0) { ifCloseParenInString = true; }
+          return STRING;
+      }
+}
+
+<IF_DQSTRING_STATE> {
+    {DQUOTE}                 { yypop(); prevConcatEligible = true; return DQUOTE; }
+    {DQSTRING}               {
+          if (yytext().toString().indexOf(')') >= 0) { ifCloseParenInString = true; }
+          return DQSTRING;
+      }
 }
 
 <MAP_STATE> {
