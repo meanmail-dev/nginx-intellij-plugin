@@ -283,6 +283,12 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    // --- Issue #76: Unquoted string with multiple & and variables ---
+
+    fun testProxyCacheKeyAmpersand() {
+        doTest(true)
+    }
+
     // --- Issue #77: Unmatched closing parenthesis ---
 
     fun testIfRegexQuotedCloseParen() {

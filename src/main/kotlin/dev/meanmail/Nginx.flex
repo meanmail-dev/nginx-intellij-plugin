@@ -218,6 +218,13 @@ DQUOTE="\""
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
+    // Ampersand query string segment (e.g. &b=, &key=value) — typically concatenated after a variable
+    // like $arg_a&b= in proxy_cache_key $uri?a=$arg_a&b=$arg_b&c=$arg_c;
+    // Includes '=' after '&' so the entire segment is a single VALUE token.
+    "&"({BRACED_VAR}|[^\s;'\"\{\}\$])+ {
+        if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; return VALUE;
+    }
     {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         // Check if the matched VALUE contains a bare $variable reference (not braced ${VAR})
