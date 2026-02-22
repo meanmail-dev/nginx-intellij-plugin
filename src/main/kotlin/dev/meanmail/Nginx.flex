@@ -259,6 +259,15 @@ DQUOTE="\""
     {LPAREN}                      { ifParenDepth++; return VALUE; }
     {RPAREN}                      {
           if (ifParenDepth > 0) { ifParenDepth--; return VALUE; }
+          if (ifCloseParenInString) {
+              // nginx quirk: ) inside a quoted string already "closed" the if(),
+              // so this explicit ) is extra — treat as syntax error.
+              yypop(); // pop IF_PAREN_STATE -> IF_STATE
+              yypop(); // pop IF_STATE -> YYINITIAL
+              joinPending = false; prevConcatEligible = false;
+              ifCloseParenInString = false;
+              return BAD_CHARACTER;
+          }
           yypop();
           return RPAREN;
       }
