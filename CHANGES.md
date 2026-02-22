@@ -1,3 +1,7 @@
+## 2026.1.7 (February, 22, 2026)
+
+* Fix parsing of `if` condition when a quoted string contains `)` — nginx's parser quirk treats `)` inside quotes as the closing paren of `if()`, so `if ($arg ~ "x)"{` is now accepted and `if ($arg ~ "x)") {` correctly shows an error ([#77](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/77))
+
 ## 2026.1.6 (February, 17, 2026)
 
 * Fix `self` context not considered when validating directives in files with inferred context — e.g. `location` inside a file detected as `location` context no longer reports a false error ([#70](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/70))
