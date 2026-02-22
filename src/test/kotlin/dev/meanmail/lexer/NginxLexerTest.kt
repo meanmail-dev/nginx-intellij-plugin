@@ -567,6 +567,38 @@ class NginxLexerTest {
     }
 
     @Test
+    fun testProxyCacheKeyWithMultipleAmpersandAndVariables() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/76
+        val tokens = tokenize(
+            "proxy_cache_key ${'$'}uri?a=${'$'}arg_a&b=${'$'}arg_b&c=${'$'}arg_c;"
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "proxy_cache_key",
+            "VARIABLE" to "${'$'}uri",
+            "CONCAT_JOIN" to "",
+            "VALUE" to "?a=",
+            "CONCAT_JOIN" to "",
+            "VARIABLE" to "${'$'}arg_a",
+            "CONCAT_JOIN" to "",
+            "VALUE" to "&b=",
+            "CONCAT_JOIN" to "",
+            "VARIABLE" to "${'$'}arg_b",
+            "CONCAT_JOIN" to "",
+            "VALUE" to "&c=",
+            "CONCAT_JOIN" to "",
+            "VARIABLE" to "${'$'}arg_c",
+            "SEMICOLON" to ";"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
     fun testIfDirectiveWithEscapedParentheses() {
         // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/52
         val tokens = tokenize(
