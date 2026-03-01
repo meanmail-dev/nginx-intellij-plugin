@@ -1,5 +1,6 @@
 ## 2026.1.8 (March, 1, 2026)
 
+* Fix variable highlighting in double-quoted strings — `$var`, `${var}`, and `$1` capture groups inside `"..."` are now recognized as variables ([#84](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84))
 * Fix inspection shortName conflict between free and pro plugins — rename `NginxDirectiveValueInspection` to `NginxDirectiveInspection` to avoid `PluginException: Short name is not unique` when both plugins are installed
 
 ## 2026.1.7 (February, 22, 2026)
