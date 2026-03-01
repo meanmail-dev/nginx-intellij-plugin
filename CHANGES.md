@@ -1,3 +1,7 @@
+## 2026.1.8 (March, 1, 2026)
+
+* Fix inspection shortName conflict between free and pro plugins — rename `NginxDirectiveValueInspection` to `NginxDirectiveInspection` to avoid `PluginException: Short name is not unique` when both plugins are installed
+
 ## 2026.1.7 (February, 22, 2026)
 
 * Fix parsing of unquoted string with multiple `&` and variables in directives like `proxy_cache_key` (e.g. `proxy_cache_key $uri?a=$arg_a&b=$arg_b&c=$arg_c;`) ([#76](https://github.com/meanmail-dev/nginx-intellij-plugin/issues/76))
