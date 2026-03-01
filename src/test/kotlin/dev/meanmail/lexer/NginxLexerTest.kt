@@ -262,7 +262,11 @@ class NginxLexerTest {
 
         val expectedTokens = listOf(
             "IDENTIFIER" to "ssl_certificate",
-            "VALUE" to "/etc/letsencrypt/live/\${SERVER_NAME}/fullchain.pem",
+            "VALUE" to "/etc/letsencrypt/live/",
+            "CONCAT_JOIN" to "",
+            "VARIABLE" to "\${SERVER_NAME}",
+            "CONCAT_JOIN" to "",
+            "VALUE" to "/fullchain.pem",
             "SEMICOLON" to ";"
         )
 
@@ -591,6 +595,124 @@ class NginxLexerTest {
             "SEMICOLON" to ";"
         )
 
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testVariablesInDoubleQuotedString() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84
+        val tokens = tokenize(
+            "set ${'$'}a \"/${'$'}uri/${'$'}1\";"
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "set",
+            "VARIABLE" to "${'$'}a",
+            "DQUOTE" to "\"",
+            "DQSTRING" to "/",
+            "VARIABLE" to "${'$'}uri",
+            "DQSTRING" to "/",
+            "VARIABLE" to "${'$'}1",
+            "DQUOTE" to "\"",
+            "SEMICOLON" to ";"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testBracedVariablesInDoubleQuotedString() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84
+        val tokens = tokenize(
+            "set ${'$'}b \"https://${'$'}{host}-${'$'}{request_uri}\";"
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "set",
+            "VARIABLE" to "${'$'}b",
+            "DQUOTE" to "\"",
+            "DQSTRING" to "https://",
+            "VARIABLE" to "${'$'}{host}",
+            "DQSTRING" to "-",
+            "VARIABLE" to "${'$'}{request_uri}",
+            "DQUOTE" to "\"",
+            "SEMICOLON" to ";"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testCaptureGroupVariable() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84
+        val tokens = tokenize(
+            "rewrite ^/api/v1/(.*) /${'$'}1 break;"
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "rewrite",
+            "VALUE" to "^/api/v1/(.*)",
+            "VALUE" to "/",
+            "CONCAT_JOIN" to "",
+            "VARIABLE" to "${'$'}1",
+            "IDENTIFIER" to "break",
+            "SEMICOLON" to ";"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testDollarSignWithoutVariableInDoubleQuotedString() {
+        // Bare $ at end of string or followed by non-variable chars should remain DQSTRING
+        val tokens = tokenize(
+            "set ${'$'}a \"price: 5${'$'}\";"
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "set",
+            "VARIABLE" to "${'$'}a",
+            "DQUOTE" to "\"",
+            "DQSTRING" to "price: 5",
+            "DQSTRING" to "${'$'}",
+            "DQUOTE" to "\"",
+            "SEMICOLON" to ";"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testSingleQuotedStringUnchanged() {
+        // Variables in single-quoted strings should NOT be interpolated
+        val tokens = tokenize(
+            "set ${'$'}a '${'$'}uri';"
+        )
+
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "set",
+            "VARIABLE" to "${'$'}a",
+            "QUOTE" to "'",
+            "STRING" to "${'$'}uri",
+            "QUOTE" to "'",
+            "SEMICOLON" to ";"
+        )
         assertEquals("Token count does not match", expectedTokens.size, tokens.size)
         expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
             assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)

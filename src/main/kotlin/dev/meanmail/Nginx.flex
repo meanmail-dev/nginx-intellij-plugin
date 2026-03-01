@@ -101,7 +101,7 @@ LETTER=[a-zA-Z_]
 DIGIT=[0-9]
 WHITE_SPACE=\s+
 IDENTIFIER={LETTER}({LETTER}|{DIGIT})*
-VARIABLE=\$\{?{IDENTIFIER}\}?
+VARIABLE=\$(\{?{IDENTIFIER}\}?|{DIGIT}+)
 SEMICOLON=";"
 CARET_TILDE=\^\~
 UNARY_OPERATOR=\!?-[fdex]
@@ -119,7 +119,7 @@ EQUAL==
 IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)])+
 ESCAPE=\\[^\n\r]
 STRING=([^'\\]|{ESCAPE})+
-DQSTRING=([^\"\\]|{ESCAPE})+
+DQSTRING=([^\"\\$]|{ESCAPE})+
 
 COMMENT=#[^\r\n]*
 
@@ -202,42 +202,49 @@ DQUOTE="\""
     // — includes '=' and '#' in the token so the entire URL is a single VALUE.
     // '#' is allowed here because after '://' it is a URL fragment, not a comment.
     // Excludes '$' so variables remain separate tokens.
-    [a-z]+"://"({BRACED_VAR}|[^\s;'\"\{\}\$])+ {
+    [a-z]+"://"[^\s;'\"\{\}\$]+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
     // Path with query string (e.g. /index.php?=, /path?key=value&b=) — includes '=' after '?'
     // so the entire path+query is a single VALUE. Excludes '$' so variables remain separate tokens.
-    ({BRACED_VAR}|[^\s;'\"\{\}=\$])+"?"({BRACED_VAR}|[^\s;'\"\{\}\$])* {
+    [^\s;'\"\{\}=\$]+"?"[^\s;'\"\{\}\$]* {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
     // Bare query string (e.g. ?x=, ?key=value) — typically concatenated after a variable like $uri?x=
     // Includes '=' after '?' so the entire query is a single VALUE token.
-    "?"({BRACED_VAR}|[^\s;'\"\{\}\$])+ {
+    "?"[^\s;'\"\{\}\$]+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
     // Ampersand query string segment (e.g. &b=, &key=value) — typically concatenated after a variable
     // like $arg_a&b= in proxy_cache_key $uri?a=$arg_a&b=$arg_b&c=$arg_c;
     // Includes '=' after '&' so the entire segment is a single VALUE token.
-    "&"({BRACED_VAR}|[^\s;'\"\{\}\$])+ {
+    "&"[^\s;'\"\{\}\$]+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; return VALUE;
     }
     {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        // Check if the matched VALUE contains a bare $variable reference (not braced ${VAR})
+        // Check if the matched VALUE contains a $variable reference ($var, ${var}, $1)
         // that should be a separate VARIABLE token due to longest-match consuming too much.
-        // Braced vars ${VAR} are already part of VALUE pattern and should NOT be split out.
         String text = yytext().toString();
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '$' && i + 1 < text.length()) {
                 char next = text.charAt(i + 1);
                 if (next == '{') {
-                    // Braced variable ${VAR} — skip to closing brace, it's part of VALUE
+                    // Braced variable ${VAR} — split VALUE before it
                     int closeBrace = text.indexOf('}', i + 2);
-                    if (closeBrace >= 0) { i = closeBrace; }
+                    if (closeBrace >= 0) {
+                        if (i > 0) {
+                            yypushback(text.length() - i);
+                            joinPending = false; prevConcatEligible = true; return VALUE;
+                        } else {
+                            yypushback(text.length() - closeBrace - 1);
+                            joinPending = false; prevConcatEligible = true; return VARIABLE;
+                        }
+                    }
                     continue;
                 }
                 if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') || next == '_') {
@@ -251,6 +258,26 @@ DQUOTE="\""
                         while (varEnd < text.length()) {
                             char c = text.charAt(varEnd);
                             if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9')) {
+                                varEnd++;
+                            } else {
+                                break;
+                            }
+                        }
+                        yypushback(text.length() - varEnd);
+                        joinPending = false; prevConcatEligible = true; return VARIABLE;
+                    }
+                }
+                if (next >= '0' && next <= '9') {
+                    // Capture group reference $1, $2, etc. — split VALUE before it
+                    if (i > 0) {
+                        yypushback(text.length() - i);
+                        joinPending = false; prevConcatEligible = true; return VALUE;
+                    } else {
+                        // VALUE starts with $N — find end of digits and push back the rest
+                        int varEnd = i + 1;
+                        while (varEnd < text.length()) {
+                            char c = text.charAt(varEnd);
+                            if (c >= '0' && c <= '9') {
                                 varEnd++;
                             } else {
                                 break;
@@ -365,6 +392,8 @@ DQUOTE="\""
 
 <DQSTRING_STATE> {
     {DQUOTE}                 { yypop(); prevConcatEligible = true; return DQUOTE; }
+    {VARIABLE}               { return VARIABLE; }
+    \$                       { return DQSTRING; }
     {DQSTRING}               { return DQSTRING; }
 }
 
@@ -380,6 +409,8 @@ DQUOTE="\""
 
 <IF_DQSTRING_STATE> {
     {DQUOTE}                 { yypop(); prevConcatEligible = true; return DQUOTE; }
+    {VARIABLE}               { return VARIABLE; }
+    \$                       { return DQSTRING; }
     {DQSTRING}               {
           if (endsWithUnbalancedParen(yytext().toString())) { ifCloseParenInString = true; }
           return DQSTRING;

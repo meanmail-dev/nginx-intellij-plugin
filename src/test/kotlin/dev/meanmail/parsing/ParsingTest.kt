@@ -283,6 +283,12 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    // --- Issue #84: Variable highlighting in double-quoted strings ---
+
+    fun testVariableInString() {
+        doTest(true)
+    }
+
     // --- Issue #76: Unquoted string with multiple & and variables ---
 
     fun testProxyCacheKeyAmpersand() {
