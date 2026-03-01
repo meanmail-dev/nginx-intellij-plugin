@@ -118,7 +118,7 @@ MAP_BLOCK_VALUE=({BRACED_VAR}|[^\s;'\"\{\}])+
 EQUAL==
 IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)])+
 ESCAPE=\\[^\n\r]
-STRING=([^'\\]|{ESCAPE})+
+STRING=([^'\\$]|{ESCAPE})+
 DQSTRING=([^\"\\$]|{ESCAPE})+
 
 COMMENT=#[^\r\n]*
@@ -387,6 +387,8 @@ DQUOTE="\""
 
 <STRING_STATE> {
     {QUOTE}                  { yypop(); prevConcatEligible = true; return QUOTE; }
+    {VARIABLE}               { return VARIABLE; }
+    \$                       { return STRING; }
     {STRING}                 { return STRING; }
 }
 
@@ -401,6 +403,8 @@ DQUOTE="\""
 // but track whether the string content ends with an unbalanced ')' (nginx quirk flag).
 <IF_STRING_STATE> {
     {QUOTE}                  { yypop(); prevConcatEligible = true; return QUOTE; }
+    {VARIABLE}               { return VARIABLE; }
+    \$                       { return STRING; }
     {STRING}                 {
           if (endsWithUnbalancedParen(yytext().toString())) { ifCloseParenInString = true; }
           return STRING;
