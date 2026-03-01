@@ -699,8 +699,8 @@ class NginxLexerTest {
     }
 
     @Test
-    fun testSingleQuotedStringUnchanged() {
-        // Variables in single-quoted strings should NOT be interpolated
+    fun testVariablesInSingleQuotedString() {
+        // Variables in single-quoted strings are also interpolated (nginx treats quotes identically)
         val tokens = tokenize(
             "set ${'$'}a '${'$'}uri';"
         )
@@ -709,7 +709,7 @@ class NginxLexerTest {
             "IDENTIFIER" to "set",
             "VARIABLE" to "${'$'}a",
             "QUOTE" to "'",
-            "STRING" to "${'$'}uri",
+            "VARIABLE" to "${'$'}uri",
             "QUOTE" to "'",
             "SEMICOLON" to ";"
         )

@@ -1297,6 +1297,27 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (STRING | variable_stmt)*
+  static boolean sq_string_content(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "sq_string_content")) return false;
+    while (true) {
+      int pos_ = current_position_(builder_);
+      if (!sq_string_content_0(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "sq_string_content", pos_)) break;
+    }
+    return true;
+  }
+
+  // STRING | variable_stmt
+  private static boolean sq_string_content_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "sq_string_content_0")) return false;
+    boolean result_;
+    result_ = consumeToken(builder_, STRING);
+    if (!result_) result_ = variable_stmt(builder_, level_ + 1);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // directive_stmt [COMMENT]
   static boolean statement(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "statement")) return false;
@@ -1316,7 +1337,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (QUOTE [STRING] QUOTE) | (DQUOTE dq_string_content DQUOTE)
+  // (QUOTE sq_string_content QUOTE) | (DQUOTE dq_string_content DQUOTE)
   public static boolean string_stmt(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "string_stmt")) return false;
     if (!nextTokenIs(builder_, "<string stmt>", DQUOTE, QUOTE)) return false;
@@ -1328,23 +1349,16 @@ public class NginxParser implements PsiParser, LightPsiParser {
     return result_;
   }
 
-  // QUOTE [STRING] QUOTE
+  // QUOTE sq_string_content QUOTE
   private static boolean string_stmt_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "string_stmt_0")) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, QUOTE);
-    result_ = result_ && string_stmt_0_1(builder_, level_ + 1);
+    result_ = result_ && sq_string_content(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, QUOTE);
     exit_section_(builder_, marker_, null, result_);
     return result_;
-  }
-
-  // [STRING]
-  private static boolean string_stmt_0_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "string_stmt_0_1")) return false;
-    consumeToken(builder_, STRING);
-    return true;
   }
 
   // DQUOTE dq_string_content DQUOTE
