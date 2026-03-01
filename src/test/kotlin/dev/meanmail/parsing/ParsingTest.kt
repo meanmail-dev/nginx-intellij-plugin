@@ -309,6 +309,16 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    // --- Issue #82: Escaped closing parenthesis in if condition ---
+
+    fun testIfRegexEscapedCloseParen() {
+        doTest(true)
+    }
+
+    fun testIfRegexDoubleEscapedCloseParen() {
+        doTest(true)
+    }
+
     // --- Issue #83: Standalone comments in map/geo/types/num_map blocks ---
 
     fun testCommentsInBlockDirectives() {

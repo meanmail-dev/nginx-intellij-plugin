@@ -39,13 +39,57 @@ import static dev.meanmail.psi.Types.*;
   // so "x)" has an unbalanced ')' (nginx strips it), but "(x)" is balanced (nginx strips it too,
   // breaking the regex). We only set the quirk flag when the string ends with ')' AND
   // closing parens outnumber opening ones — i.e. there's an "extra" ')' at the end.
+  //
+  // Must account for escape sequences:
+  //   Step 1 — nginx config parser collapses \\ → \ in both single- and double-quoted strings;
+  //            all other \X sequences (like \) ) are kept verbatim.
+  //   Step 2 — PCRE2 treats \( and \) as escaped (literal) parens that don't affect group balance,
+  //            and \\ as a literal backslash.
+  //
+  // Examples (raw lexer text → nginx value → PCRE2 interpretation → quirk?):
+  //   x)      → x)      → unmatched )        → true  (quirk)
+  //   x\)     → x\)     → escaped )           → false (no quirk)
+  //   x\\)    → x\)     → escaped )           → false (no quirk)
+  //   x\\\)   → x\\)    → literal \ + real )  → true  (quirk)
+  //   x\\\\)  → x\\)    → literal \ + real )  → true  (quirk)
   private boolean endsWithUnbalancedParen(String s) {
       if (!s.endsWith(")")) return false;
-      int depth = 0;
-      for (int i = 0; i < s.length(); i++) {
+
+      // Step 1: simulate nginx escape processing.
+      // \\ → single \;  \X (other) → \X (both chars kept).
+      StringBuilder nginxValue = new StringBuilder(s.length());
+      int i = 0;
+      while (i < s.length()) {
           char c = s.charAt(i);
+          if (c == '\\' && i + 1 < s.length()) {
+              if (s.charAt(i + 1) == '\\') {
+                  nginxValue.append('\\');
+                  i += 2;
+              } else {
+                  nginxValue.append(c);
+                  nginxValue.append(s.charAt(i + 1));
+                  i += 2;
+              }
+          } else {
+              nginxValue.append(c);
+              i++;
+          }
+      }
+
+      // Step 2: count parens with PCRE2 escape rules.
+      // \X (any) → skip both chars (escaped in PCRE2).
+      String v = nginxValue.toString();
+      int depth = 0;
+      i = 0;
+      while (i < v.length()) {
+          char c = v.charAt(i);
+          if (c == '\\' && i + 1 < v.length()) {
+              i += 2;
+              continue;
+          }
           if (c == '(') depth++;
           else if (c == ')') depth--;
+          i++;
       }
       return depth < 0;
   }
