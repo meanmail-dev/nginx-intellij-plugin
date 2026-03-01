@@ -105,10 +105,216 @@
 Your ratings and feedback are very important. The feature will appear the faster the more people request it.
 ]]></description>
     <change-notes><![CDATA[
-<b>2026.1.8</b>
+<b>2026.1.8 (March, 1, 2026)</b>
 <ul>
     <li>Fix variable highlighting in double-quoted strings — $var, ${var}, and $1 capture groups inside "..." are now recognized as variables (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84">#84</a>)</li>
-    <li>Fix inspection shortName conflict between free and pro plugins</li>
+    <li>Fix inspection shortName conflict between free and pro plugins — rename NginxDirectiveValueInspection to NginxDirectiveInspection to avoid PluginException: Short name is not unique when both plugins are installed</li>
+</ul>
+
+<b>2026.1.7 (February, 22, 2026)</b>
+<ul>
+    <li>Fix parsing of unquoted string with multiple &amp; and variables in directives like proxy_cache_key (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/76">#76</a>)</li>
+    <li>Fix parsing of if condition when a quoted string contains ) — nginx's parser quirk treats ) inside quotes as the closing paren of if() (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/77">#77</a>)</li>
+</ul>
+
+<b>2026.1.6 (February, 17, 2026)</b>
+<ul>
+    <li>Fix self context not considered when validating directives in files with inferred context (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/70">#70</a>)</li>
+    <li>Fix parsing of unquoted string with variable and trailing = in try_files and error_page directives (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/67">#67</a>)</li>
+    <li>Fix parsing of unquoted values containing # — # now only starts a comment after whitespace, matching nginx behavior (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/68">#68</a>)</li>
+    <li>Fix parsing of keywords (default, include, volatile, hostnames) used as literal values in map, geo, and num_map directives (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/69">#69</a>)</li>
+</ul>
+
+<b>2026.1.5 (February, 17, 2026)</b>
+<ul>
+    <li>Fix directive context mismatches for 33 directives to match nginx.org reference docs (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/64">#64</a>)</li>
+    <li>Fix parsing of unquoted string with variable and trailing = in try_files and error_page (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/63">#63</a>)</li>
+</ul>
+
+<b>2026.1.4 (February, 15, 2026)</b>
+<ul>
+    <li>Fix parsing of unquoted strings with = in map directive values (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/53">#53</a>)</li>
+    <li>Fix parsing of unquoted strings with trailing = in query strings (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/54">#54</a>)</li>
+    <li>Fix error_page directive context to allow usage inside if in location (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/55">#55</a>)</li>
+    <li>Fix memcached_pass directive context (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/56">#56</a>)</li>
+    <li>Fix parsing of unquoted strings with escaped ( in if condition (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/52">#52</a>)</li>
+    <li>Fix parsing of unquoted URL in proxy_pass with variables and multiple = (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/51">#51</a>)</li>
+    <li>Fix parsing of unquoted URL with # fragment in rewrite directive (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/50">#50</a>)</li>
+</ul>
+
+<b>2026.1.3 (February, 9, 2026)</b>
+<ul>
+    <li>Fix parsing of unquoted URLs containing multiple = signs in directives like error_page and proxy_pass (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/48">#48</a>)</li>
+</ul>
+
+<b>2025.21 (November, 18, 2025)</b>
+<ul>
+    <li>Fix context for allow and deny directives</li>
+</ul>
+
+<b>2025.20 (September, 16, 2025)</b>
+<ul>
+    <li>Update Nginx support to 1.29.1: added early_hints and ssl_certificate_compression directives</li>
+</ul>
+
+<b>2025.19 (August, 14, 2025)</b>
+<ul>
+    <li>Minor improvements</li>
+    <li>Fix the proxy_next_upstream directive</li>
+    <li>Support on param for the stub_status directive</li>
+    <li>Fix the proxy_cache_path directive</li>
+</ul>
+
+<b>2025.17 (August, 5, 2025)</b>
+<ul>
+    <li>Fix ngx_http_grpc_module directives</li>
+</ul>
+
+<b>2025.14 (July, 4, 2025)</b>
+<ul>
+    <li>Added some new contexts to directives (Thanks @atwupack): js_import, js_path, js_preload_object</li>
+</ul>
+
+<b>2025.13 (June, 8, 2025)</b>
+<ul>
+    <li>Add support for new directives: grpc_ssl_certificate_cache, keepalive_min_timeout, proxy_ssl_certificate_cache, ssl_certificate_cache, ssl_object_cache_inheritable, uwsgi_ssl_certificate_cache</li>
+</ul>
+
+<b>2025.11 (June, 6, 2025)</b>
+<ul>
+    <li>Fix pcre_jit directive context</li>
+    <li>Fix google_perftools_profiles directive context</li>
+    <li>Support for external directives is only in Pro version</li>
+</ul>
+
+<b>2025.10 (May, 31, 2025)</b>
+<ul>
+    <li>Improved handling of the if directive in the rewrite module</li>
+    <li>Simplified the break directive by removing unnecessary parameters</li>
+</ul>
+
+<b>2025.9 (May, 28, 2025)</b>
+<ul>
+    <li>Fix recursive include directive processing</li>
+    <li>Update dependencies</li>
+</ul>
+
+<b>2025.8 (April, 20, 2025)</b>
+<ul>
+    <li>Add support for directives: proxy_cookie_domain, proxy_cookie_flags, proxy_cookie_path, proxy_ignore_client_abort, proxy_ssl_certificate_cache, proxy_ssl_key_log</li>
+</ul>
+
+<b>2025.7 (April, 6, 2025)</b>
+<ul>
+    <li>Add error reporting</li>
+</ul>
+
+<b>2025.6 (March, 22, 2025)</b>
+<ul>
+    <li>A dark theme for file icons</li>
+    <li>Allow set directive parameters in if block</li>
+</ul>
+
+<b>2025.5.1 (March, 16, 2025)</b>
+<ul>
+    <li>Support JetBrains IDE 2025.*</li>
+</ul>
+
+<b>2025.5 (March, 16, 2025)</b>
+<ul>
+    <li>Add support for directives: js_context_reuse, js_engine, js_fetch_buffer_size, js_fetch_max_response_buffer_size, js_fetch_timeout, js_fetch_verify, js_periodic, js_preload_object, js_shared_dict_zone</li>
+</ul>
+
+<b>2024.5 (December, 3, 2024)</b>
+<ul>
+    <li>Full support for map directive configuration and validation</li>
+    <li>Improved autocompletion for map parameters</li>
+    <li>Added validation for map block values</li>
+    <li>Support for include files within map blocks</li>
+    <li>Added new inspection for validating Nginx directive values</li>
+    <li>Full support for Lua blocks in configuration</li>
+    <li>Enhanced SSL configuration handling</li>
+    <li>Added support for geo blocks for geolocation</li>
+    <li>Expanded support for conditional expressions (if)</li>
+    <li>Enhanced syntax highlighting for strings, braces, and values</li>
+    <li>Special highlighting for Lua code blocks</li>
+    <li>Smarter autocompletion for all directives</li>
+    <li>Enhanced configuration file navigation</li>
+    <li>More precise syntax validation</li>
+    <li>Better support for nested blocks</li>
+    <li>Improved handling of folding for blocks</li>
+    <li>Fixed location blocks processing</li>
+    <li>Improved directive modifiers handling</li>
+    <li>Fixed parameter values processing</li>
+    <li>Fixed include directive paths resolution relative to nginx root directory</li>
+    <li>Fixed IDE error when trying to fold empty blocks</li>
+    <li>Prevented potential IllegalArgumentException in folding regions</li>
+</ul>
+
+<b>2024.4 (November, 28, 2024)</b>
+<ul>
+    <li>Full support for all Lua block directives in Nginx configuration parsing</li>
+    <li>Added support for new Nginx 1.27.3 configuration syntax: resolve parameter in upstream server directive, resolver and resolver_timeout directives in upstream block, new proxy_pass_trailers directive</li>
+    <li>Security updates: Disabled TLSv1 and TLSv1.1 protocols by default across modules</li>
+    <li>Fixed directive naming in SCGI module: corrected scgiCacheLockAge to scgi_cache_lock_age</li>
+    <li>Enhanced IPv6 address handling in various directives</li>
+    <li>Verified compatibility with Nginx 1.27.3</li>
+    <li>Fixed lexer and syntax highlighting for Lua block directives with parameters</li>
+    <li>Improved parsing of set_by_lua_block and similar Lua directives</li>
+</ul>
+
+<b>2024.3 (May, 30, 2024)</b>
+<ul>
+    <li>Add ngx_stream_pass_module to directives</li>
+</ul>
+
+<b>2024.2 (May, 28, 2024)</b>
+<ul>
+    <li>Update icon</li>
+    <li>Support ssl_certificate_by_lua_block and set_by_lua_block (needs any Lua Language plugin)</li>
+</ul>
+
+<b>2024.1 (May, 26, 2024)</b>
+<ul>
+    <li>Update dependencies</li>
+</ul>
+
+<b>2022.1 (October, 9, 2022)</b>
+<ul>
+    <li>Update dependencies</li>
+</ul>
+
+<b>2021.3 (December, 5, 2021)</b>
+<ul>
+    <li>Support access_by_lua_block, content_by_lua_block, rewrite_by_lua_block (needs any Lua Language plugin)</li>
+</ul>
+
+<b>2021.2 (May, 3, 2021)</b>
+<ul>
+    <li>Support include directive</li>
+</ul>
+
+<b>2021.1 (April, 11, 2021)</b>
+<ul>
+    <li>Support a block folding</li>
+    <li>Better strings handling (@Athorcis)</li>
+</ul>
+
+<b>2020.2.1 (December, 8, 2020)</b>
+<ul>
+    <li>Support nginx file extension</li>
+    <li>Update file icon</li>
+</ul>
+
+<b>2020.2 (December, 6, 2020)</b>
+<ul>
+    <li>Comment with Line Comment action</li>
+    <li>Structure view</li>
+</ul>
+
+<b>2020.1 (November, 27, 2020)</b>
+<ul>
+    <li>First release</li>
 </ul>
 ]]></change-notes>
 
