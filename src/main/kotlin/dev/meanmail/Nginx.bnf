@@ -30,7 +30,8 @@ nginxFile ::= statement*
 
 private statement ::= directive_stmt [COMMENT]
 
-string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE [DQSTRING] DQUOTE) {pin=1}
+string_stmt ::= (QUOTE [STRING] QUOTE) | (DQUOTE dq_string_content DQUOTE) {pin=1}
+private dq_string_content ::= (DQSTRING | variable_stmt)*
 name_stmt ::= IDENTIFIER
 variable_stmt ::= VARIABLE
 private part_value_stmt ::=

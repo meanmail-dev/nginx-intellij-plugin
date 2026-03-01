@@ -27,4 +27,10 @@ public class StringStmtImpl extends NginxCompositeElementBase implements StringS
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<VariableStmt> getVariableStmtList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, VariableStmt.class);
+  }
+
 }
