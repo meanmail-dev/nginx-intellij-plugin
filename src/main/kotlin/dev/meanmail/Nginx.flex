@@ -440,6 +440,7 @@ DQUOTE="\""
     volatile                 { return MAP_VOLATILE; }
     hostnames                { return MAP_HOSTNAMES; }
     {SEMICOLON}              { return SEMICOLON; }
+    {COMMENT}                { prevConcatEligible = false; joinPending = false; return COMMENT; }
     // Use MAP_BLOCK_VALUE to allow '=' in unquoted map values (e.g. &a=1)
     {MAP_BLOCK_VALUE}        { return VALUE; }
 }
@@ -464,6 +465,7 @@ DQUOTE="\""
     {DQUOTE}                 { yypush(DQSTRING_STATE); return DQUOTE; }
     include                  { return TYPES_INCLUDE; }
     {SEMICOLON}              { return SEMICOLON; }
+    {COMMENT}                { prevConcatEligible = false; joinPending = false; return COMMENT; }
     {VARIABLE}               { return VARIABLE; }
     {VALUE}                  { return VALUE; }
 }
@@ -478,6 +480,7 @@ DQUOTE="\""
     proxy                    { return GEO_PROXY; }
     ranges                   { return GEO_RANGES; }
     {SEMICOLON}              { return SEMICOLON; }
+    {COMMENT}                { prevConcatEligible = false; joinPending = false; return COMMENT; }
     {VALUE}                  { return VALUE; }
 }
 
@@ -499,6 +502,7 @@ DQUOTE="\""
     include                  { return NUM_MAP_INCLUDE; }
     volatile                 { return NUM_MAP_VOLATILE; }
     {SEMICOLON}              { return SEMICOLON; }
+    {COMMENT}                { prevConcatEligible = false; joinPending = false; return COMMENT; }
     {VALUE}                  { return VALUE; }
 }
 
