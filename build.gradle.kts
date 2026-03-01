@@ -48,7 +48,7 @@ intellijPlatform {
     pluginConfiguration {
         name.set(config("pluginName"))
         version.set(project.version.toString())
-        changeNotes.set(readChangeNotes("CHANGES.md"))
+
         ideaVersion {
             sinceBuild.set(config("platformSinceBuild"))
             untilBuild.set(provider { null })
@@ -69,39 +69,6 @@ intellijPlatform {
         }
         channels.set(listOf(config("publishChannel")))
     }
-}
-
-fun readChangeNotes(pathname: String): String {
-    val lines = file(pathname).readLines()
-
-    val notes: MutableList<MutableList<String>> = mutableListOf()
-
-    var note: MutableList<String>? = null
-
-    for (line in lines) {
-        if (line.startsWith('#')) {
-            if (notes.size == 3) {
-                break
-            }
-            note = mutableListOf()
-            notes.add(note)
-            val header = line.trimStart('#')
-            note.add("<b>$header</b>")
-        } else if (line.isNotBlank()) {
-            note?.add(line)
-        }
-    }
-
-    return notes.joinToString(
-        "</p><br><p>",
-        prefix = "<p>",
-        postfix = "</p><br>"
-    ) {
-        it.joinToString("<br>")
-    } +
-            "See the full change notes on the <a href='" +
-            config("repository") +
-            "/blob/master/CHANGES.md'>github</a>"
 }
 
 tasks {
