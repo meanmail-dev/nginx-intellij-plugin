@@ -110,6 +110,7 @@ Your ratings and feedback are very important. The feature will appear the faster
     <li>Fix variable highlighting in double-quoted strings — $var, ${var}, and $1 capture groups inside "..." are now recognized as variables (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84">#84</a>)</li>
     <li>Fix inspection shortName conflict between free and pro plugins — rename NginxDirectiveValueInspection to NginxDirectiveInspection to avoid PluginException: Short name is not unique when both plugins are installed</li>
     <li>Fix standalone comments (#...) not recognized inside map, geo, num_map, and types blocks (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/83">#83</a>)</li>
+    <li>Fix escaped closing parenthesis not interpreted in if condition — patterns like "x\)" and "x\\)" no longer cause false parse errors (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/82">#82</a>)</li>
 </ul>
 
 <b>2026.1.7 (February, 22, 2026)</b>
