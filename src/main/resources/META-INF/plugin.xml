@@ -115,6 +115,7 @@ Your ratings and feedback are very important. The feature will appear the faster
 
 <b>2026.1.8 (March, 1, 2026)</b>
 <ul>
+    <li>Fix parsing of quoted capture-group regex with "$" in if condition — patterns like <code>"($)"</code> are now parsed correctly and no longer produce false <code>)</code> errors (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/91">#91</a>)</li>
     <li>Fix variable highlighting in double-quoted strings — $var, ${var}, and $1 capture groups inside "..." are now recognized as variables (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84">#84</a>)</li>
     <li>Fix inspection shortName conflict between free and pro plugins — rename NginxDirectiveValueInspection to NginxDirectiveInspection to avoid PluginException: Short name is not unique when both plugins are installed</li>
     <li>Fix standalone comments (#...) not recognized inside map, geo, num_map, and types blocks (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/83">#83</a>)</li>

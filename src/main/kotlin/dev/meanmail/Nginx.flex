@@ -33,6 +33,7 @@ import static dev.meanmail.psi.Types.*;
   // we allow '{' in IF_PAREN_STATE when a quoted string in the condition contained ')'.
   // See also: IF_STRING_STATE, IF_DQSTRING_STATE, and the LBRACE rule in IF_PAREN_STATE.
   boolean ifCloseParenInString = false;
+  StringBuilder ifQuotedTokenBuffer = new StringBuilder();
 
   // Check if string ends with an unbalanced ')'.
   // nginx strips trailing ')' from the last token regardless of balance,
@@ -367,11 +368,17 @@ DQUOTE="\""
       }
     {QUOTE}                       {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-          joinPending = false; prevConcatEligible = false; yypush(IF_STRING_STATE); return QUOTE;
+          joinPending = false; prevConcatEligible = false;
+          ifQuotedTokenBuffer.setLength(0);
+          yypush(IF_STRING_STATE);
+          return QUOTE;
       }
     {DQUOTE}                      {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-          joinPending = false; prevConcatEligible = false; yypush(IF_DQSTRING_STATE); return DQUOTE;
+          joinPending = false; prevConcatEligible = false;
+          ifQuotedTokenBuffer.setLength(0);
+          yypush(IF_DQSTRING_STATE);
+          return DQUOTE;
       }
     {VARIABLE}                    {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
@@ -446,21 +453,27 @@ DQUOTE="\""
 // String states for if-condition context: identical to normal string states,
 // but track whether the string content ends with an unbalanced ')' (nginx quirk flag).
 <IF_STRING_STATE> {
-    {QUOTE}                  { yypop(); prevConcatEligible = true; return QUOTE; }
-    {VARIABLE}               { return VARIABLE; }
-    \$                       { return STRING; }
+    {QUOTE}                  {
+          if (endsWithUnbalancedParen(ifQuotedTokenBuffer.toString())) { ifCloseParenInString = true; }
+          yypop(); prevConcatEligible = true; return QUOTE;
+      }
+    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return VARIABLE; }
+    \$                       { ifQuotedTokenBuffer.append(yytext().toString()); return STRING; }
     {STRING}                 {
-          if (endsWithUnbalancedParen(yytext().toString())) { ifCloseParenInString = true; }
+          ifQuotedTokenBuffer.append(yytext().toString());
           return STRING;
       }
 }
 
 <IF_DQSTRING_STATE> {
-    {DQUOTE}                 { yypop(); prevConcatEligible = true; return DQUOTE; }
-    {VARIABLE}               { return VARIABLE; }
-    \$                       { return DQSTRING; }
+    {DQUOTE}                 {
+          if (endsWithUnbalancedParen(ifQuotedTokenBuffer.toString())) { ifCloseParenInString = true; }
+          yypop(); prevConcatEligible = true; return DQUOTE;
+      }
+    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return VARIABLE; }
+    \$                       { ifQuotedTokenBuffer.append(yytext().toString()); return DQSTRING; }
     {DQSTRING}               {
-          if (endsWithUnbalancedParen(yytext().toString())) { ifCloseParenInString = true; }
+          ifQuotedTokenBuffer.append(yytext().toString());
           return DQSTRING;
       }
 }

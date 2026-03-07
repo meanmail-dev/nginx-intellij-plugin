@@ -751,4 +751,41 @@ class NginxLexerTest {
             assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
         }
     }
+
+    @Test
+    fun testIfDirectiveWithQuotedCaptureGroupDollar() {
+        // https://github.com/meanmail-dev/nginx-intellij-plugin/issues/91
+        val tokens = tokenize(
+            """
+            if ( ${'$'}arg_a ~ "($)" ) {
+                set ${'$'}d ${'$'}1;
+            }
+        """.trimIndent()
+        )
+
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}arg_a",
+            "BINARY_OPERATOR" to "~",
+            "DQUOTE" to "\"",
+            "DQSTRING" to "(",
+            "DQSTRING" to "${'$'}",
+            "DQSTRING" to ")",
+            "DQUOTE" to "\"",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "IDENTIFIER" to "set",
+            "VARIABLE" to "${'$'}d",
+            "VARIABLE" to "${'$'}1",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}"
+        )
+
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
 }
