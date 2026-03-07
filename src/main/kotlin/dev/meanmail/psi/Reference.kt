@@ -1,5 +1,6 @@
 package dev.meanmail.psi
 
+import com.intellij.openapi.vfs.InvalidVirtualFileAccessException
 import com.intellij.openapi.paths.WebReference
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
@@ -25,8 +26,13 @@ class Reference(element: ReferenceElement) :
         val directory = element.containingFile
             ?.containingDirectory?.virtualFile ?: return null
         val file = resolveFileUtil(ref, directory) ?: return null
+        if (!file.isValid) return null
 
-        return PsiManager.getInstance(element.project).findFile(file)
+        return try {
+            PsiManager.getInstance(element.project).findFile(file)
+        } catch (_: InvalidVirtualFileAccessException) {
+            null
+        }
     }
 
     override fun getRangeInElement(): TextRange {
