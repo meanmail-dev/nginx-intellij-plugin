@@ -107,6 +107,8 @@ Your ratings and feedback are very important. The feature will appear the faster
     <change-notes><![CDATA[
 <b>2026.1.9 (March, 7, 2026)</b>
 <ul>
+    <li>Prevent regression of Unknown Directive quick-fix preview crash: keep Intention Preview side-effect free to avoid SideEffectGuard "Side effect not allowed: INVOKE_LATER"</li>
+    <li>Add regression test for Unknown Directive quick-fix Intention Preview</li>
     <li>Fix navigation crash on deleted include targets: prevent InvalidVirtualFileAccessException when resolving references to invalid virtual files</li>
     <li>Add regression test for include reference resolution after target file deletion</li>
 </ul>

@@ -33,6 +33,18 @@ class NginxDirectiveInspectionTest : BasePlatformTestCase() {
         doTest("unknownDirective.nginx")
     }
 
+    fun testUnknownDirectiveQuickFixPreviewDoesNotThrow() {
+        myFixture.enableInspections(NginxDirectiveInspection())
+        myFixture.configureByText("preview.nginx", "my_custom_directive on;")
+
+        val intention = myFixture.getAvailableIntentions().firstOrNull {
+            it.text.contains("Directive 'my_custom_directive' may be supported in Pro version")
+        }
+        assertNotNull(intention)
+
+        myFixture.getIntentionPreviewText(intention!!)
+    }
+
     fun testDirectiveInCorrectParent() {
         doTest("directiveInCorrectParent.nginx")
     }
