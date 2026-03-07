@@ -105,6 +105,11 @@
 Your ratings and feedback are very important. The feature will appear the faster the more people request it.
 ]]></description>
     <change-notes><![CDATA[
+<b>2026.1.10 (March, 7, 2026)</b>
+<ul>
+    <li>Fix UI freeze (DiffTree.build stack overflow) on large nginx config files by making block element types lazy-parseable — only the changed block is reparsed instead of the entire file</li>
+</ul>
+
 <b>2026.1.9 (March, 7, 2026)</b>
 <ul>
     <li>Fix parsing of quoted capture-group regex with "$" in if condition — patterns like <code>"($)"</code> are now parsed correctly and no longer produce false <code>)</code> errors (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/91">#91</a>)</li>

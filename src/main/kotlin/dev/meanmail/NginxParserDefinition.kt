@@ -12,8 +12,8 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
 import dev.meanmail.psi.NginxFile
+import dev.meanmail.psi.NginxLazyBlockParser
 import dev.meanmail.psi.Types
-import dev.meanmail.psi.parser.NginxParser
 
 class NginxParserDefinition : ParserDefinition {
 
@@ -34,7 +34,7 @@ class NginxParserDefinition : ParserDefinition {
     }
 
     override fun createParser(project: Project): PsiParser {
-        return NginxParser()
+        return NginxLazyBlockParser()
     }
 
     override fun getFileNodeType(): IFileElementType {
