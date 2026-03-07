@@ -12,6 +12,7 @@
 
   elementTypeHolderClass="dev.meanmail.psi.Types"
   elementTypeClass="dev.meanmail.psi.NginxElementType"
+  elementTypeFactory="dev.meanmail.psi.NginxElementTypeFactory.createType"
   tokenTypeClass="dev.meanmail.psi.NginxTokenType"
 
   psiImplUtilClass="dev.meanmail.psi.PsiImplUtil"
