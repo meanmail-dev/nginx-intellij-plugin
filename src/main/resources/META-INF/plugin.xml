@@ -107,6 +107,7 @@ Your ratings and feedback are very important. The feature will appear the faster
     <change-notes><![CDATA[
 <b>2026.1.9 (March, 7, 2026)</b>
 <ul>
+    <li>Fix parsing of quoted capture-group regex with "$" in if condition — patterns like <code>"($)"</code> are now parsed correctly and no longer produce false <code>)</code> errors (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/91">#91</a>)</li>
     <li>Prevent regression of Unknown Directive quick-fix preview crash: keep Intention Preview side-effect free to avoid SideEffectGuard "Side effect not allowed: INVOKE_LATER"</li>
     <li>Add regression test for Unknown Directive quick-fix Intention Preview</li>
     <li>Fix navigation crash on deleted include targets: prevent InvalidVirtualFileAccessException when resolving references to invalid virtual files</li>
@@ -115,7 +116,6 @@ Your ratings and feedback are very important. The feature will appear the faster
 
 <b>2026.1.8 (March, 1, 2026)</b>
 <ul>
-    <li>Fix parsing of quoted capture-group regex with "$" in if condition — patterns like <code>"($)"</code> are now parsed correctly and no longer produce false <code>)</code> errors (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/91">#91</a>)</li>
     <li>Fix variable highlighting in double-quoted strings — $var, ${var}, and $1 capture groups inside "..." are now recognized as variables (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84">#84</a>)</li>
     <li>Fix inspection shortName conflict between free and pro plugins — rename NginxDirectiveValueInspection to NginxDirectiveInspection to avoid PluginException: Short name is not unique when both plugins are installed</li>
     <li>Fix standalone comments (#...) not recognized inside map, geo, num_map, and types blocks (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/83">#83</a>)</li>
