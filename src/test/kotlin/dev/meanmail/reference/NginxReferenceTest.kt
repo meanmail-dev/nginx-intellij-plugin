@@ -1,5 +1,6 @@
 package dev.meanmail.reference
 
+import com.intellij.openapi.application.runWriteAction
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.meanmail.NginxFileType
@@ -122,6 +123,45 @@ class NginxReferenceTest : BasePlatformTestCase() {
 
         assertNotNull("Should resolve nested path", resolved)
         assertEquals("Should resolve to correct nested file", nestedConf, resolved)
+    }
+
+    fun testDeletedFileReferenceDoesNotThrowAndResolvesToNull() {
+        myFixture.tempDirFixture.findOrCreateDir("conf.d")
+        val includedFile = myFixture.addFileToProject(
+            "conf.d/server.conf",
+            """
+            server {
+                listen 80;
+            }
+            """.trimIndent()
+        )
+
+        val config = myFixture.configureByText(
+            NginxFileType.INSTANCE,
+            """
+            http {
+                include conf.d/server.conf;
+            }
+            """.trimIndent()
+        )
+
+        val valueStmt = findValueStmt(config)
+        assertNotNull("Should find value statement", valueStmt)
+        val references = valueStmt!!.references
+        assertTrue("Should have references", references.isNotEmpty())
+
+        runWriteAction {
+            includedFile.virtualFile.delete(this)
+        }
+
+        val resolved = try {
+            references[0].resolve()
+        } catch (t: Throwable) {
+            fail("Resolve should not throw after include file deletion, but got: ${t::class.java.name}: ${t.message}")
+            null
+        }
+
+        assertNull("Deleted file reference should resolve to null", resolved)
     }
 
     private fun findValueStmt(element: PsiElement): PsiElement? {

@@ -105,6 +105,12 @@
 Your ratings and feedback are very important. The feature will appear the faster the more people request it.
 ]]></description>
     <change-notes><![CDATA[
+<b>2026.1.9 (March, 7, 2026)</b>
+<ul>
+    <li>Fix navigation crash on deleted include targets: prevent InvalidVirtualFileAccessException when resolving references to invalid virtual files</li>
+    <li>Add regression test for include reference resolution after target file deletion</li>
+</ul>
+
 <b>2026.1.8 (March, 1, 2026)</b>
 <ul>
     <li>Fix variable highlighting in double-quoted strings — $var, ${var}, and $1 capture groups inside "..." are now recognized as variables (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/84">#84</a>)</li>
