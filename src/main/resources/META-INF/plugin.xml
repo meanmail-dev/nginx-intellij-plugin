@@ -105,6 +105,11 @@
 Your ratings and feedback are very important. The feature will appear the faster the more people request it.
 ]]></description>
     <change-notes><![CDATA[
+<b>2026.1.11 (March, 21, 2026)</b>
+<ul>
+    <li>Suppress incorrect variable highlighting in location URI paths and regex patterns in if conditions — <code>$identifier</code> after <code>~</code>, <code>~*</code>, <code>!~</code>, <code>!~*</code> operators and in location paths is now treated as literal text, not a variable (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/96">#96</a>)</li>
+</ul>
+
 <b>2026.1.10 (March, 7, 2026)</b>
 <ul>
     <li>Fix UI freeze (DiffTree.build stack overflow) on large nginx config files by making block element types lazy-parseable — only the changed block is reparsed instead of the entire file</li>
