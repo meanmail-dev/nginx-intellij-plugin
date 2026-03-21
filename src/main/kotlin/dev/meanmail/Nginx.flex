@@ -478,7 +478,7 @@ DQUOTE="\""
           if (endsWithUnbalancedParen(ifQuotedTokenBuffer.toString())) { ifCloseParenInString = true; }
           yypop(); prevConcatEligible = true; return QUOTE;
       }
-    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return VARIABLE; }
+    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return ifAfterRegexOp ? STRING : VARIABLE; }
     \$                       { ifQuotedTokenBuffer.append(yytext().toString()); return STRING; }
     {STRING}                 {
           ifQuotedTokenBuffer.append(yytext().toString());
@@ -491,7 +491,7 @@ DQUOTE="\""
           if (endsWithUnbalancedParen(ifQuotedTokenBuffer.toString())) { ifCloseParenInString = true; }
           yypop(); prevConcatEligible = true; return DQUOTE;
       }
-    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return VARIABLE; }
+    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return ifAfterRegexOp ? DQSTRING : VARIABLE; }
     \$                       { ifQuotedTokenBuffer.append(yytext().toString()); return DQSTRING; }
     {DQSTRING}               {
           ifQuotedTokenBuffer.append(yytext().toString());

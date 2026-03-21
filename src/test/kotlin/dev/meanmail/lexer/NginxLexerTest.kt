@@ -968,7 +968,8 @@ class NginxLexerTest {
     }
 
     @Test
-    fun testIfRegexQuotedRhsDollarIsVariable() {
+    fun testIfRegexQuotedRhsDollarIsNotVariable() {
+        // nginx does NOT interpolate variables in regex patterns, even when quoted
         val tokens = tokenize("if (${'$'}var ~ \"${'$'}arg_ua\") {}")
         val expectedTokens = listOf(
             "IF" to "if",
@@ -976,7 +977,7 @@ class NginxLexerTest {
             "VARIABLE" to "${'$'}var",
             "BINARY_OPERATOR" to "~",
             "DQUOTE" to "\"",
-            "VARIABLE" to "${'$'}arg_ua",
+            "DQSTRING" to "${'$'}arg_ua",
             "DQUOTE" to "\"",
             "RPAREN" to ")",
             "LBRACE" to "{",
