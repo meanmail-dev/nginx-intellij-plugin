@@ -370,6 +370,26 @@ Your ratings and feedback are very important. The feature will appear the faster
         <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
         <notificationGroup id="Nginx Pro Features" displayType="BALLOON" isLogByDefault="false"/>
         <postFormatProcessor implementation="dev.meanmail.codeInsight.NginxProFormatNotifier"/>
+
+        <!-- Analytics services -->
+        <applicationService serviceInterface="dev.meanmail.analytics.AnalyticsConfig"
+                            serviceImplementation="dev.meanmail.analytics.NginxAnalyticsConfig"/>
+        <applicationService serviceInterface="dev.meanmail.analytics.AnalyticsSettings"
+                            serviceImplementation="dev.meanmail.analytics.NginxAnalyticsSettings"/>
+        <applicationService serviceImplementation="dev.meanmail.analytics.AnalyticsService"/>
+        <applicationService serviceInterface="dev.meanmail.analytics.MilestoneTracker"
+                            serviceImplementation="dev.meanmail.analytics.NginxMilestoneTracker"/>
+        <projectService serviceImplementation="dev.meanmail.analytics.FeatureUsageCounterService"/>
+
+        <postStartupActivity implementation="dev.meanmail.analytics.AnalyticsConsentActivity"/>
+        <notificationGroup id="Nginx Analytics"
+                           displayType="STICKY_BALLOON"
+                           isLogByDefault="false"/>
+        <applicationConfigurable
+                instance="dev.meanmail.analytics.AnalyticsSettingsConfigurable"
+                id="dev.meanmail.analytics.AnalyticsSettings"
+                displayName="Nginx Analytics"
+                parentId="tools"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij.lang">

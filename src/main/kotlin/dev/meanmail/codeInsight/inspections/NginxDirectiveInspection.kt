@@ -15,6 +15,7 @@ import dev.meanmail.directives.catalog.any
 import dev.meanmail.directives.catalog.findDirectives
 import dev.meanmail.directives.catalog.self
 import dev.meanmail.directives.determineFileContext
+import dev.meanmail.analytics.AnalyticsTracker
 import dev.meanmail.psi.DirectiveStmt
 
 class NginxDirectiveInspection : LocalInspectionTool() {
@@ -47,6 +48,10 @@ class NginxDirectiveInspection : LocalInspectionTool() {
                     validateDirectiveContext(directiveStmt, nameElement, matchingDirectives, manager, isOnTheFly)
                 )
             }
+        }
+
+        if (problems.isNotEmpty()) {
+            AnalyticsTracker.onInspectionProblemsFound(file.project, problems.size)
         }
 
         return problems.toTypedArray()
@@ -151,6 +156,8 @@ class NginxDirectiveInspection : LocalInspectionTool() {
             if (IntentionPreviewUtils.isPreviewElement(descriptor.psiElement)) {
                 return
             }
+
+            AnalyticsTracker.onQuickFixApplied(project)
 
             val url = "https://meanmail.dev/nginx-pro?utm_source=free_plugin&utm_medium=quickfix&utm_term=$directiveName"
 
