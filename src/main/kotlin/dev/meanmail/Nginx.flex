@@ -95,6 +95,16 @@ import static dev.meanmail.psi.Types.*;
       return depth < 0;
   }
 
+  // Suppress VARIABLE tokens in location path context (issue #96).
+  // When the current directive is 'location', all $identifier patterns in the path
+  // are literal URI text, not nginx variables.
+  boolean inLocationPath = false;
+
+  // Suppress VARIABLE tokens in unquoted regex context inside if-conditions (issue #96).
+  // After regex binary operators (~, ~*, !~, !~*), $identifier in unquoted text is
+  // regex content, not an nginx variable. Equality operators (=, !=) do NOT set this flag.
+  boolean ifAfterRegexOp = false;
+
   // Concatenation join handling: emit a synthetic CONCAT_JOIN token
   // between two adjacent atoms (VARIABLE/IDENTIFIER/VALUE/STRING) with no separators.
   boolean joinPending = false;           // true when we pushed back current token to emit CONCAT_JOIN
@@ -200,9 +210,9 @@ DQUOTE="\""
     geo                      { yypush(GEO_STATE); return GEO; }
     types                    { yypush(TYPES_STATE); return TYPES; }
     if                       { yypush(IF_STATE); return IF; }
-    location                 { yypush(DIRECTIVE_STATE); return LOCATION; }
-    {VARIABLE}               { yypush(DIRECTIVE_STATE); return VARIABLE; }
-    {IDENTIFIER}             { yypush(DIRECTIVE_STATE); return IDENTIFIER; }
+    location                 { inLocationPath = true; yypush(DIRECTIVE_STATE); return LOCATION; }
+    {VARIABLE}               { inLocationPath = false; yypush(DIRECTIVE_STATE); return VARIABLE; }
+    {IDENTIFIER}             { inLocationPath = false; yypush(DIRECTIVE_STATE); return IDENTIFIER; }
     {RBRACE}                 { prevConcatEligible = false; joinPending = false; return RBRACE; }
 }
 
@@ -224,7 +234,7 @@ DQUOTE="\""
     }
     {VARIABLE}               {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        joinPending = false; prevConcatEligible = true; return VARIABLE;
+        joinPending = false; prevConcatEligible = true; return inLocationPath ? VALUE : VARIABLE;
     }
     {IDENTIFIER}             {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
@@ -233,8 +243,8 @@ DQUOTE="\""
     {CARET_TILDE}            { joinPending = false; prevConcatEligible = false; return CARET_TILDE; }
     {EQUAL}                  { joinPending = false; prevConcatEligible = false; return EQUAL; }
     {BINARY_OPERATOR}        { joinPending = false; prevConcatEligible = false; return BINARY_OPERATOR; }
-    {SEMICOLON}              { yypop(); joinPending = false; prevConcatEligible = false; return SEMICOLON; }
-    {LBRACE}                 { yypop(); joinPending = false; prevConcatEligible = false; return LBRACE; }
+    {SEMICOLON}              { yypop(); joinPending = false; prevConcatEligible = false; inLocationPath = false; return SEMICOLON; }
+    {LBRACE}                 { yypop(); joinPending = false; prevConcatEligible = false; inLocationPath = false; return LBRACE; }
     {QUOTE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = false; yypush(STRING_STATE); return QUOTE;
@@ -272,64 +282,67 @@ DQUOTE="\""
     }
     {VALUE}                  {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        // Check if the matched VALUE contains a $variable reference ($var, ${var}, $1)
-        // that should be a separate VARIABLE token due to longest-match consuming too much.
-        String text = yytext().toString();
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '$' && i + 1 < text.length()) {
-                char next = text.charAt(i + 1);
-                if (next == '{') {
-                    // Braced variable ${VAR} — split VALUE before it
-                    int closeBrace = text.indexOf('}', i + 2);
-                    if (closeBrace >= 0) {
+        // In location path context, $identifier is literal URI text — skip variable splitting.
+        if (!inLocationPath) {
+            // Check if the matched VALUE contains a $variable reference ($var, ${var}, $1)
+            // that should be a separate VARIABLE token due to longest-match consuming too much.
+            String text = yytext().toString();
+            for (int i = 0; i < text.length(); i++) {
+                if (text.charAt(i) == '$' && i + 1 < text.length()) {
+                    char next = text.charAt(i + 1);
+                    if (next == '{') {
+                        // Braced variable ${VAR} — split VALUE before it
+                        int closeBrace = text.indexOf('}', i + 2);
+                        if (closeBrace >= 0) {
+                            if (i > 0) {
+                                yypushback(text.length() - i);
+                                joinPending = false; prevConcatEligible = true; return VALUE;
+                            } else {
+                                yypushback(text.length() - closeBrace - 1);
+                                joinPending = false; prevConcatEligible = true; return VARIABLE;
+                            }
+                        }
+                        continue;
+                    }
+                    if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') || next == '_') {
+                        // Bare $variable found — split VALUE before it
                         if (i > 0) {
                             yypushback(text.length() - i);
                             joinPending = false; prevConcatEligible = true; return VALUE;
                         } else {
-                            yypushback(text.length() - closeBrace - 1);
+                            // VALUE starts with $variable — find end of variable name and push back the rest
+                            int varEnd = i + 1;
+                            while (varEnd < text.length()) {
+                                char c = text.charAt(varEnd);
+                                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9')) {
+                                    varEnd++;
+                                } else {
+                                    break;
+                                }
+                            }
+                            yypushback(text.length() - varEnd);
                             joinPending = false; prevConcatEligible = true; return VARIABLE;
                         }
                     }
-                    continue;
-                }
-                if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') || next == '_') {
-                    // Bare $variable found — split VALUE before it
-                    if (i > 0) {
-                        yypushback(text.length() - i);
-                        joinPending = false; prevConcatEligible = true; return VALUE;
-                    } else {
-                        // VALUE starts with $variable — find end of variable name and push back the rest
-                        int varEnd = i + 1;
-                        while (varEnd < text.length()) {
-                            char c = text.charAt(varEnd);
-                            if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9')) {
-                                varEnd++;
-                            } else {
-                                break;
+                    if (next >= '0' && next <= '9') {
+                        // Capture group reference $1, $2, etc. — split VALUE before it
+                        if (i > 0) {
+                            yypushback(text.length() - i);
+                            joinPending = false; prevConcatEligible = true; return VALUE;
+                        } else {
+                            // VALUE starts with $N — find end of digits and push back the rest
+                            int varEnd = i + 1;
+                            while (varEnd < text.length()) {
+                                char c = text.charAt(varEnd);
+                                if (c >= '0' && c <= '9') {
+                                    varEnd++;
+                                } else {
+                                    break;
+                                }
                             }
+                            yypushback(text.length() - varEnd);
+                            joinPending = false; prevConcatEligible = true; return VARIABLE;
                         }
-                        yypushback(text.length() - varEnd);
-                        joinPending = false; prevConcatEligible = true; return VARIABLE;
-                    }
-                }
-                if (next >= '0' && next <= '9') {
-                    // Capture group reference $1, $2, etc. — split VALUE before it
-                    if (i > 0) {
-                        yypushback(text.length() - i);
-                        joinPending = false; prevConcatEligible = true; return VALUE;
-                    } else {
-                        // VALUE starts with $N — find end of digits and push back the rest
-                        int varEnd = i + 1;
-                        while (varEnd < text.length()) {
-                            char c = text.charAt(varEnd);
-                            if (c >= '0' && c <= '9') {
-                                varEnd++;
-                            } else {
-                                break;
-                            }
-                        }
-                        yypushback(text.length() - varEnd);
-                        joinPending = false; prevConcatEligible = true; return VARIABLE;
                     }
                 }
             }
@@ -344,6 +357,7 @@ DQUOTE="\""
           // Enter condition parentheses; reset nested depth
           ifParenDepth = 0;
           ifCloseParenInString = false;
+          ifAfterRegexOp = false;
           yypush(IF_PAREN_STATE);
           return LPAREN;
       }
@@ -363,6 +377,7 @@ DQUOTE="\""
               ifCloseParenInString = false;
               return BAD_CHARACTER;
           }
+          ifAfterRegexOp = false;
           yypop();
           return RPAREN;
       }
@@ -382,7 +397,8 @@ DQUOTE="\""
       }
     {VARIABLE}                    {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-          joinPending = false; prevConcatEligible = true; return VARIABLE;
+          joinPending = false; prevConcatEligible = true;
+          return ifAfterRegexOp ? VALUE : VARIABLE;
       }
     {IDENTIFIER}                  {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
@@ -391,7 +407,12 @@ DQUOTE="\""
     // Keep '=' as a dedicated EQUAL token inside if (...) to allow simple comparisons
     {EQUAL}                       { return EQUAL; }
     {UNARY_OPERATOR}              { return UNARY_OPERATOR; }
-    {BINARY_OPERATOR}             { return BINARY_OPERATOR; }
+    {BINARY_OPERATOR}             {
+          // Set regex flag for ~ ~* !~ !~* operators; clear for = != (issue #96)
+          ifAfterRegexOp = yytext().toString().contains("~");
+          joinPending = false; prevConcatEligible = false;
+          return BINARY_OPERATOR;
+      }
     {IF_VALUE}                    {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
           joinPending = false; prevConcatEligible = true; return VALUE;

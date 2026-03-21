@@ -788,4 +788,245 @@ class NginxLexerTest {
             assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
         }
     }
+
+    // Issue #96: $identifier in location path is literal URI text, not a variable
+
+    @Test
+    fun testLocationPathWithDollarIdentifier() {
+        val tokens = tokenize("location /${'$'}a {}")
+        val expectedTokens = listOf(
+            "LOCATION" to "location",
+            "VALUE" to "/${'$'}a",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testLocationPathStandaloneDollarIdentifier() {
+        val tokens = tokenize("location ${'$'}a {}")
+        val expectedTokens = listOf(
+            "LOCATION" to "location",
+            "VALUE" to "${'$'}a",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testLocationRegexModifierDollarIsValue() {
+        val tokens = tokenize("location ~ /path${'$'}a {}")
+        val expectedTokens = listOf(
+            "LOCATION" to "location",
+            "BINARY_OPERATOR" to "~",
+            "VALUE" to "/path${'$'}a",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testDirectiveAfterLocationHasVariables() {
+        val tokens = tokenize(
+            """
+            location /${'$'}a {
+                proxy_pass ${'$'}host;
+            }
+        """.trimIndent()
+        )
+        val expectedTokens = listOf(
+            "LOCATION" to "location",
+            "VALUE" to "/${'$'}a",
+            "LBRACE" to "{",
+            "IDENTIFIER" to "proxy_pass",
+            "VARIABLE" to "${'$'}host",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    // Issue #96: $identifier after regex operator in if condition is regex text, not a variable
+
+    @Test
+    fun testIfRegexRhsDollarIsValue() {
+        val tokens = tokenize("if (${'$'}var ~ ${'$'}arg_ua) {}")
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}var",
+            "BINARY_OPERATOR" to "~",
+            "VALUE" to "${'$'}arg_ua",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testIfRegexStarRhsDollarIsValue() {
+        val tokens = tokenize("if (${'$'}var ~* ${'$'}arg_ua) {}")
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}var",
+            "BINARY_OPERATOR" to "~*",
+            "VALUE" to "${'$'}arg_ua",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testIfNotRegexRhsDollarIsValue() {
+        val tokens = tokenize("if (${'$'}var !~ ${'$'}arg_ua) {}")
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}var",
+            "BINARY_OPERATOR" to "!~",
+            "VALUE" to "${'$'}arg_ua",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testIfEqualityRhsDollarIsVariable() {
+        val tokens = tokenize("if (${'$'}var = ${'$'}arg_ua) {}")
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}var",
+            "EQUAL" to "=",
+            "VARIABLE" to "${'$'}arg_ua",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testIfNotEqualRhsDollarIsVariable() {
+        val tokens = tokenize("if (${'$'}var != ${'$'}arg_ua) {}")
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}var",
+            "BINARY_OPERATOR" to "!=",
+            "VARIABLE" to "${'$'}arg_ua",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testIfRegexQuotedRhsDollarIsVariable() {
+        val tokens = tokenize("if (${'$'}var ~ \"${'$'}arg_ua\") {}")
+        val expectedTokens = listOf(
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}var",
+            "BINARY_OPERATOR" to "~",
+            "DQUOTE" to "\"",
+            "VARIABLE" to "${'$'}arg_ua",
+            "DQUOTE" to "\"",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
+
+    @Test
+    fun testIssue96FullExample() {
+        // Full example from issue #96
+        val tokens = tokenize(
+            """
+            server {
+                location /${'$'}a {
+                    if (${'$'}http_user_agent ~ ${'$'}arg_ua) {
+                        return 401;
+                    }
+                }
+            }
+        """.trimIndent()
+        )
+        val expectedTokens = listOf(
+            "IDENTIFIER" to "server",
+            "LBRACE" to "{",
+            "LOCATION" to "location",
+            "VALUE" to "/${'$'}a",
+            "LBRACE" to "{",
+            "IF" to "if",
+            "LPAREN" to "(",
+            "VARIABLE" to "${'$'}http_user_agent",
+            "BINARY_OPERATOR" to "~",
+            "VALUE" to "${'$'}arg_ua",
+            "RPAREN" to ")",
+            "LBRACE" to "{",
+            "IDENTIFIER" to "return",
+            "VALUE" to "401",
+            "SEMICOLON" to ";",
+            "RBRACE" to "}",
+            "RBRACE" to "}",
+            "RBRACE" to "}"
+        )
+        assertEquals("Token count does not match", expectedTokens.size, tokens.size)
+        expectedTokens.forEachIndexed { index, (expectedType, expectedValue) ->
+            assertEquals("Token type does not match at index $index", expectedType, tokens[index].first)
+            assertEquals("Token value does not match at index $index", expectedValue, tokens[index].second)
+        }
+    }
 }
