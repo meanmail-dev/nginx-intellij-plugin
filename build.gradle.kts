@@ -27,6 +27,7 @@ version = config("version")
 
 dependencies {
     implementation(project(":directive-catalog"))
+    implementation(project(":analytics"))
     testImplementation(libs.junit)
     testImplementation("net.java.dev.jna:jna:5.17.0")
 
