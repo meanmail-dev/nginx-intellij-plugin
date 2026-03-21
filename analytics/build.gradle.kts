@@ -25,9 +25,25 @@ intellijPlatform {
 
 // This module is a library, not a standalone plugin — disable plugin-specific tasks
 tasks.configureEach {
-    if (name == "prepareJarSearchableOptions" ||
-        name == "verifyPluginConfiguration" ||
-        name == "verifyPlugin"
+    if (name in setOf(
+            "buildPlugin",
+            "buildSearchableOptions",
+            "jarSearchableOptions",
+            "prepareJarSearchableOptions",
+            "prepareSandbox",
+            "prepareTestSandbox",
+            "prepareTestIdePerformanceSandbox",
+            "patchPluginXml",
+            "publishPlugin",
+            "signPlugin",
+            "runIde",
+            "testIdePerformance",
+            "verifyPlugin",
+            "verifyPluginConfiguration",
+            "verifyPluginProjectConfiguration",
+            "verifyPluginSignature",
+            "verifyPluginStructure",
+        )
     ) {
         enabled = false
     }
