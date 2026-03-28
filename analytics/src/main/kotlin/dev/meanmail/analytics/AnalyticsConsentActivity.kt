@@ -4,6 +4,7 @@ import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
 
@@ -38,10 +39,12 @@ abstract class AnalyticsConsentActivity : ProjectActivity {
                 settings.consentState = ConsentState.ACCEPTED
                 notification.expire()
                 getMilestoneTracker().ensureFirstLoadTimestamp()
-                val service = getAnalyticsService()
-                service.identify()
-                service.capture("plugin_loaded")
-                service.capture("analytics_consent", mapOf("consent" to "accepted"))
+                ApplicationManager.getApplication().executeOnPooledThread {
+                    val service = getAnalyticsService()
+                    service.identify()
+                    service.capture("plugin_loaded")
+                    service.capture("analytics_consent", mapOf("consent" to "accepted"))
+                }
             }
         })
 

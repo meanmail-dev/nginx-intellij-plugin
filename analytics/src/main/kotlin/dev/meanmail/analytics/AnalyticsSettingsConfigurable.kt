@@ -1,5 +1,6 @@
 package dev.meanmail.analytics
 
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.options.Configurable
 import java.awt.BorderLayout
 import javax.swing.JCheckBox
@@ -45,9 +46,11 @@ abstract class AnalyticsSettingsConfigurable : Configurable {
         }
 
         if (!wasEnabled && settings.isEnabled) {
-            val service = getAnalyticsService()
-            service.identify()
-            service.capture("analytics_enabled_from_settings")
+            ApplicationManager.getApplication().executeOnPooledThread {
+                val service = getAnalyticsService()
+                service.identify()
+                service.capture("analytics_enabled_from_settings")
+            }
         }
     }
 }
