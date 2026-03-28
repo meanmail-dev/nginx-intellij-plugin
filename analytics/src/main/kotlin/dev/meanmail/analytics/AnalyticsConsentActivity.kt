@@ -7,17 +7,20 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
 
-class AnalyticsConsentActivity : ProjectActivity {
+abstract class AnalyticsConsentActivity : ProjectActivity {
+    protected abstract fun getConfig(): AnalyticsConfig
+    protected abstract fun getSettings(): AnalyticsSettings
+    protected abstract fun getMilestoneTracker(): MilestoneTracker
+    protected abstract fun getAnalyticsService(): AnalyticsService
+
     override suspend fun execute(project: Project) {
-        val settings = AnalyticsSettings.getInstance()
-        val config = AnalyticsConfig.getInstance()
+        val settings = getSettings()
+        val config = getConfig()
 
         if (settings.consentState != ConsentState.NOT_ASKED) {
             if (settings.isEnabled) {
-                MilestoneTracker.getInstance().ensureFirstLoadTimestamp()
-                AnalyticsService.getInstance().capture(
-                    "plugin_loaded", LicenseHelper.getLicenseProperties()
-                )
+                getMilestoneTracker().ensureFirstLoadTimestamp()
+                getAnalyticsService().capture("plugin_loaded")
             }
             return
         }
@@ -34,10 +37,10 @@ class AnalyticsConsentActivity : ProjectActivity {
             override fun actionPerformed(e: AnActionEvent) {
                 settings.consentState = ConsentState.ACCEPTED
                 notification.expire()
-                MilestoneTracker.getInstance().ensureFirstLoadTimestamp()
-                val service = AnalyticsService.getInstance()
+                getMilestoneTracker().ensureFirstLoadTimestamp()
+                val service = getAnalyticsService()
                 service.identify()
-                service.capture("plugin_loaded", LicenseHelper.getLicenseProperties())
+                service.capture("plugin_loaded")
                 service.capture("analytics_consent", mapOf("consent" to "accepted"))
             }
         })

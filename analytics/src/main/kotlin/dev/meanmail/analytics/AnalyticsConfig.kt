@@ -1,7 +1,5 @@
 package dev.meanmail.analytics
 
-import com.intellij.openapi.components.service
-
 interface AnalyticsConfig {
     /** PostHog project API key */
     val posthogApiKey: String
@@ -49,8 +47,4 @@ interface AnalyticsConfig {
                 "No personal data or file contents are collected. " +
                 "This helps us understand which IDE versions and platforms to prioritize." +
                 "</p></body></html>"
-
-    companion object {
-        fun getInstance(): AnalyticsConfig = service()
-    }
 }

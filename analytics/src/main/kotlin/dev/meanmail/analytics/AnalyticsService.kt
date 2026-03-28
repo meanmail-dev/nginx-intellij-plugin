@@ -5,8 +5,6 @@ import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.PermanentInstallationID
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.ui.LicensingFacade
@@ -17,10 +15,10 @@ import java.security.MessageDigest
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 
-@Service
-class AnalyticsService : Disposable {
-    private val settings = AnalyticsSettings.getInstance()
-    private val config = AnalyticsConfig.getInstance()
+open class AnalyticsService(
+    private val config: AnalyticsConfig,
+    private val settings: AnalyticsSettings,
+) : Disposable {
     private val gson = Gson()
     private val eventQueue = ConcurrentLinkedQueue<Map<String, Any?>>()
 
@@ -40,6 +38,7 @@ class AnalyticsService : Disposable {
 
         val allProperties = buildMap {
             putAll(collectEnvironmentProperties())
+            putAll(LicenseHelper.getLicenseProperties(config))
             putAll(properties)
         }
 
@@ -65,8 +64,11 @@ class AnalyticsService : Disposable {
         val distinctId = getDistinctId()
         val installationId = PermanentInstallationID.get()
 
+        val environmentAndLicense = collectEnvironmentProperties() + LicenseHelper.getLicenseProperties(config)
+
         val identifyProperties = buildMap {
-            put("\$set", collectEnvironmentProperties())
+            putAll(environmentAndLicense)
+            put("\$set", environmentAndLicense)
             if (distinctId != installationId) {
                 put("\$anon_distinct_id", installationId)
             }
@@ -154,8 +156,6 @@ class AnalyticsService : Disposable {
     companion object {
         private val LOG = logger<AnalyticsService>()
         private const val MAX_QUEUE_SIZE = 50
-
-        fun getInstance(): AnalyticsService = service()
 
         private fun sha256(input: String): String {
             val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())

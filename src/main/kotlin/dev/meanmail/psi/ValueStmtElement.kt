@@ -6,7 +6,7 @@ import com.intellij.openapi.util.NlsSafe
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
-import dev.meanmail.analytics.AnalyticsTracker
+import dev.meanmail.analytics.NginxAnalyticsTracker
 
 abstract class ValueStmtElement(node: ASTNode) : NginxCompositeElementBase(node), ReferenceElement {
     override val ref: String
@@ -44,7 +44,7 @@ abstract class ValueStmtElement(node: ASTNode) : NginxCompositeElementBase(node)
         if (reference.resolve() == null) {
             return null
         }
-        AnalyticsTracker.onNavigationResolved(project)
+        NginxAnalyticsTracker.onNavigationResolved(project)
         return reference
     }
 }

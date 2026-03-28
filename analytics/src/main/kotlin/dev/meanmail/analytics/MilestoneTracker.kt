@@ -1,7 +1,6 @@
 package dev.meanmail.analytics
 
 import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.service
 
 class MilestoneTrackerState {
     var firedMilestones: MutableSet<String> = mutableSetOf()
@@ -29,8 +28,11 @@ abstract class MilestoneTracker : PersistentStateComponent<MilestoneTrackerState
             state.firstLoadTimestamp = value
         }
 
+    protected abstract fun getSettings(): AnalyticsSettings
+    protected abstract fun getAnalyticsService(): AnalyticsService
+
     fun recordMilestone(milestone: String) {
-        if (!AnalyticsSettings.getInstance().isEnabled) return
+        if (!getSettings().isEnabled) return
         if (milestone in firedMilestones) return
 
         firedMilestones.add(milestone)
@@ -44,18 +46,13 @@ abstract class MilestoneTracker : PersistentStateComponent<MilestoneTrackerState
         val properties = buildMap {
             put("milestone", milestone)
             put("minutes_since_first_load", minutesSinceFirstLoad)
-            putAll(LicenseHelper.getLicenseProperties())
         }
-        AnalyticsService.getInstance().capture("trial_milestone", properties)
+        getAnalyticsService().capture("trial_milestone", properties)
     }
 
     fun ensureFirstLoadTimestamp() {
         if (firstLoadTimestamp == 0L) {
             firstLoadTimestamp = System.currentTimeMillis()
         }
-    }
-
-    companion object {
-        fun getInstance(): MilestoneTracker = service()
     }
 }

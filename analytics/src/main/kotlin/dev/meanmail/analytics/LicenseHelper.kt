@@ -5,14 +5,11 @@ import java.util.Date
 import java.util.concurrent.TimeUnit
 
 object LicenseHelper {
-    private val config: AnalyticsConfig
-        get() = AnalyticsConfig.getInstance()
-
     enum class LicenseType {
         TRIAL, PAID, EXPIRED, FREE, NONE
     }
 
-    fun getLicenseType(): LicenseType {
+    fun getLicenseType(config: AnalyticsConfig): LicenseType {
         val productCode = config.productCode
             ?: return LicenseType.FREE
 
@@ -36,13 +33,13 @@ object LicenseHelper {
         return LicenseType.NONE
     }
 
-    fun getTrialDay(): Int? {
-        if (getLicenseType() != LicenseType.TRIAL) return null
-        val daysRemaining = getDaysUntilExpiration() ?: return null
+    fun getTrialDay(config: AnalyticsConfig): Int? {
+        if (getLicenseType(config) != LicenseType.TRIAL) return null
+        val daysRemaining = getDaysUntilExpiration(config) ?: return null
         return (config.trialDurationDays - daysRemaining).coerceIn(1, config.trialDurationDays)
     }
 
-    fun getDaysUntilExpiration(): Int? {
+    fun getDaysUntilExpiration(config: AnalyticsConfig): Int? {
         val productCode = config.productCode ?: return null
         val facade = LicensingFacade.getInstance() ?: return null
         val expirationDate = facade.getExpirationDate(productCode) ?: return null
@@ -51,11 +48,11 @@ object LicenseHelper {
         return TimeUnit.MILLISECONDS.toDays(diff).toInt()
     }
 
-    fun getLicenseProperties(): Map<String, Any?> {
+    fun getLicenseProperties(config: AnalyticsConfig): Map<String, Any?> {
         return buildMap {
-            put("license_type", getLicenseType().name.lowercase())
-            put("trial_day", getTrialDay())
-            put("days_until_expiration", getDaysUntilExpiration())
+            put("license_type", getLicenseType(config).name.lowercase())
+            put("trial_day", getTrialDay(config))
+            put("days_until_expiration", getDaysUntilExpiration(config))
         }
     }
 }

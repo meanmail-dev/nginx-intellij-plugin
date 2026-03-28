@@ -1,15 +1,12 @@
 package dev.meanmail.analytics
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.components.Service
-import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.util.concurrency.AppExecutorUtil
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
-@Service(Service.Level.PROJECT)
-class FeatureUsageCounterService(
+abstract class FeatureUsageCounterService(
     @Suppress("unused") private val project: Project
 ) : Disposable {
     private val inspectionsFound = AtomicInteger(0)
@@ -19,6 +16,9 @@ class FeatureUsageCounterService(
 
     private val flushTask = AppExecutorUtil.getAppScheduledExecutorService()
         .scheduleWithFixedDelay(::flush, 30, 30, TimeUnit.MINUTES)
+
+    protected abstract fun getSettings(): AnalyticsSettings
+    protected abstract fun getAnalyticsService(): AnalyticsService
 
     fun incrementInspections(count: Int) {
         inspectionsFound.addAndGet(count)
@@ -37,7 +37,7 @@ class FeatureUsageCounterService(
     }
 
     private fun flush() {
-        if (!AnalyticsSettings.getInstance().isEnabled) return
+        if (!getSettings().isEnabled) return
 
         val inspections = inspectionsFound.getAndSet(0)
         val fixes = quickFixesApplied.getAndSet(0)
@@ -51,17 +51,12 @@ class FeatureUsageCounterService(
             put("quick_fixes_applied", fixes)
             put("completions_accepted", completions)
             put("navigations_used", navigations)
-            putAll(LicenseHelper.getLicenseProperties())
         }
-        AnalyticsService.getInstance().capture("feature_value_delivered", properties)
+        getAnalyticsService().capture("feature_value_delivered", properties)
     }
 
     override fun dispose() {
         flushTask.cancel(false)
         flush()
-    }
-
-    companion object {
-        fun getInstance(project: Project): FeatureUsageCounterService = project.service()
     }
 }

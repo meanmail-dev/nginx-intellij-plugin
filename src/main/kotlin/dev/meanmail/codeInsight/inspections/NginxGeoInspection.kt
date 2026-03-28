@@ -10,7 +10,7 @@ import dev.meanmail.NginxFileType
 import dev.meanmail.directives.catalog.nginx.http.geo
 import dev.meanmail.directives.catalog.nginx.http.http
 import dev.meanmail.directives.catalog.nginx.stream.stream
-import dev.meanmail.analytics.AnalyticsTracker
+import dev.meanmail.analytics.NginxAnalyticsTracker
 import dev.meanmail.psi.DirectiveStmt
 
 class NginxGeoInspection : LocalInspectionTool() {
@@ -96,7 +96,7 @@ class NginxGeoInspection : LocalInspectionTool() {
         }
 
         if (problems.isNotEmpty()) {
-            AnalyticsTracker.onInspectionProblemsFound(file.project, problems.size)
+            NginxAnalyticsTracker.onInspectionProblemsFound(file.project, problems.size)
         }
 
         return problems.toTypedArray()

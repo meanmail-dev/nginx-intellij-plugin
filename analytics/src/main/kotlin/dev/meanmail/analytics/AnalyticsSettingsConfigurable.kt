@@ -7,18 +7,21 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 
-class AnalyticsSettingsConfigurable : Configurable {
-    private val settings = AnalyticsSettings.getInstance()
-    private val config = AnalyticsConfig.getInstance()
+abstract class AnalyticsSettingsConfigurable : Configurable {
+    protected abstract fun getConfig(): AnalyticsConfig
+    protected abstract fun getSettings(): AnalyticsSettings
+    protected abstract fun getAnalyticsService(): AnalyticsService
+
     private var enabledCheckBox: JCheckBox? = null
 
-    override fun getDisplayName(): String = config.settingsDisplayName
+    override fun getDisplayName(): String = getConfig().settingsDisplayName
 
     override fun createComponent(): JComponent {
+        val config = getConfig()
         val panel = JPanel(BorderLayout())
 
         enabledCheckBox = JCheckBox(config.checkboxLabel).apply {
-            isSelected = settings.isEnabled
+            isSelected = getSettings().isEnabled
         }
         panel.add(enabledCheckBox!!, BorderLayout.NORTH)
 
@@ -29,10 +32,11 @@ class AnalyticsSettingsConfigurable : Configurable {
     }
 
     override fun isModified(): Boolean {
-        return enabledCheckBox?.isSelected != settings.isEnabled
+        return enabledCheckBox?.isSelected != getSettings().isEnabled
     }
 
     override fun apply() {
+        val settings = getSettings()
         val wasEnabled = settings.isEnabled
         settings.consentState = if (enabledCheckBox?.isSelected == true) {
             ConsentState.ACCEPTED
@@ -41,7 +45,7 @@ class AnalyticsSettingsConfigurable : Configurable {
         }
 
         if (!wasEnabled && settings.isEnabled) {
-            val service = AnalyticsService.getInstance()
+            val service = getAnalyticsService()
             service.identify()
             service.capture("analytics_enabled_from_settings")
         }

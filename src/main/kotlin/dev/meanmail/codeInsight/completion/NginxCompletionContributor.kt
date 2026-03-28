@@ -5,7 +5,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.util.findParentOfType
 import com.intellij.util.ProcessingContext
-import dev.meanmail.analytics.AnalyticsTracker
+import dev.meanmail.analytics.NginxAnalyticsTracker
 import dev.meanmail.directives.catalog.Directive
 import dev.meanmail.directives.catalog.findDirectives
 import dev.meanmail.psi.DirectiveStmt
@@ -66,7 +66,7 @@ class DirectiveNameCompletionProvider : CompletionProvider<CompletionParameters>
                 .withTypeText(directive.description)
                 .withPresentableText(directive.name)
                 .withInsertHandler { insertionContext, _ ->
-                    AnalyticsTracker.onCompletionAccepted(insertionContext.project)
+                    NginxAnalyticsTracker.onCompletionAccepted(insertionContext.project)
                 }
 
             result.addElement(lookupElement)

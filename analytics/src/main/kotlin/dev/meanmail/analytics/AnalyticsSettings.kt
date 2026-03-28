@@ -1,7 +1,6 @@
 package dev.meanmail.analytics
 
 import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.service
 
 class AnalyticsSettingsState {
     var consentState: ConsentState = ConsentState.NOT_ASKED
@@ -24,8 +23,4 @@ abstract class AnalyticsSettings : PersistentStateComponent<AnalyticsSettingsSta
 
     val isEnabled: Boolean
         get() = consentState == ConsentState.ACCEPTED
-
-    companion object {
-        fun getInstance(): AnalyticsSettings = service()
-    }
 }
