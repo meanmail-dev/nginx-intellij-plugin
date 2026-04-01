@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.startup.ProjectActivity
+import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class AnalyticsConsentActivity : ProjectActivity {
     protected abstract fun getConfig(): AnalyticsConfig
@@ -26,6 +27,10 @@ abstract class AnalyticsConsentActivity : ProjectActivity {
             return
         }
 
+        if (!consentNotificationShown.compareAndSet(false, true)) {
+            return
+        }
+
         val notification = NotificationGroupManager.getInstance()
             .getNotificationGroup(config.notificationGroupId)
             .createNotification(
@@ -34,8 +39,11 @@ abstract class AnalyticsConsentActivity : ProjectActivity {
                 NotificationType.INFORMATION
             )
 
+        val actionClicked = AtomicBoolean(false)
+
         notification.addAction(object : AnAction("Allow") {
             override fun actionPerformed(e: AnActionEvent) {
+                actionClicked.set(true)
                 settings.consentState = ConsentState.ACCEPTED
                 notification.expire()
                 getMilestoneTracker().ensureFirstLoadTimestamp()
@@ -50,11 +58,22 @@ abstract class AnalyticsConsentActivity : ProjectActivity {
 
         notification.addAction(object : AnAction("Deny") {
             override fun actionPerformed(e: AnActionEvent) {
+                actionClicked.set(true)
                 settings.consentState = ConsentState.DECLINED
                 notification.expire()
             }
         })
 
+        notification.whenExpired {
+            if (!actionClicked.get()) {
+                settings.consentState = ConsentState.DECLINED
+            }
+        }
+
         notification.notify(project)
+    }
+
+    companion object {
+        private val consentNotificationShown = AtomicBoolean(false)
     }
 }
