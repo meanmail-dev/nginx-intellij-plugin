@@ -105,6 +105,11 @@
 Your ratings and feedback are very important. The feature will appear the faster the more people request it.
 ]]></description>
     <change-notes><![CDATA[
+<b>2026.1.13 (April, 1, 2026)</b>
+<ul>
+    <li>Fix analytics consent dialog reappearing after user denial</li>
+</ul>
+
 <b>2026.1.12 (March, 28, 2026)</b>
 <ul>
     <li>Fix UI freeze caused by blocking HTTP requests on EDT when sending analytics data — network calls are now executed on a pooled thread</li>
