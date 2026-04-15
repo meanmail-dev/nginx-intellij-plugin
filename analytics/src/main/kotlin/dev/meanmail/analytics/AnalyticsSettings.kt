@@ -1,6 +1,5 @@
 package dev.meanmail.analytics
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
 
 class AnalyticsSettingsState {
@@ -20,7 +19,6 @@ abstract class AnalyticsSettings : PersistentStateComponent<AnalyticsSettingsSta
         get() = state.consentState
         set(value) {
             state.consentState = value
-            ApplicationManager.getApplication().saveSettings()
         }
 
     val isEnabled: Boolean
