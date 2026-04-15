@@ -33,7 +33,10 @@ dependencies {
 
     intellijPlatform {
         create(config("platformType"), config("platformVersion"))
-        compatiblePlugins(providers.gradleProperty("plugins").map { it.split(',') })
+        val plugins = providers.gradleProperty("plugins").map { it.split(',') }
+        if (plugins.isPresent && plugins.get().isNotEmpty()) {
+            compatiblePlugins(plugins)
+        }
         val platformBundledPlugins = providers.gradleProperty("platformBundledPlugins").map { it.split(',') }
         if (platformBundledPlugins.isPresent && platformBundledPlugins.get().isNotEmpty()) {
             bundledPlugins(platformBundledPlugins)
