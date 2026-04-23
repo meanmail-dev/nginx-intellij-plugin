@@ -1,37 +1,27 @@
 package dev.meanmail.codeInsight
 
 import com.intellij.ide.plugins.PluginManagerConfigurable
-import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
 
 object NginxProPluginInstaller {
     private val proPluginId: PluginId = PluginId.getId("dev.meanmail.plugin.nginx-intellij-plugin-pro")
-    private const val marketplaceSearchQueryPrefix = "Nginx Configuration Pro"
     private val isOpeningDialog = ThreadLocal.withInitial { false }
 
     fun openInstallDialog(project: Project?) {
-        openInstallDialog(project) { targetProject, query ->
-            val configurable = PluginManagerConfigurable()
-            var tabInitialized = false
-            ShowSettingsUtil.getInstance().editConfigurable(targetProject, configurable) {
-                if (!tabInitialized) {
-                    tabInitialized = true
-                    configurable.openMarketplaceTab(query)
-                }
-            }
+        openInstallDialog(project) { targetProject, pluginIds ->
+            PluginManagerConfigurable.showPluginConfigurable(targetProject, pluginIds)
         }
     }
 
-    internal fun openInstallDialog(project: Project?, opener: (Project?, String) -> Unit) {
+    internal fun openInstallDialog(project: Project?, installer: (Project?, Set<PluginId>) -> Unit) {
         if (isOpeningDialog.get()) {
             return
         }
 
         isOpeningDialog.set(true)
         try {
-            val searchQuery = "$marketplaceSearchQueryPrefix ${proPluginId.idString}"
-            opener(project, searchQuery)
+            installer(project, setOf(proPluginId))
         } finally {
             isOpeningDialog.set(false)
         }
