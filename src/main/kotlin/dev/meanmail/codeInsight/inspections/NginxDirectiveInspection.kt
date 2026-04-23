@@ -2,7 +2,6 @@ package dev.meanmail.codeInsight.inspections
 
 import com.intellij.codeInsight.intention.preview.IntentionPreviewUtils
 import com.intellij.codeInspection.*
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
@@ -158,10 +157,7 @@ class NginxDirectiveInspection : LocalInspectionTool() {
             }
 
             NginxAnalyticsTracker.onQuickFixApplied(project)
-
-            ApplicationManager.getApplication().invokeLater {
-                NginxProPluginInstaller.openInstallDialog(project)
-            }
+            NginxProPluginInstaller.openInstallDialog(project)
         }
     }
 }
