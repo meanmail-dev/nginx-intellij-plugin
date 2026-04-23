@@ -29,7 +29,7 @@ dependencies {
     implementation(project(":directive-catalog"))
     implementation(project(":analytics"))
     testImplementation(libs.junit)
-    testImplementation("net.java.dev.jna:jna:5.17.0")
+    testImplementation("net.java.dev.jna:jna:5.18.1")
 
     intellijPlatform {
         create(config("platformType"), config("platformVersion"))
