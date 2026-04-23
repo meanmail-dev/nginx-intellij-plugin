@@ -1,12 +1,17 @@
 package dev.meanmail.codeInsight
 
 import com.intellij.lang.documentation.AbstractDocumentationProvider
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiTreeUtil
 import dev.meanmail.directives.catalog.findDirectives
 import dev.meanmail.psi.DirectiveStmt
 
 class NginxDocumentationProvider : AbstractDocumentationProvider() {
+    companion object {
+        private const val INSTALL_PRO_LINK_ID = "install_nginx_pro"
+    }
 
     override fun generateDoc(element: PsiElement?, originalElement: PsiElement?): String? {
         val directiveStmt = resolveDirectiveStmt(element, originalElement) ?: return null
@@ -34,6 +39,20 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
         }
     }
 
+    override fun getDocumentationElementForLink(
+        psiManager: PsiManager,
+        link: String,
+        context: PsiElement?
+    ): PsiElement? {
+        if (link == INSTALL_PRO_LINK_ID) {
+            ApplicationManager.getApplication().invokeLater {
+                NginxProPluginInstaller.openInstallDialog(context?.project)
+            }
+            return context
+        }
+        return super.getDocumentationElementForLink(psiManager, link, context)
+    }
+
     private fun buildKnownDirectiveDoc(
         name: String,
         directives: List<dev.meanmail.directives.catalog.Directive>
@@ -52,7 +71,7 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
 
         sb.append("<hr/>")
         sb.append("<p>Full documentation with examples is available in ")
-        sb.append("<a href=\"https://meanmail.dev/nginx-pro?utm_source=free_plugin&utm_medium=documentation&utm_term=$name\">")
+        sb.append("<a href=\"psi_element://$INSTALL_PRO_LINK_ID\">")
         sb.append("Nginx Pro</a></p>")
         sb.append("</div>")
 
@@ -64,7 +83,7 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
         sb.append("<div>")
         sb.append("<h2>$name</h2>")
         sb.append("<p>This directive may be supported in ")
-        sb.append("<a href=\"https://meanmail.dev/nginx-pro?utm_source=free_plugin&utm_medium=documentation&utm_term=$name\">")
+        sb.append("<a href=\"psi_element://$INSTALL_PRO_LINK_ID\">")
         sb.append("Nginx Pro</a></p>")
         sb.append("</div>")
 

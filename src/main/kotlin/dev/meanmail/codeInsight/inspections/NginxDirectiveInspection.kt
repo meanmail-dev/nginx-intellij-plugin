@@ -2,7 +2,6 @@ package dev.meanmail.codeInsight.inspections
 
 import com.intellij.codeInsight.intention.preview.IntentionPreviewUtils
 import com.intellij.codeInspection.*
-import com.intellij.ide.BrowserUtil
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
@@ -15,6 +14,7 @@ import dev.meanmail.directives.catalog.any
 import dev.meanmail.directives.catalog.findDirectives
 import dev.meanmail.directives.catalog.self
 import dev.meanmail.directives.determineFileContext
+import dev.meanmail.codeInsight.NginxProPluginInstaller
 import dev.meanmail.analytics.NginxAnalyticsTracker
 import dev.meanmail.psi.DirectiveStmt
 
@@ -159,10 +159,8 @@ class NginxDirectiveInspection : LocalInspectionTool() {
 
             NginxAnalyticsTracker.onQuickFixApplied(project)
 
-            val url = "https://meanmail.dev/nginx-pro?utm_source=free_plugin&utm_medium=quickfix&utm_term=$directiveName"
-
             ApplicationManager.getApplication().invokeLater {
-                BrowserUtil.browse(url)
+                NginxProPluginInstaller.openInstallDialog(project)
             }
         }
     }
