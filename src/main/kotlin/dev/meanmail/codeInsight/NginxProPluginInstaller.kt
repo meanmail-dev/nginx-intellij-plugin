@@ -10,7 +10,7 @@ object NginxProPluginInstaller {
 
     fun openInstallDialog(project: Project?) {
         openInstallDialog(project) { targetProject, pluginIds ->
-            PluginManagerConfigurable.showPluginConfigurable(targetProject, pluginIds)
+            installAndEnableViaAdvertiser(targetProject, pluginIds)
         }
     }
 
@@ -33,5 +33,25 @@ object NginxProPluginInstaller {
 
     internal fun resetDialogOpeningStateForTests() {
         isOpeningDialog.set(false)
+    }
+
+    private fun installAndEnableViaAdvertiser(project: Project?, pluginIds: Set<PluginId>) {
+        val installed = runCatching {
+            val advertiserClass = Class.forName(
+                "com.intellij.openapi.updateSettings.impl.pluginsAdvertisement.PluginsAdvertiser"
+            )
+            val installMethod = advertiserClass.getMethod(
+                "installAndEnable",
+                Project::class.java,
+                Set::class.java,
+                Runnable::class.java
+            )
+            installMethod.invoke(null, project, pluginIds, Runnable { })
+            true
+        }.getOrDefault(false)
+
+        if (!installed) {
+            PluginManagerConfigurable.showPluginConfigurable(project, pluginIds)
+        }
     }
 }
