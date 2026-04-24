@@ -1,6 +1,7 @@
 package dev.meanmail.codeInsight
 
 import com.intellij.ide.plugins.PluginManagerConfigurable
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.project.Project
 
@@ -9,21 +10,40 @@ object NginxProPluginInstaller {
     private val isOpeningDialog = ThreadLocal.withInitial { false }
 
     fun openInstallDialog(project: Project?) {
-        openInstallDialog(project) { targetProject, pluginIds ->
-            installAndEnableViaAdvertiser(targetProject, pluginIds)
-        }
+        openInstallDialog(
+            project = project,
+            installer = { targetProject, pluginIds ->
+                installAndEnableViaAdvertiser(targetProject, pluginIds)
+            },
+            scheduler = { runnable ->
+                ApplicationManager.getApplication().invokeLater(runnable)
+            }
+        )
     }
 
-    internal fun openInstallDialog(project: Project?, installer: (Project?, Set<PluginId>) -> Unit) {
+    internal fun openInstallDialog(
+        project: Project?,
+        installer: (Project?, Set<PluginId>) -> Unit,
+        scheduler: (Runnable) -> Unit
+    ) {
         if (isOpeningDialog.get()) {
             return
         }
 
         isOpeningDialog.set(true)
         try {
-            installer(project, setOf(proPluginId))
-        } finally {
+            scheduler(
+                Runnable {
+                    try {
+                        installer(project, setOf(proPluginId))
+                    } finally {
+                        isOpeningDialog.set(false)
+                    }
+                }
+            )
+        } catch (t: Throwable) {
             isOpeningDialog.set(false)
+            throw t
         }
     }
 
