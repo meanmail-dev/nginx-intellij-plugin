@@ -1,8 +1,11 @@
 package dev.meanmail.codeInsight
 
-import com.intellij.ide.plugins.PluginManagerConfigurable
+import com.intellij.notification.NotificationAction
+import com.intellij.notification.NotificationGroupManager
+import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.extensions.PluginId
+import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
 
 object NginxProPluginInstaller {
@@ -71,7 +74,17 @@ object NginxProPluginInstaller {
         }.getOrDefault(false)
 
         if (!installed) {
-            PluginManagerConfigurable.showPluginConfigurable(project, pluginIds)
+            NotificationGroupManager.getInstance()
+                .getNotificationGroup("Nginx Pro Features")
+                .createNotification(
+                    "Failed to install Nginx Pro plugin automatically. " +
+                        "Please open Settings → Plugins and install \"Nginx Pro\" manually.",
+                    NotificationType.WARNING
+                )
+                .addAction(NotificationAction.createSimpleExpiring("Open Plugins") {
+                    ShowSettingsUtil.getInstance().showSettingsDialog(project, "Plugins")
+                })
+                .notify(project)
         }
     }
 }
