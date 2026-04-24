@@ -327,18 +327,18 @@
         <postFormatProcessor implementation="dev.meanmail.codeInsight.NginxProFormatNotifier"/>
 
         <!-- Analytics services -->
-        <applicationService serviceImplementation="dev.meanmail.analytics.NginxAnalyticsSettings"/>
-        <applicationService serviceImplementation="dev.meanmail.analytics.NginxAnalyticsService"/>
-        <applicationService serviceImplementation="dev.meanmail.analytics.NginxMilestoneTracker"/>
-        <projectService serviceImplementation="dev.meanmail.analytics.NginxFeatureUsageCounterService"/>
+        <applicationService serviceImplementation="dev.meanmail.analytics.NginxFreeAnalyticsSettings"/>
+        <applicationService serviceImplementation="dev.meanmail.analytics.NginxFreeAnalyticsService"/>
+        <applicationService serviceImplementation="dev.meanmail.analytics.NginxFreeMilestoneTracker"/>
+        <projectService serviceImplementation="dev.meanmail.analytics.NginxFreeFeatureUsageCounterService"/>
 
-        <postStartupActivity implementation="dev.meanmail.analytics.NginxAnalyticsConsentActivity"/>
+        <postStartupActivity implementation="dev.meanmail.analytics.NginxFreeAnalyticsConsentActivity"/>
         <notificationGroup id="Nginx Analytics"
                            displayType="STICKY_BALLOON"
                            isLogByDefault="false"/>
         <applicationConfigurable
-                instance="dev.meanmail.analytics.NginxAnalyticsSettingsConfigurable"
-                id="dev.meanmail.analytics.NginxAnalyticsSettings"
+                instance="dev.meanmail.analytics.NginxFreeAnalyticsSettingsConfigurable"
+                id="dev.meanmail.analytics.NginxFreeAnalyticsSettings"
                 displayName="Nginx Analytics"
                 parentId="tools"/>
     </extensions>

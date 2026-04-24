@@ -4,11 +4,11 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.service
 
 @Service
-class NginxAnalyticsService : AnalyticsService(
+class NginxFreeAnalyticsService : AnalyticsService(
     NginxAnalyticsConfig(),
-    service<NginxAnalyticsSettings>(),
+    service<NginxFreeAnalyticsSettings>(),
 ) {
     companion object {
-        fun getInstance(): NginxAnalyticsService = service()
+        fun getInstance(): NginxFreeAnalyticsService = service()
     }
 }

@@ -7,7 +7,7 @@ import com.intellij.openapi.components.service
 
 @State(name = "NginxMilestones", storages = [Storage("nginx-milestones.xml")])
 @Service
-class NginxMilestoneTracker : MilestoneTracker() {
-    override fun getSettings(): AnalyticsSettings = service<NginxAnalyticsSettings>()
-    override fun getAnalyticsService(): AnalyticsService = NginxAnalyticsService.getInstance()
+class NginxFreeMilestoneTracker : MilestoneTracker() {
+    override fun getSettings(): AnalyticsSettings = service<NginxFreeAnalyticsSettings>()
+    override fun getAnalyticsService(): AnalyticsService = NginxFreeAnalyticsService.getInstance()
 }

@@ -5,7 +5,7 @@ import com.intellij.testFramework.fixtures.BasePlatformTestCase
 
 class AnalyticsSettingsTest : BasePlatformTestCase() {
     fun testConsentStateUpdateInsideWriteActionDoesNotFail() {
-        val settings = NginxAnalyticsSettings()
+        val settings = NginxFreeAnalyticsSettings()
 
         runWriteAction {
             settings.consentState = ConsentState.ACCEPTED

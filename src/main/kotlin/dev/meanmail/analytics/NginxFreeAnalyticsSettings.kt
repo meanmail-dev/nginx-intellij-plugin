@@ -6,4 +6,4 @@ import com.intellij.openapi.components.Storage
 
 @State(name = "NginxAnalytics", storages = [Storage("nginx-analytics.xml")])
 @Service
-class NginxAnalyticsSettings : AnalyticsSettings()
+class NginxFreeAnalyticsSettings : AnalyticsSettings()

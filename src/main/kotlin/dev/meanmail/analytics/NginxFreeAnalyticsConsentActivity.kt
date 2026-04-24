@@ -1,11 +1,10 @@
 package dev.meanmail.analytics
 
 import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
 
-object NginxAnalyticsTracker : AnalyticsTracker() {
+class NginxFreeAnalyticsConsentActivity : AnalyticsConsentActivity() {
+    override fun getConfig(): AnalyticsConfig = NginxAnalyticsConfig()
     override fun getSettings(): AnalyticsSettings = service<NginxFreeAnalyticsSettings>()
     override fun getMilestoneTracker(): MilestoneTracker = service<NginxFreeMilestoneTracker>()
-    override fun getFeatureUsageCounterService(project: Project): FeatureUsageCounterService =
-        NginxFreeFeatureUsageCounterService.getInstance(project)
+    override fun getAnalyticsService(): AnalyticsService = NginxFreeAnalyticsService.getInstance()
 }
