@@ -10,7 +10,7 @@
 
 <p>This plugin helps you edit, navigate, and understand Nginx configuration files directly in your JetBrains IDE.</p>
 
-<p>Advanced validation is available in Pro: <a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro</a></p>
+<p>Advanced validation is available in Pro: <a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">Nginx Configuration Pro</a></p>
 
 <p>Nginx configs are hard to read and easy to break. With this plugin, you can quickly understand directives, navigate large configs, and work more confidently without constantly switching to documentation.</p>
 
@@ -26,7 +26,7 @@
 <p>Need to be sure your config won’t break production?</p>
 
 <p>Upgrade to Pro:<br>
-    <a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro</a></p>
+    <a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">Nginx Configuration Pro</a></p>
 
 <ul>
     <li>Detect real misconfigurations before deploy</li>
