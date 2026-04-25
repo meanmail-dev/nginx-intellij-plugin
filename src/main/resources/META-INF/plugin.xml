@@ -8,33 +8,22 @@
 <h4>Nginx Configuration — fast editing inside JetBrains IDE</h4>
 <p>Work with Nginx configs faster — without breaking them.</p>
 
-<p>This plugin helps you edit, navigate, and understand Nginx configuration files directly in your JetBrains IDE.</p>
+<p>This plugin brings full IDE support for Nginx configuration files: syntax highlighting, code completion, navigation, and structure view — so you can read and edit configs without constantly switching to documentation.</p>
 
-<p>Advanced validation is available in Pro: <a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">Nginx Configuration Pro</a></p>
-
-<p>Nginx configs are hard to read and easy to break. With this plugin, you can quickly understand directives, navigate large configs, and work more confidently without constantly switching to documentation.</p>
-
-<p>What you get:</p>
+<h4>What you get</h4>
 <ul>
-    <li>Syntax highlighting for Nginx configs</li>
-    <li>Directive auto-completion</li>
-    <li>Basic validation of directives</li>
-    <li>Navigation across config files</li>
-    <li>File structure overview</li>
+    <li><strong>Syntax highlighting</strong> — directives, variables, strings, comments, and regex patterns are color-coded for readability</li>
+    <li><strong>Directive auto-completion</strong> — suggests directive names as you type, with context filtering</li>
+    <li><strong>Basic validation</strong> — catches unknown directives and common structural errors</li>
+    <li><strong>Navigation</strong> — Ctrl+Click on <code>include</code> paths to jump to the referenced file</li>
+    <li><strong>Structure view</strong> — see the outline of your config with server, location, and upstream blocks</li>
+    <li><strong>Code folding</strong> — collapse blocks to focus on what matters</li>
+    <li><strong>Lua block support</strong> — syntax highlighting inside <code>content_by_lua_block</code> and similar directives (requires a Lua plugin)</li>
+    <li><strong>File recognition</strong> — auto-detects <code>nginx.conf</code>, <code>mime.types</code>, <code>fastcgi_params</code>, <code>*.conf</code>, <code>*.nginx</code>, and more</li>
 </ul>
 
-<p>Need to be sure your config won’t break production?</p>
-
-<p>Upgrade to Pro:<br>
-    <a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">Nginx Configuration Pro</a></p>
-
-<ul>
-    <li>Detect real misconfigurations before deploy</li>
-    <li>Advanced validation across files</li>
-    <li>Catch hidden issues early</li>
-</ul>
-
-<p>Even a small Nginx mistake can cause downtime. Pro helps you catch it before it happens.</p>
+<h4>Need more power?</h4>
+<p><a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">Nginx Configuration Pro</a> adds 14 inspections with quick fixes, refactoring (rename, safe delete, extract to include), 30+ live templates, context-aware completion for 1090+ directives, Find Usages, Docker/envsubst support, and OpenResty module support.</p>
 ]]></description>
     <change-notes><![CDATA[
 <b>2026.1.15 (April, 24, 2026)</b>
