@@ -5,6 +5,8 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiTreeUtil
+import dev.meanmail.codeInsight.profeatures.ProFeaturePromptAnalytics
+import dev.meanmail.codeInsight.profeatures.ProFeatureEntryPoint
 import dev.meanmail.directives.catalog.findDirectives
 import dev.meanmail.psi.DirectiveStmt
 
@@ -45,8 +47,9 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
         context: PsiElement?
     ): PsiElement? {
         if (link == INSTALL_PRO_LINK_ID) {
+            ProFeaturePromptAnalytics.onClicked(ProFeatureEntryPoint.DOCS, "doc_footer")
             ApplicationManager.getApplication().invokeLater {
-                NginxProPluginInstaller.openInstallDialog(context?.project)
+                NginxProPluginInstaller.openInstallDialog(context?.project, ProFeatureEntryPoint.DOCS, "doc_footer")
             }
             return context
         }
@@ -70,7 +73,8 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
         }
 
         sb.append("<hr/>")
-        sb.append("<p>Full documentation with examples is available in ")
+        ProFeaturePromptAnalytics.onShown(ProFeatureEntryPoint.DOCS, "doc_footer")
+        sb.append("<p>Pro documentation includes full syntax, defaults, contexts, and parameter details. ")
         sb.append("<a href=\"psi_element://$INSTALL_PRO_LINK_ID\">")
         sb.append("Nginx Pro</a></p>")
         sb.append("</div>")
@@ -82,6 +86,7 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
         val sb = StringBuilder()
         sb.append("<div>")
         sb.append("<h2>$name</h2>")
+        ProFeaturePromptAnalytics.onShown(ProFeatureEntryPoint.DOCS, "doc_footer")
         sb.append("<p>This directive may be supported in ")
         sb.append("<a href=\"psi_element://$INSTALL_PRO_LINK_ID\">")
         sb.append("Nginx Pro</a></p>")

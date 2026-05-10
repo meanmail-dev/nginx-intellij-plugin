@@ -31,7 +31,6 @@ import static dev.meanmail.psi.Types.*;
   //
   // Our lexer uses ifParenDepth tracking which is more correct, but to match nginx behavior
   // we allow '{' in IF_PAREN_STATE when a quoted string in the condition contained ')'.
-  // See also: IF_STRING_STATE, IF_DQSTRING_STATE, and the LBRACE rule in IF_PAREN_STATE.
   boolean ifCloseParenInString = false;
   StringBuilder ifQuotedTokenBuffer = new StringBuilder();
 
@@ -109,12 +108,13 @@ import static dev.meanmail.psi.Types.*;
   // between two adjacent atoms (VARIABLE/IDENTIFIER/VALUE/STRING) with no separators.
   boolean joinPending = false;           // true when we pushed back current token to emit CONCAT_JOIN
   boolean prevConcatEligible = false;    // true if the last emitted token completed a concat atom
+  boolean prevWasIdentifier = false;     // true if the last concat-eligible token was IDENTIFIER (for named params)
 
   public final void yypush(int newState) {
       yybegin(newState);
       stack.push(newState);
   }
-
+  
   public final int yycurrentState() {
       int state = stack.isEmpty() ? YYINITIAL : stack.peek();
       return state;
@@ -139,7 +139,65 @@ import static dev.meanmail.psi.Types.*;
 
   public final void yyinitial() {
       stack.clear();
+      prevWasIdentifier = false;
       yypush(YYINITIAL);
+  }
+
+  /**
+   * Encodes the full lexer state (stack + flags) into a single int for incremental lexing.
+   * Layout (32 bits):
+   *   bits  0-4:  current zzLexicalState (5 bits, up to 32 states)
+   *   bits  5-9:  stack[0] or 0x1F if empty (5 bits)
+   *   bits 10-14: stack[1] or 0x1F if empty (5 bits)
+   *   bits 15-19: stack[2] or 0x1F if empty (5 bits)
+   *   bit  20:    inLocationPath
+   *   bit  21:    ifAfterRegexOp
+   *   bit  22:    ifCloseParenInString
+   *   bit  23:    prevConcatEligible
+   *   bit  24:    prevWasIdentifier
+   *   bit  25:    joinPending
+   *   bits 26-29: ifParenDepth (4 bits, 0-15)
+   */
+  public int getFullState() {
+      int state = yystate() & 0x1F;
+      Integer[] stackArr = stack.toArray(new Integer[0]);
+      int s0 = stackArr.length > 0 ? (stackArr[0] & 0x1F) : 0x1F;
+      int s1 = stackArr.length > 1 ? (stackArr[1] & 0x1F) : 0x1F;
+      int s2 = stackArr.length > 2 ? (stackArr[2] & 0x1F) : 0x1F;
+      state |= (s0 << 5);
+      state |= (s1 << 10);
+      state |= (s2 << 15);
+      if (inLocationPath)       state |= (1 << 20);
+      if (ifAfterRegexOp)       state |= (1 << 21);
+      if (ifCloseParenInString) state |= (1 << 22);
+      if (prevConcatEligible)   state |= (1 << 23);
+      if (prevWasIdentifier)    state |= (1 << 24);
+      if (joinPending)          state |= (1 << 25);
+      state |= ((ifParenDepth & 0xF) << 26);
+      return state;
+  }
+
+  /**
+   * Restores the full lexer state from a value produced by getFullState().
+   */
+  public void restoreFullState(int state) {
+      yybegin(state & 0x1F);
+      stack.clear();
+      int s0 = (state >> 5)  & 0x1F;
+      int s1 = (state >> 10) & 0x1F;
+      int s2 = (state >> 15) & 0x1F;
+      // Stack is LIFO (Deque), so push in reverse order: bottom first.
+      // push() = addFirst(), so the head ends up holding s0 (the original top).
+      if (s2 != 0x1F) stack.addFirst(s2);
+      if (s1 != 0x1F) stack.addFirst(s1);
+      if (s0 != 0x1F) stack.addFirst(s0);
+      inLocationPath       = (state & (1 << 20)) != 0;
+      ifAfterRegexOp       = (state & (1 << 21)) != 0;
+      ifCloseParenInString = (state & (1 << 22)) != 0;
+      prevConcatEligible   = (state & (1 << 23)) != 0;
+      prevWasIdentifier    = (state & (1 << 24)) != 0;
+      joinPending          = (state & (1 << 25)) != 0;
+      ifParenDepth         = (state >> 26) & 0xF;
   }
 %}
 
@@ -174,7 +232,7 @@ EQUAL==
 IF_VALUE=(\\[^\n\r]|[^\s;'\"\{\}\(\)])+
 ESCAPE=\\[^\n\r]
 STRING=([^'\\$]|{ESCAPE})+
-DQSTRING=([^\"\\$]|{ESCAPE})+
+// DQSTRING pattern inlined in DQSTRING_STATE rules (same as STRING but excludes " instead of ')
 
 COMMENT=#[^\r\n]*
 
@@ -234,14 +292,18 @@ DQUOTE="\""
     }
     {VARIABLE}               {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        joinPending = false; prevConcatEligible = true; return inLocationPath ? VALUE : VARIABLE;
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return inLocationPath ? VALUE : VARIABLE;
     }
     {IDENTIFIER}             {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        joinPending = false; prevConcatEligible = true; return IDENTIFIER;
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = true; return IDENTIFIER;
     }
     {CARET_TILDE}            { joinPending = false; prevConcatEligible = false; return CARET_TILDE; }
-    {EQUAL}                  { joinPending = false; prevConcatEligible = false; return EQUAL; }
+    {EQUAL}                  {
+        if (prevConcatEligible && !prevWasIdentifier && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        if (joinPending && !prevWasIdentifier) { joinPending = false; prevConcatEligible = true; return VALUE; }
+        joinPending = false; prevConcatEligible = false; return EQUAL;
+    }
     {BINARY_OPERATOR}        { joinPending = false; prevConcatEligible = false; return BINARY_OPERATOR; }
     {SEMICOLON}              { yypop(); joinPending = false; prevConcatEligible = false; inLocationPath = false; return SEMICOLON; }
     {LBRACE}                 { yypop(); joinPending = false; prevConcatEligible = false; inLocationPath = false; return LBRACE; }
@@ -259,95 +321,34 @@ DQUOTE="\""
     // Excludes '$' so variables remain separate tokens.
     [a-z]+"://"[^\s;'\"\{\}\$]+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        joinPending = false; prevConcatEligible = true; return VALUE;
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
     }
     // Path with query string (e.g. /index.php?=, /path?key=value&b=) — includes '=' after '?'
     // so the entire path+query is a single VALUE. Excludes '$' so variables remain separate tokens.
     [^\s;'\"\{\}=\$]+"?"[^\s;'\"\{\}\$]* {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        joinPending = false; prevConcatEligible = true; return VALUE;
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
     }
     // Bare query string (e.g. ?x=, ?key=value) — typically concatenated after a variable like $uri?x=
     // Includes '=' after '?' so the entire query is a single VALUE token.
     "?"[^\s;'\"\{\}\$]+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        joinPending = false; prevConcatEligible = true; return VALUE;
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
     }
     // Ampersand query string segment (e.g. &b=, &key=value) — typically concatenated after a variable
     // like $arg_a&b= in proxy_cache_key $uri?a=$arg_a&b=$arg_b&c=$arg_c;
     // Includes '=' after '&' so the entire segment is a single VALUE token.
     "&"[^\s;'\"\{\}\$]+ {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        joinPending = false; prevConcatEligible = true; return VALUE;
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
     }
-    {VALUE}                  {
+    [^\s;'\"\{\}=$]+       {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        // In location path context, $identifier is literal URI text — skip variable splitting.
-        if (!inLocationPath) {
-            // Check if the matched VALUE contains a $variable reference ($var, ${var}, $1)
-            // that should be a separate VARIABLE token due to longest-match consuming too much.
-            String text = yytext().toString();
-            for (int i = 0; i < text.length(); i++) {
-                if (text.charAt(i) == '$' && i + 1 < text.length()) {
-                    char next = text.charAt(i + 1);
-                    if (next == '{') {
-                        // Braced variable ${VAR} — split VALUE before it
-                        int closeBrace = text.indexOf('}', i + 2);
-                        if (closeBrace >= 0) {
-                            if (i > 0) {
-                                yypushback(text.length() - i);
-                                joinPending = false; prevConcatEligible = true; return VALUE;
-                            } else {
-                                yypushback(text.length() - closeBrace - 1);
-                                joinPending = false; prevConcatEligible = true; return VARIABLE;
-                            }
-                        }
-                        continue;
-                    }
-                    if ((next >= 'a' && next <= 'z') || (next >= 'A' && next <= 'Z') || next == '_') {
-                        // Bare $variable found — split VALUE before it
-                        if (i > 0) {
-                            yypushback(text.length() - i);
-                            joinPending = false; prevConcatEligible = true; return VALUE;
-                        } else {
-                            // VALUE starts with $variable — find end of variable name and push back the rest
-                            int varEnd = i + 1;
-                            while (varEnd < text.length()) {
-                                char c = text.charAt(varEnd);
-                                if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_' || (c >= '0' && c <= '9')) {
-                                    varEnd++;
-                                } else {
-                                    break;
-                                }
-                            }
-                            yypushback(text.length() - varEnd);
-                            joinPending = false; prevConcatEligible = true; return VARIABLE;
-                        }
-                    }
-                    if (next >= '0' && next <= '9') {
-                        // Capture group reference $1, $2, etc. — split VALUE before it
-                        if (i > 0) {
-                            yypushback(text.length() - i);
-                            joinPending = false; prevConcatEligible = true; return VALUE;
-                        } else {
-                            // VALUE starts with $N — find end of digits and push back the rest
-                            int varEnd = i + 1;
-                            while (varEnd < text.length()) {
-                                char c = text.charAt(varEnd);
-                                if (c >= '0' && c <= '9') {
-                                    varEnd++;
-                                } else {
-                                    break;
-                                }
-                            }
-                            yypushback(text.length() - varEnd);
-                            joinPending = false; prevConcatEligible = true; return VARIABLE;
-                        }
-                    }
-                }
-            }
-        }
-        joinPending = false; prevConcatEligible = true; return VALUE;
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
+    }
+    \$                       {
+        if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
     }
 }
 
@@ -377,7 +378,6 @@ DQUOTE="\""
               ifCloseParenInString = false;
               return BAD_CHARACTER;
           }
-          ifAfterRegexOp = false;
           yypop();
           return RPAREN;
       }
@@ -405,13 +405,26 @@ DQUOTE="\""
           joinPending = false; prevConcatEligible = true; return IDENTIFIER;
       }
     // Keep '=' as a dedicated EQUAL token inside if (...) to allow simple comparisons
-    {EQUAL}                       { return EQUAL; }
+    {EQUAL}                       { ifAfterRegexOp = false; return EQUAL; }
     {UNARY_OPERATOR}              { return UNARY_OPERATOR; }
     {BINARY_OPERATOR}             {
           // Set regex flag for ~ ~* !~ !~* operators; clear for = != (issue #96)
           ifAfterRegexOp = yytext().toString().contains("~");
           joinPending = false; prevConcatEligible = false;
           return BINARY_OPERATOR;
+      }
+    // UNARY_OPERATOR followed immediately by value/variable (no space) — split the operator out.
+    // These rules match the same total length as {IF_VALUE} alone, but are listed first so JFlex
+    // picks them on equal-length tie-breaking (first rule wins).
+    {UNARY_OPERATOR}{IF_VALUE}    {
+          int opLen = yytext().charAt(0) == '!' ? 3 : 2;
+          yypushback(yylength() - opLen);
+          return UNARY_OPERATOR;
+      }
+    {UNARY_OPERATOR}{VARIABLE}    {
+          int opLen = yytext().charAt(0) == '!' ? 3 : 2;
+          yypushback(yylength() - opLen);
+          return UNARY_OPERATOR;
       }
     {IF_VALUE}                    {
           if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
@@ -444,7 +457,7 @@ DQUOTE="\""
 }
 
 <LUA_STATE> {
-    {RBRACE}                  {
+    {RBRACE}                  { 
           yypop();
           if (yycurrentState() == LUA_STATE) return LUA;
           yypop();
@@ -467,8 +480,8 @@ DQUOTE="\""
 <DQSTRING_STATE> {
     {DQUOTE}                 { yypop(); prevConcatEligible = true; return DQUOTE; }
     {VARIABLE}               { return VARIABLE; }
-    \$                       { return DQSTRING; }
-    {DQSTRING}               { return DQSTRING; }
+    \$                       { return STRING; }
+    ([^\"\\$]|{ESCAPE})+     { return STRING; }
 }
 
 // String states for if-condition context: identical to normal string states,
@@ -491,11 +504,11 @@ DQUOTE="\""
           if (endsWithUnbalancedParen(ifQuotedTokenBuffer.toString())) { ifCloseParenInString = true; }
           yypop(); prevConcatEligible = true; return DQUOTE;
       }
-    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return ifAfterRegexOp ? DQSTRING : VARIABLE; }
-    \$                       { ifQuotedTokenBuffer.append(yytext().toString()); return DQSTRING; }
-    {DQSTRING}               {
+    {VARIABLE}               { ifQuotedTokenBuffer.append(yytext().toString()); return ifAfterRegexOp ? STRING : VARIABLE; }
+    \$                       { ifQuotedTokenBuffer.append(yytext().toString()); return STRING; }
+    ([^\"\\$]|{ESCAPE})+     {
           ifQuotedTokenBuffer.append(yytext().toString());
-          return DQSTRING;
+          return STRING;
       }
 }
 
@@ -585,7 +598,7 @@ DQUOTE="\""
 }
 
 
-{COMMENT}                    { prevConcatEligible = false; joinPending = false; return COMMENT; }
-{WHITE_SPACE}                { prevConcatEligible = false; joinPending = false; return WHITE_SPACE; }
+{COMMENT}                    { prevConcatEligible = false; joinPending = false; prevWasIdentifier = false; return COMMENT; }
+{WHITE_SPACE}                { prevConcatEligible = false; joinPending = false; prevWasIdentifier = false; return WHITE_SPACE; }
 
 [^]                          { yyinitial(); return BAD_CHARACTER; }

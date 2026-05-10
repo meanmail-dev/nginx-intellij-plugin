@@ -1,15 +1,14 @@
 package dev.meanmail.codeInsight
 
-import com.intellij.notification.NotificationAction
-import com.intellij.notification.NotificationGroupManager
-import com.intellij.notification.NotificationType
-import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.impl.source.codeStyle.PostFormatProcessor
 import dev.meanmail.NginxFileType
+import dev.meanmail.codeInsight.profeatures.ProFeaturePromptService
+import dev.meanmail.codeInsight.profeatures.ProFeatureEntryPoint
 
 class NginxProFormatNotifier : PostFormatProcessor {
 
@@ -19,18 +18,15 @@ class NginxProFormatNotifier : PostFormatProcessor {
         if (source.fileType !is NginxFileType) return rangeToReformat
 
         val project = source.project
-        ApplicationManager.getApplication().invokeLater {
-            NotificationGroupManager.getInstance()
-                .getNotificationGroup("Nginx Pro Features")
-                .createNotification(
-                    "Auto-formatting for Nginx configuration files is available in Nginx Pro",
-                    NotificationType.INFORMATION
-                )
-                .addAction(NotificationAction.createSimpleExpiring("Install Pro") {
-                    NginxProPluginInstaller.openInstallDialog(project)
-                })
-                .notify(project)
-        }
+        service<ProFeaturePromptService>().tryShowNotification(
+            project = project,
+            source = ProFeatureEntryPoint.FORMAT,
+            title = "Advanced formatting is available in Nginx Pro",
+            message = "For Nginx configs, Pro can align map/geo/types blocks during reformat.",
+            onInstall = {
+                NginxProPluginInstaller.openInstallDialog(project, ProFeatureEntryPoint.FORMAT, "notification")
+            }
+        )
 
         return rangeToReformat
     }
