@@ -15,7 +15,10 @@ import dev.meanmail.directives.catalog.self
 import dev.meanmail.directives.determineFileContext
 import dev.meanmail.codeInsight.NginxProPluginInstaller
 import dev.meanmail.analytics.NginxAnalyticsTracker
+import dev.meanmail.codeInsight.profeatures.ProFeaturePromptService
+import dev.meanmail.codeInsight.profeatures.ProFeatureEntryPoint
 import dev.meanmail.psi.DirectiveStmt
+import com.intellij.openapi.components.service
 
 class NginxDirectiveInspection : LocalInspectionTool() {
     override fun checkFile(
@@ -157,7 +160,22 @@ class NginxDirectiveInspection : LocalInspectionTool() {
             }
 
             NginxAnalyticsTracker.onQuickFixApplied(project)
-            NginxProPluginInstaller.openInstallDialog(project)
+            val shown = service<ProFeaturePromptService>().tryShowNotification(
+                project = project,
+                source = ProFeatureEntryPoint.UNKNOWN_DIRECTIVE,
+                title = "Extended directive support is available in Nginx Pro",
+                message = "This directive may come from a third-party module. Pro includes additional module catalogs and validation.",
+                onInstall = {
+                    NginxProPluginInstaller.openInstallDialog(
+                        project,
+                        ProFeatureEntryPoint.UNKNOWN_DIRECTIVE,
+                        "notification"
+                    )
+                }
+            )
+            if (!shown) {
+                NginxProPluginInstaller.openInstallDialog(project, ProFeatureEntryPoint.UNKNOWN_DIRECTIVE, "quick_fix")
+            }
         }
     }
 }

@@ -7,12 +7,21 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.options.ShowSettingsUtil
 import com.intellij.openapi.project.Project
+import dev.meanmail.codeInsight.profeatures.ProFeaturePromptAnalytics
+import dev.meanmail.codeInsight.profeatures.ProFeatureEntryPoint
 
 object NginxProPluginInstaller {
     private val proPluginId: PluginId = PluginId.getId("dev.meanmail.plugin.nginx-intellij-plugin-pro")
     private val isOpeningDialog = ThreadLocal.withInitial { false }
 
     fun openInstallDialog(project: Project?) {
+        openInstallDialog(project, null, "unknown")
+    }
+
+    fun openInstallDialog(project: Project?, source: ProFeatureEntryPoint?, surface: String) {
+        if (source != null) {
+            ProFeaturePromptAnalytics.onInstallDialogOpened(source, surface)
+        }
         openInstallDialog(
             project = project,
             installer = { targetProject, pluginIds ->
