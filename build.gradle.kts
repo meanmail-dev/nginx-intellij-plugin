@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":directive-catalog"))
     implementation(project(":analytics"))
     testImplementation(libs.junit)
+    testImplementation("org.opentest4j:opentest4j:1.3.0")
     testImplementation("net.java.dev.jna:jna:5.18.1")
 
     intellijPlatform {
