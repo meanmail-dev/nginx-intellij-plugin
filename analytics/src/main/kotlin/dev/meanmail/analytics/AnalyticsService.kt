@@ -7,16 +7,13 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationInfo
 import com.intellij.openapi.application.PathManager
-import com.intellij.openapi.application.PermanentInstallationID
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.extensions.PluginId
-import com.intellij.ui.LicensingFacade
 import com.intellij.util.concurrency.AppExecutorUtil
 import com.intellij.util.io.HttpRequests
 import java.net.HttpURLConnection
 import java.nio.file.Files
 import java.nio.file.Path
-import java.security.MessageDigest
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.TimeUnit
 
@@ -35,11 +32,7 @@ open class AnalyticsService(
         .scheduleWithFixedDelay(::flush, 1, 1, TimeUnit.MINUTES)
 
     private fun getDistinctId(): String {
-        val licensedTo = LicensingFacade.getInstance()?.getLicensedToMessage()
-        if (!licensedTo.isNullOrBlank()) {
-            return sha256(licensedTo)
-        }
-        return PermanentInstallationID.get()
+        return SharedDistinctIdStorage.get()
     }
 
     fun capture(event: String, properties: Map<String, Any?> = emptyMap()) {
@@ -75,16 +68,12 @@ open class AnalyticsService(
         if (!settings.isEnabled) return
 
         val distinctId = getDistinctId()
-        val installationId = PermanentInstallationID.get()
 
         val environmentAndLicense = collectEnvironmentProperties() + LicenseHelper.getLicenseProperties(config)
 
         val identifyProperties = buildMap {
             putAll(environmentAndLicense)
             put("\$set", environmentAndLicense)
-            if (distinctId != installationId) {
-                put("\$anon_distinct_id", installationId)
-            }
         }
 
         val payload = mapOf(
@@ -264,16 +253,12 @@ open class AnalyticsService(
             put("os_name", System.getProperty("os.name", "unknown"))
             put("os_version", System.getProperty("os.version", "unknown"))
             put("os_arch", System.getProperty("os.arch", "unknown"))
+            put("id_scheme", "v2")
         }
     }
 
     companion object {
         private val LOG = logger<AnalyticsService>()
         private const val MAX_QUEUE_SIZE = 50
-
-        private fun sha256(input: String): String {
-            val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
-            return bytes.joinToString("") { "%02x".format(it) }
-        }
     }
 }
