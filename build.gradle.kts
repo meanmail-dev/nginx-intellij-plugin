@@ -33,7 +33,9 @@ dependencies {
     testImplementation("net.java.dev.jna:jna:5.18.1")
 
     intellijPlatform {
-        create(config("platformType"), config("platformVersion"))
+        create(config("platformType"), config("platformVersion")) {
+            useCache.set(true)
+        }
         val plugins = providers.gradleProperty("plugins").map { it.split(',') }
         if (plugins.isPresent && plugins.get().isNotEmpty()) {
             compatiblePlugins(plugins)
