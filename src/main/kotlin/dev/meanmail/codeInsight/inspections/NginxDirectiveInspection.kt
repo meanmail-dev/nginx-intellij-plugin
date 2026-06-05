@@ -163,8 +163,11 @@ class NginxDirectiveInspection : LocalInspectionTool() {
             val shown = service<ProFeaturePromptService>().tryShowNotification(
                 project = project,
                 source = ProFeatureEntryPoint.UNKNOWN_DIRECTIVE,
-                title = "Extended directive support is available in Nginx Pro",
-                message = "This directive may come from a third-party module. Pro includes additional module catalogs and validation.",
+                title = "Recognize '$directiveName' with Nginx Pro",
+                message = "'$directiveName' looks like a directive from a third-party module. " +
+                    "Nginx Pro ships catalogs for OpenResty, Brotli, GeoIP2, ModSecurity and more, " +
+                    "so directives like this get completion, docs and validation instead of a warning. " +
+                    "Free 14-day trial, no account needed.",
                 onInstall = {
                     NginxProPluginInstaller.openInstallDialog(
                         project,

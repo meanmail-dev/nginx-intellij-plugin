@@ -29,7 +29,7 @@ class ProFeaturePromptService : PersistentStateComponent<ProFeaturePromptState> 
         source: ProFeatureEntryPoint,
         title: String,
         message: String,
-        actionText: String = "Enable Pro Features",
+        actionText: String = "Start 14-day free trial",
         onInstall: (() -> Unit)? = null
     ): Boolean {
         if (isProInstalled()) return false
