@@ -2,13 +2,12 @@ package dev.meanmail.analytics
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.intellij.ide.plugins.PluginManager
+import com.intellij.ide.plugins.cl.PluginAwareClassLoader
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationInfo
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.PathManager
 import com.intellij.openapi.diagnostic.logger
-import com.intellij.openapi.extensions.PluginId
 import com.intellij.util.concurrency.AppExecutorUtil
 import com.intellij.util.io.HttpRequests
 import java.net.HttpURLConnection
@@ -24,6 +23,7 @@ open class AnalyticsService(
     private val gson = Gson()
     private val queueType = object : TypeToken<List<Map<String, Any?>>>() {}.type
     private val queueLock = Any()
+
     @Volatile
     private var queueRestored: Boolean = false
     private val eventQueue = ConcurrentLinkedQueue<Map<String, Any?>>()
@@ -241,11 +241,11 @@ open class AnalyticsService(
 
     private fun collectEnvironmentProperties(): Map<String, String> {
         val appInfo = ApplicationInfo.getInstance()
-        val pluginId = PluginId.getId(config.pluginId)
-        val plugin = PluginManager.getInstance().findEnabledPlugin(pluginId)
+        val classLoader = javaClass.classLoader
+        val plugin = (classLoader as? PluginAwareClassLoader)?.pluginDescriptor
 
         return buildMap {
-            put("plugin_id", pluginId.idString)
+            put("plugin_id", plugin?.pluginId?.idString ?: "unknown")
             put("plugin_version", plugin?.version ?: "unknown")
             put("ide_name", appInfo.versionName)
             put("ide_version", appInfo.fullVersion)
