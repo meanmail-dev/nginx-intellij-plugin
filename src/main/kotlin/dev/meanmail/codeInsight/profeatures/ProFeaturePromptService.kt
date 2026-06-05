@@ -1,5 +1,6 @@
 package dev.meanmail.codeInsight.profeatures
 
+import com.intellij.ide.plugins.PluginManager
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
@@ -69,6 +70,6 @@ class ProFeaturePromptService : PersistentStateComponent<ProFeaturePromptState> 
 
     private fun isProInstalled(): Boolean {
         val pluginId = PluginId.getId("dev.meanmail.plugin.nginx-intellij-plugin-pro")
-        return com.intellij.ide.plugins.PluginManagerCore.getPlugin(pluginId) != null
+        return PluginManager.getInstance().findEnabledPlugin(pluginId) != null
     }
 }

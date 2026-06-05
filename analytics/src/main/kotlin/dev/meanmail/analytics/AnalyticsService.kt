@@ -2,7 +2,7 @@ package dev.meanmail.analytics
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.intellij.ide.plugins.PluginManagerCore
+import com.intellij.ide.plugins.PluginManager
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.ApplicationInfo
@@ -242,7 +242,7 @@ open class AnalyticsService(
     private fun collectEnvironmentProperties(): Map<String, String> {
         val appInfo = ApplicationInfo.getInstance()
         val pluginId = PluginId.getId(config.pluginId)
-        val plugin = PluginManagerCore.getPlugin(pluginId)
+        val plugin = PluginManager.getInstance().findEnabledPlugin(pluginId)
 
         return buildMap {
             put("plugin_id", pluginId.idString)
