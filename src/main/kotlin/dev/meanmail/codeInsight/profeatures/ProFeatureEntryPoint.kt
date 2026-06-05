@@ -4,5 +4,7 @@ enum class ProFeatureEntryPoint {
     FORMAT,
     UNKNOWN_DIRECTIVE,
     DOCS,
-    NAVIGATION
+    NAVIGATION,
+    REFACTORING,
+    FIND_USAGES
 }
