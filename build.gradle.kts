@@ -30,7 +30,7 @@ dependencies {
     implementation(project(":analytics"))
     testImplementation(libs.junit)
     testImplementation("org.opentest4j:opentest4j:1.3.0")
-    testImplementation("net.java.dev.jna:jna:5.18.1")
+    testImplementation("net.java.dev.jna:jna:5.19.0")
 
     intellijPlatform {
         create(config("platformType"), config("platformVersion")) {
