@@ -322,6 +322,9 @@
         <errorHandler implementation="com.intellij.diagnostic.JetBrainsMarketplaceErrorReportSubmitter"/>
         <notificationGroup id="Nginx Pro Features" displayType="BALLOON" isLogByDefault="false"/>
         <postFormatProcessor implementation="dev.meanmail.codeInsight.NginxProFormatNotifier"/>
+        <gotoDeclarationHandler implementation="dev.meanmail.codeInsight.profeatures.NginxProNavigationNotifier"/>
+        <renameHandler implementation="dev.meanmail.codeInsight.profeatures.NginxProRenameNotifier" order="first"/>
+        <findUsagesHandlerFactory implementation="dev.meanmail.codeInsight.profeatures.NginxProFindUsagesNotifier"/>
 
         <!-- Analytics services -->
         <applicationService serviceImplementation="dev.meanmail.codeInsight.profeatures.ProFeaturePromptService"/>

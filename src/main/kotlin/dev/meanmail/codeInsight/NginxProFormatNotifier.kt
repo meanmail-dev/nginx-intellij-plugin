@@ -21,8 +21,9 @@ class NginxProFormatNotifier : PostFormatProcessor {
         service<ProFeaturePromptService>().tryShowNotification(
             project = project,
             source = ProFeatureEntryPoint.FORMAT,
-            title = "Advanced formatting is available in Nginx Pro",
-            message = "For Nginx configs, Pro can align map/geo/types blocks during reformat.",
+            title = "Keep map, geo and upstream blocks aligned automatically",
+            message = "Nginx Pro aligns values in map/geo/types/upstream blocks every time you reformat, " +
+                "so large configs stay readable without manual spacing. Free 14-day trial, no account needed.",
             onInstall = {
                 NginxProPluginInstaller.openInstallDialog(project, ProFeatureEntryPoint.FORMAT, "notification")
             }

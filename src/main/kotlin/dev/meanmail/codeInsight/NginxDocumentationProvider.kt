@@ -74,9 +74,9 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
 
         sb.append("<hr/>")
         ProFeaturePromptAnalytics.onShown(ProFeatureEntryPoint.DOCS, "doc_footer")
-        sb.append("<p>Pro documentation includes full syntax, defaults, contexts, and parameter details. ")
+        sb.append("<p>Nginx Pro documentation adds full syntax, defaults, contexts and parameter details for every directive. ")
         sb.append("<a href=\"psi_element://$INSTALL_PRO_LINK_ID\">")
-        sb.append("Nginx Pro</a></p>")
+        sb.append("Try Pro free for 14 days</a></p>")
         sb.append("</div>")
 
         return sb.toString()
@@ -87,9 +87,9 @@ class NginxDocumentationProvider : AbstractDocumentationProvider() {
         sb.append("<div>")
         sb.append("<h2>$name</h2>")
         ProFeaturePromptAnalytics.onShown(ProFeatureEntryPoint.DOCS, "doc_footer")
-        sb.append("<p>This directive may be supported in ")
+        sb.append("<p>'$name' may come from a third-party module. Nginx Pro recognizes it with completion, docs and validation. ")
         sb.append("<a href=\"psi_element://$INSTALL_PRO_LINK_ID\">")
-        sb.append("Nginx Pro</a></p>")
+        sb.append("Try Pro free for 14 days</a></p>")
         sb.append("</div>")
 
         return sb.toString()
