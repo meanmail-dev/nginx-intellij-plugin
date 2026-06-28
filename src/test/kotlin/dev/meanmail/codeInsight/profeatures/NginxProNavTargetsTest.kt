@@ -1,5 +1,6 @@
 package dev.meanmail.codeInsight.profeatures
 
+import com.intellij.psi.impl.source.PsiFileImpl
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.meanmail.NginxFileType
 
@@ -66,6 +67,22 @@ class NginxProNavTargetsTest : BasePlatformTestCase() {
         assertFalse(NginxProNavTargets.isVariable(element))
         assertFalse(NginxProNavTargets.isUpstreamReference(element))
         assertFalse(NginxProNavTargets.isNavigableProSymbol(element))
+    }
+
+    fun testFileElementIsRejectedWithoutLoadingAst() {
+        // The platform queries every FindUsagesHandlerFactory with the element being
+        // operated on. Safe Delete of a config file passes the whole PsiFile here.
+        // Touching its .node forced the entire file to parse (decoding bytes) on the
+        // EDT, freezing the IDE. A file is never a variable, so reject it without
+        // loading the AST.
+        val psiFile = myFixture.addFileToProject("freeze-check.nginx", "server { listen 80; }")
+        val fileImpl = psiFile as PsiFileImpl
+        assertFalse("precondition: AST must not be loaded yet", fileImpl.isContentsLoaded)
+
+        assertFalse(NginxProNavTargets.isVariable(psiFile))
+        assertFalse(NginxProNavTargets.isNavigableProSymbol(psiFile))
+
+        assertFalse("checking for a variable must not force the file AST to load", fileImpl.isContentsLoaded)
     }
 
     fun testExtractUpstreamNameSkipsAddressesAndDomains() {

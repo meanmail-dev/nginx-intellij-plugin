@@ -1,6 +1,7 @@
 package dev.meanmail.codeInsight.profeatures
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import dev.meanmail.NginxLanguage
 import dev.meanmail.psi.RegularDirectiveStmt
@@ -29,7 +30,12 @@ object NginxProNavTargets {
 
     fun isVariable(element: PsiElement?): Boolean {
         if (!isNginxElement(element)) return false
-        return element?.node?.elementType == Types.VARIABLE
+        // A variable is a single leaf token. Read the type straight off the leaf
+        // instead of via element.node: a composite element (e.g. the whole PsiFile
+        // passed during Safe Delete) would otherwise force its AST to load, decoding
+        // the entire file on the EDT and freezing the IDE.
+        val leaf = element as? LeafPsiElement ?: return false
+        return leaf.elementType == Types.VARIABLE
     }
 
     fun isUpstreamReference(element: PsiElement?): Boolean {
