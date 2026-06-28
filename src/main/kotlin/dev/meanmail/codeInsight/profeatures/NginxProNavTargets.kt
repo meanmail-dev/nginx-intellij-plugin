@@ -2,6 +2,7 @@ package dev.meanmail.codeInsight.profeatures
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
+import dev.meanmail.NginxLanguage
 import dev.meanmail.psi.RegularDirectiveStmt
 import dev.meanmail.psi.Types
 import dev.meanmail.psi.ValueStmt
@@ -27,11 +28,12 @@ object NginxProNavTargets {
     )
 
     fun isVariable(element: PsiElement?): Boolean {
+        if (!isNginxElement(element)) return false
         return element?.node?.elementType == Types.VARIABLE
     }
 
     fun isUpstreamReference(element: PsiElement?): Boolean {
-        if (element == null) return false
+        if (!isNginxElement(element)) return false
         val directive = PsiTreeUtil.getParentOfType(element, RegularDirectiveStmt::class.java) ?: return false
         if (directive.nameStmt.text !in PASS_DIRECTIVES) return false
         val valueStmt = PsiTreeUtil.getParentOfType(element, ValueStmt::class.java, false) ?: return false
@@ -41,6 +43,16 @@ object NginxProNavTargets {
 
     fun isNavigableProSymbol(element: PsiElement?): Boolean {
         return isVariable(element) || isUpstreamReference(element)
+    }
+
+    /**
+     * The platform queries every [FindUsagesHandlerFactory] for elements of any
+     * language. Reject foreign elements before touching their PSI/AST: forcing a
+     * non-Nginx file's AST load could crash on the platform's stub/AST mismatch
+     * (e.g. a Vue/JS embedded-content stub type mismatch).
+     */
+    private fun isNginxElement(element: PsiElement?): Boolean {
+        return element != null && element.language == NginxLanguage
     }
 
     /**

@@ -56,6 +56,18 @@ class NginxProNavTargetsTest : BasePlatformTestCase() {
         assertFalse(NginxProNavTargets.isNavigableProSymbol(null))
     }
 
+    fun testForeignLanguageElementIsNotNavigable() {
+        // The platform queries every FindUsagesHandlerFactory for elements of any
+        // language. We must never touch a non-Nginx element's AST (doing so forced
+        // foreign-file AST loads and crashed on a Vue/JS stub mismatch). A plain
+        // text element must be rejected without inspecting its node.
+        val element = myFixture.configureByText("foreign.txt", "backend variable")
+            .let { it.findElementAt(0) }
+        assertFalse(NginxProNavTargets.isVariable(element))
+        assertFalse(NginxProNavTargets.isUpstreamReference(element))
+        assertFalse(NginxProNavTargets.isNavigableProSymbol(element))
+    }
+
     fun testExtractUpstreamNameSkipsAddressesAndDomains() {
         assertEquals("backend", NginxProNavTargets.extractUpstreamName("http://backend"))
         assertEquals("backend", NginxProNavTargets.extractUpstreamName("https://backend:8080/path"))
