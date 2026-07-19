@@ -23,7 +23,7 @@ class NginxSyntaxHighlighter : SyntaxHighlighterBase() {
             Types.IDENTIFIER -> IDENTIFIER_KEYS
             Types.VARIABLE -> VARIABLE_KEYS
             Types.VALUE -> VALUE_KEYS
-            Types.STRING, Types.DQSTRING -> STRING_KEYS
+            Types.STRING -> STRING_KEYS
             Types.LBRACE, Types.RBRACE -> BRACE_KEYS
             Types.LPAREN, Types.RPAREN -> PAREN_KEYS
             Types.QUOTE, Types.DQUOTE -> QUOTE_KEYS

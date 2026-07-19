@@ -72,7 +72,6 @@ public interface Types {
   IElementType CARET_TILDE = new NginxTokenType("CARET_TILDE");
   IElementType COMMENT = new NginxTokenType("COMMENT");
   IElementType CONCAT_JOIN = new NginxTokenType("CONCAT_JOIN");
-  IElementType DQSTRING = new NginxTokenType("DQSTRING");
   IElementType DQUOTE = new NginxTokenType("DQUOTE");
   IElementType EQUAL = new NginxTokenType("EQUAL");
   IElementType GEO = new NginxTokenType("GEO");

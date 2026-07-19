@@ -252,7 +252,7 @@ public class NginxParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (DQSTRING | variable_stmt)*
+  // (STRING | variable_stmt)*
   static boolean dq_string_content(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dq_string_content")) return false;
     while (true) {
@@ -263,11 +263,11 @@ public class NginxParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // DQSTRING | variable_stmt
+  // STRING | variable_stmt
   private static boolean dq_string_content_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "dq_string_content_0")) return false;
     boolean result_;
-    result_ = consumeToken(builder_, DQSTRING);
+    result_ = consumeToken(builder_, STRING);
     if (!result_) result_ = variable_stmt(builder_, level_ + 1);
     return result_;
   }
