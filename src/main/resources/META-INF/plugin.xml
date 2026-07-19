@@ -26,6 +26,12 @@
 <p><a href="https://meanmail.dev/plugins/18280?utm_source=jetbrains_marketplace&utm_medium=plugin_description&utm_campaign=nginx_free_to_pro">Nginx Configuration Pro</a> adds 14 inspections with quick fixes, refactoring (rename, safe delete, extract to include), 30+ live templates, context-aware completion for 1090+ directives, Find Usages, Docker/envsubst support, and OpenResty module support.</p>
 ]]></description>
     <change-notes><![CDATA[
+<b>2026.2.3 (July, 19, 2026)</b>
+<ul>
+    <li>Fix double-quoted directive values wrongly reported as syntax errors — double-quoted values such as <code>add_header</code> values, <code>if</code> regex conditions, and <code>map</code> regex keys are now accepted, matching single-quote behavior (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/107">#107</a>, <a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/108">#108</a>)</li>
+    <li>Fix false syntax errors on unquoted <code>location</code> paths and regex values ending with <code>$</code> or <code>=</code> — patterns like a <code>rewrite</code> regex with a trailing end-anchor <code>$</code> are now parsed as a single value (<a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/110">#110</a>, <a href="https://github.com/meanmail-dev/nginx-intellij-plugin/issues/111">#111</a>)</li>
+</ul>
+
 <b>2026.2.0 (May, 10, 2026)</b>
 <ul>
     <li>Fix unstable syntax highlighting after edits inside nested blocks (for example <code>map</code>, <code>if</code>, <code>location</code>) by correcting incremental lexer state restoration</li>
