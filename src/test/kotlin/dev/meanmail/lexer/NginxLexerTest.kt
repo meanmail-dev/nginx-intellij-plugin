@@ -144,7 +144,7 @@ class NginxLexerTest {
             "SEMICOLON" to ";",
             "VALUE" to "example.com",
             "DQUOTE" to "\"",
-            "DQSTRING" to "main_site",
+            "STRING" to "main_site",
             "DQUOTE" to "\"",
             "SEMICOLON" to ";",
             "RBRACE" to "}"
@@ -613,9 +613,9 @@ class NginxLexerTest {
             "IDENTIFIER" to "set",
             "VARIABLE" to "${'$'}a",
             "DQUOTE" to "\"",
-            "DQSTRING" to "/",
+            "STRING" to "/",
             "VARIABLE" to "${'$'}uri",
-            "DQSTRING" to "/",
+            "STRING" to "/",
             "VARIABLE" to "${'$'}1",
             "DQUOTE" to "\"",
             "SEMICOLON" to ";"
@@ -638,9 +638,9 @@ class NginxLexerTest {
             "IDENTIFIER" to "set",
             "VARIABLE" to "${'$'}b",
             "DQUOTE" to "\"",
-            "DQSTRING" to "https://",
+            "STRING" to "https://",
             "VARIABLE" to "${'$'}{host}",
-            "DQSTRING" to "-",
+            "STRING" to "-",
             "VARIABLE" to "${'$'}{request_uri}",
             "DQUOTE" to "\"",
             "SEMICOLON" to ";"
@@ -677,7 +677,7 @@ class NginxLexerTest {
 
     @Test
     fun testDollarSignWithoutVariableInDoubleQuotedString() {
-        // Bare $ at end of string or followed by non-variable chars should remain DQSTRING
+        // Bare $ at end of string or followed by non-variable chars should remain STRING
         val tokens = tokenize(
             "set ${'$'}a \"price: 5${'$'}\";"
         )
@@ -686,8 +686,8 @@ class NginxLexerTest {
             "IDENTIFIER" to "set",
             "VARIABLE" to "${'$'}a",
             "DQUOTE" to "\"",
-            "DQSTRING" to "price: 5",
-            "DQSTRING" to "${'$'}",
+            "STRING" to "price: 5",
+            "STRING" to "${'$'}",
             "DQUOTE" to "\"",
             "SEMICOLON" to ";"
         )
@@ -769,9 +769,9 @@ class NginxLexerTest {
             "VARIABLE" to "${'$'}arg_a",
             "BINARY_OPERATOR" to "~",
             "DQUOTE" to "\"",
-            "DQSTRING" to "(",
-            "DQSTRING" to "${'$'}",
-            "DQSTRING" to ")",
+            "STRING" to "(",
+            "STRING" to "${'$'}",
+            "STRING" to ")",
             "DQUOTE" to "\"",
             "RPAREN" to ")",
             "LBRACE" to "{",
@@ -977,7 +977,7 @@ class NginxLexerTest {
             "VARIABLE" to "${'$'}var",
             "BINARY_OPERATOR" to "~",
             "DQUOTE" to "\"",
-            "DQSTRING" to "${'$'}arg_ua",
+            "STRING" to "${'$'}arg_ua",
             "DQUOTE" to "\"",
             "RPAREN" to ")",
             "LBRACE" to "{",

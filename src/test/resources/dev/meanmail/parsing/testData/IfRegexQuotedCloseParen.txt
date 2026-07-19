@@ -31,7 +31,7 @@ Nginx configuration file(0,271)
                   RegexAtomImpl(REGEX_ATOM)(238,242)
                     StringStmtImpl(STRING_STMT)(238,242)
                       PsiElement(NginxTokenType.DQUOTE)('"')(238,239)
-                      PsiElement(NginxTokenType.DQSTRING)('x)')(239,241)
+                      PsiElement(NginxTokenType.STRING)('x)')(239,241)
                       PsiElement(NginxTokenType.DQUOTE)('"')(241,242)
               PsiErrorElement:<regex atom>, NginxTokenType.CONCAT_JOIN, NginxTokenType.LBRACE or NginxTokenType.RPAREN expected, got ')'(242,242)
                 <empty list>

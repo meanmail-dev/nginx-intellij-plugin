@@ -32,8 +32,10 @@ nginxFile ::= statement*
 private statement ::= directive_stmt [COMMENT]
 
 string_stmt ::= (QUOTE sq_string_content QUOTE) | (DQUOTE dq_string_content DQUOTE) {pin=1}
+// Single- and double-quoted strings are semantically identical in nginx (unlike bash):
+// the lexer emits STRING for the content of both, and variables are interpolated in both.
 private sq_string_content ::= (STRING | variable_stmt)*
-private dq_string_content ::= (DQSTRING | variable_stmt)*
+private dq_string_content ::= (STRING | variable_stmt)*
 name_stmt ::= IDENTIFIER
 variable_stmt ::= VARIABLE
 private part_value_stmt ::=

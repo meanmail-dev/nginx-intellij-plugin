@@ -325,6 +325,12 @@ class ParsingTest : ParsingTestCase(
         doTest(true)
     }
 
+    // --- Issue #107: Double-quoted value wrongly reported as a syntax error ---
+
+    fun testAddHeaderDoubleQuote() {
+        doTest(true)
+    }
+
     override fun getTestDataPath(): String {
         return "src/test/resources/" +
                 this.javaClass.packageName.replace(".", "/")
