@@ -255,6 +255,7 @@ DQUOTE="\""
 %state IF_STRING_STATE
 %state IF_DQSTRING_STATE
 %state DIRECTIVE_STATE
+%state LOCATION_STATE
 %state TYPES_STATE
 %state TYPES_BLOCK_STATE
 %state NUM_MAP_STATE
@@ -268,7 +269,7 @@ DQUOTE="\""
     geo                      { yypush(GEO_STATE); return GEO; }
     types                    { yypush(TYPES_STATE); return TYPES; }
     if                       { yypush(IF_STATE); return IF; }
-    location                 { inLocationPath = true; yypush(DIRECTIVE_STATE); return LOCATION; }
+    location                 { inLocationPath = true; joinPending = false; prevConcatEligible = false; prevWasIdentifier = false; yypush(LOCATION_STATE); return LOCATION; }
     {VARIABLE}               { inLocationPath = false; yypush(DIRECTIVE_STATE); return VARIABLE; }
     {IDENTIFIER}             { inLocationPath = false; yypush(DIRECTIVE_STATE); return IDENTIFIER; }
     {RBRACE}                 { prevConcatEligible = false; joinPending = false; return RBRACE; }
@@ -299,9 +300,11 @@ DQUOTE="\""
         joinPending = false; prevConcatEligible = true; prevWasIdentifier = true; return IDENTIFIER;
     }
     {CARET_TILDE}            { joinPending = false; prevConcatEligible = false; return CARET_TILDE; }
+    // A standalone '=' is always a real EQUAL token. The grammar assembles
+    // `VALUE EQUAL ...`, `IDENTIFIER EQUAL ...` (named params) and the trailing
+    // `variable_stmt EQUAL` (e.g. $uri= in try_files/error_page, issue #67/#110)
+    // from an explicit EQUAL rather than a ConcatenatedExpr.
     {EQUAL}                  {
-        if (prevConcatEligible && !prevWasIdentifier && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
-        if (joinPending && !prevWasIdentifier) { joinPending = false; prevConcatEligible = true; return VALUE; }
         joinPending = false; prevConcatEligible = false; return EQUAL;
     }
     {BINARY_OPERATOR}        { joinPending = false; prevConcatEligible = false; return BINARY_OPERATOR; }
@@ -342,6 +345,14 @@ DQUOTE="\""
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
     }
+    // A trailing literal '$' (regex end-anchor, e.g. `rewrite ^/old-page$ ...`) belongs to
+    // the VALUE, not a separate token. The trailing context [^a-zA-Z0-9_{] guarantees the '$'
+    // does not begin a variable ($name / ${name} / $1); those must stay a separate VARIABLE
+    // token so variable/named-param separation (issues #76, #96) is preserved.
+    [^\s;'\"\{\}=$]+\$ / [^a-zA-Z0-9_{] {
+        if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
+        joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
+    }
     [^\s;'\"\{\}=$]+       {
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
@@ -350,6 +361,22 @@ DQUOTE="\""
         if (prevConcatEligible && !joinPending) { joinPending = true; yypushback(yylength()); return CONCAT_JOIN; }
         joinPending = false; prevConcatEligible = true; prevWasIdentifier = false; return VALUE;
     }
+}
+
+// Dedicated state for the `location` directive header (issue #110, #96).
+// A location path/regex is a single literal VALUE: variables in it are not real nginx
+// variables, and a trailing '$' or '=' is regex/URI text, not a token boundary. Unlike
+// DIRECTIVE_STATE, the value rule here includes '$' and '=' so the whole path is one token
+// and never gets split into a ConcatenatedExpr.
+<LOCATION_STATE> {
+    {CARET_TILDE}            { joinPending = false; prevConcatEligible = false; return CARET_TILDE; }
+    {EQUAL}                  { joinPending = false; prevConcatEligible = false; return EQUAL; }
+    {BINARY_OPERATOR}        { joinPending = false; prevConcatEligible = false; return BINARY_OPERATOR; }
+    {LBRACE}                 { yypop(); joinPending = false; prevConcatEligible = false; inLocationPath = false; return LBRACE; }
+    {SEMICOLON}              { yypop(); joinPending = false; prevConcatEligible = false; inLocationPath = false; return SEMICOLON; }
+    {QUOTE}                  { joinPending = false; prevConcatEligible = false; yypush(STRING_STATE); return QUOTE; }
+    {DQUOTE}                 { joinPending = false; prevConcatEligible = false; yypush(DQSTRING_STATE); return DQUOTE; }
+    [^\s;'\"\{\}]+           { joinPending = false; prevConcatEligible = false; return VALUE; }
 }
 
 <IF_STATE> {
