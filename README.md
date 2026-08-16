@@ -1,5 +1,10 @@
 # Nginx Configuration for JetBrains IDEs
 
+<!--
+Maintenance: verify feature claims against plugin.xml and shipped behavior. Do not add manually
+maintained download, rating, star, or repository counts.
+-->
+
 [![JetBrains Marketplace rating](https://img.shields.io/jetbrains/plugin/r/stars/15461?label=Marketplace%20rating)](https://plugins.jetbrains.com/plugin/15461-nginx-configuration)
 [![JetBrains Marketplace downloads](https://img.shields.io/jetbrains/plugin/d/15461)](https://plugins.jetbrains.com/plugin/15461-nginx-configuration)
 
