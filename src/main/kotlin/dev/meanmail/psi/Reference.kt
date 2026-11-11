@@ -32,9 +32,11 @@ class Reference(element: ReferenceElement) :
         if (ref.isEmpty()) return null
         val directory = element.containingFile
             ?.containingDirectory?.virtualFile ?: return null
-        val path = if (quote == null) ref else ESCAPED_PATH_CHARACTER.replace(ref) { match ->
-            val escaped = match.groupValues[1]
-            if (escaped.single() in INCLUDE_GLOB_CHARACTERS && !isInclude) match.value else escaped
+        val unquotedPath = if (quote == null) ref else ESCAPED_PATH_CHARACTER.replace(ref) { it.groupValues[1] }
+        val path = if (usesIncludeGlob && unquotedPath.any { it in INCLUDE_GLOB_CHARACTERS }) {
+            GLOB_ESCAPED_CHARACTER.replace(unquotedPath) { it.groupValues[1] }
+        } else {
+            unquotedPath
         }
         val file = resolveFileUtil(path, directory) ?: return null
         if (!file.isValid) return null
@@ -70,6 +72,7 @@ class Reference(element: ReferenceElement) :
         }
 
         val previousQuote = quote
+        val glob = usesIncludeGlob && path.any { it in INCLUDE_GLOB_CHARACTERS }
         val argument = if (previousQuote == null && path.all { it.isLetterOrDigit() || it in "/._-" }) {
             path
         } else {
@@ -77,10 +80,12 @@ class Reference(element: ReferenceElement) :
             buildString {
                 append(quote)
                 for (character in path) {
-                    if (character == quote || character == '\\' || include && character in INCLUDE_GLOB_CHARACTERS) {
-                        append('\\')
+                    when {
+                        glob && character == '\\' -> append("\\\\\\\\")
+                        character == quote || character == '\\' || glob && character in INCLUDE_GLOB_CHARACTERS ->
+                            append('\\').append(character)
+                        else -> append(character)
                     }
-                    append(character)
                 }
                 append(quote)
             }
@@ -97,7 +102,14 @@ class Reference(element: ReferenceElement) :
         get() = element.text.firstOrNull()?.takeIf { it == '"' || it == '\'' }
 
     private val isInclude: Boolean
-        get() = (element.parent as? RegularDirectiveStmt)?.nameStmt?.text == "include"
+        get() = usesIncludeGlob || element.parent is NumMapIncludeStmt || element.parent is GeoIncludeStmt
+
+    private val usesIncludeGlob: Boolean
+        get() = when (val parent = element.parent) {
+            is RegularDirectiveStmt -> parent.nameStmt.text == "include"
+            is MapIncludeStmt, is TypesIncludeStmt -> true
+            else -> false
+        }
 
     override fun handleElementRename(newElementName: String): PsiElement? {
         val newElement = element.setName(newElementName)
@@ -107,6 +119,7 @@ class Reference(element: ReferenceElement) :
 
     private companion object {
         const val INCLUDE_GLOB_CHARACTERS = "*?["
-        val ESCAPED_PATH_CHARACTER = Regex("""\\([\\"'*?\[])""")
+        val ESCAPED_PATH_CHARACTER = Regex("""\\([\\"'])""")
+        val GLOB_ESCAPED_CHARACTER = Regex("""\\([\\*?\[])""")
     }
 }

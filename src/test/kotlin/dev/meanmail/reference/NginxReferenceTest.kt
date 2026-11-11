@@ -4,8 +4,10 @@ import com.intellij.openapi.application.runWriteAction
 import com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.meanmail.NginxFileType
+import dev.meanmail.psi.MapIncludeStmt
 import dev.meanmail.psi.ValueStmt
 
 class NginxReferenceTest : BasePlatformTestCase() {
@@ -158,6 +160,27 @@ class NginxReferenceTest : BasePlatformTestCase() {
 
         assertEquals("include tls/tls.conf;", config.text)
         assertEquals(original.virtualFile, (findValueStmt(config)?.reference?.resolve() as PsiFile).virtualFile)
+    }
+
+    fun testMovingNestedMapIncludeKeepsMainConfigRelativePath() {
+        myFixture.addFileToProject("nginx.conf", "include conf.d/site.conf;")
+        val config = myFixture.addFileToProject(
+            "conf.d/site.conf",
+            "map \$host \$route { include snippets/routes.conf; }",
+        )
+        val original = myFixture.addFileToProject("snippets/routes.conf", "default backend;")
+        val destination = myFixture.tempDirFixture.findOrCreateDir("maps")
+        val include = requireNotNull(PsiTreeUtil.findChildOfType(config, MapIncludeStmt::class.java))
+        val reference = requireNotNull(include.valueStmt?.reference)
+        assertEquals(original, reference.resolve())
+
+        runWriteCommandAction(project) {
+            original.virtualFile.move(this, destination)
+            reference.bindToElement(original)
+        }
+
+        assertEquals("map \$host \$route { include maps/routes.conf; }", config.text)
+        assertEquals(original.virtualFile, (include.valueStmt?.reference?.resolve() as PsiFile).virtualFile)
     }
 
     fun testDeletedFileReferenceDoesNotThrowAndResolvesToNull() {
