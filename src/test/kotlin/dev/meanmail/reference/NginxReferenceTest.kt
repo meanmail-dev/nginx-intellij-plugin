@@ -1,6 +1,7 @@
 package dev.meanmail.reference
 
 import com.intellij.openapi.application.runWriteAction
+import com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
@@ -133,7 +134,7 @@ class NginxReferenceTest : BasePlatformTestCase() {
         val reference = requireNotNull(findValueStmt(config)?.reference)
         assertEquals(original, reference.resolve())
 
-        runWriteAction {
+        runWriteCommandAction(project) {
             original.virtualFile.move(this, destination)
             reference.bindToElement(original)
         }
@@ -150,7 +151,7 @@ class NginxReferenceTest : BasePlatformTestCase() {
         val reference = requireNotNull(findValueStmt(config)?.reference)
         assertEquals(original, reference.resolve())
 
-        runWriteAction {
+        runWriteCommandAction(project) {
             original.virtualFile.move(this, destination)
             reference.bindToElement(original)
         }
