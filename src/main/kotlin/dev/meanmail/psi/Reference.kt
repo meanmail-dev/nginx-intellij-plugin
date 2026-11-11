@@ -32,7 +32,10 @@ class Reference(element: ReferenceElement) :
         if (ref.isEmpty()) return null
         val directory = element.containingFile
             ?.containingDirectory?.virtualFile ?: return null
-        val path = if (quote == null) ref else ESCAPED_PATH_CHARACTER.replace(ref) { it.groupValues[1] }
+        val path = if (quote == null) ref else ESCAPED_PATH_CHARACTER.replace(ref) { match ->
+            val escaped = match.groupValues[1]
+            if (escaped.single() in INCLUDE_GLOB_CHARACTERS && !isInclude) match.value else escaped
+        }
         val file = resolveFileUtil(path, directory) ?: return null
         if (!file.isValid) return null
 
@@ -51,8 +54,8 @@ class Reference(element: ReferenceElement) :
         val file = (target as? PsiFile)?.virtualFile
             ?: throw IncorrectOperationException("An Nginx file reference requires a file target")
         val sourceDirectory = element.containingFile?.containingDirectory?.virtualFile
-        val directive = element.parent as? RegularDirectiveStmt
-        val base = if (directive?.nameStmt?.text == "include") {
+        val include = isInclude
+        val base = if (include) {
             generateSequence(sourceDirectory) { it.parent }
                 .firstOrNull { it.findChild("nginx.conf") != null }
                 ?: sourceDirectory
@@ -74,7 +77,9 @@ class Reference(element: ReferenceElement) :
             buildString {
                 append(quote)
                 for (character in path) {
-                    if (character == quote || character == '\\') append('\\')
+                    if (character == quote || character == '\\' || include && character in INCLUDE_GLOB_CHARACTERS) {
+                        append('\\')
+                    }
                     append(character)
                 }
                 append(quote)
@@ -91,6 +96,9 @@ class Reference(element: ReferenceElement) :
     private val quote: Char?
         get() = element.text.firstOrNull()?.takeIf { it == '"' || it == '\'' }
 
+    private val isInclude: Boolean
+        get() = (element.parent as? RegularDirectiveStmt)?.nameStmt?.text == "include"
+
     override fun handleElementRename(newElementName: String): PsiElement? {
         val newElement = element.setName(newElementName)
         element.parent.node.replaceChild(element.node, newElement.node)
@@ -98,6 +106,7 @@ class Reference(element: ReferenceElement) :
     }
 
     private companion object {
-        val ESCAPED_PATH_CHARACTER = Regex("""\\([\\"'])""")
+        const val INCLUDE_GLOB_CHARACTERS = "*?["
+        val ESCAPED_PATH_CHARACTER = Regex("""\\([\\"'*?\[])""")
     }
 }

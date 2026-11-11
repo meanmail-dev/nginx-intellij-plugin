@@ -127,9 +127,9 @@ class NginxReferenceTest : BasePlatformTestCase() {
     }
 
     fun testMovingIncludedFileRebindsQuotedRelativePath() {
-        val original = myFixture.addFileToProject("conf.d/server-$prod.conf", "server {}")
-        val config = myFixture.addFileToProject("nginx.conf", "include \"conf.d/server-$prod.conf\";")
-        val destination = myFixture.tempDirFixture.findOrCreateDir("sites enabled")
+        val original = myFixture.addFileToProject("conf.d/server-\$prod.conf", "server {}")
+        val config = myFixture.addFileToProject("nginx.conf", "include \"conf.d/server-\$prod.conf\";")
+        val destination = myFixture.tempDirFixture.findOrCreateDir("sites [enabled]")
         val reference = requireNotNull(findValueStmt(config)?.reference)
         assertEquals(original, reference.resolve())
 
@@ -138,7 +138,7 @@ class NginxReferenceTest : BasePlatformTestCase() {
             reference.bindToElement(original)
         }
 
-        assertEquals("include \"sites enabled/server-$prod.conf\";", config.text)
+        assertEquals("include \"sites \\[enabled]/server-\$prod.conf\";", config.text)
         assertEquals(original.virtualFile, (findValueStmt(config)?.reference?.resolve() as PsiFile).virtualFile)
     }
 
