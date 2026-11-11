@@ -102,12 +102,12 @@ class Reference(element: ReferenceElement) :
         get() = element.text.firstOrNull()?.takeIf { it == '"' || it == '\'' }
 
     private val isInclude: Boolean
-        get() = usesIncludeGlob || element.parent is NumMapIncludeStmt || element.parent is GeoIncludeStmt
+        get() = usesIncludeGlob || element.parent is NumMapIncludeStmt
 
     private val usesIncludeGlob: Boolean
         get() = when (val parent = element.parent) {
             is RegularDirectiveStmt -> parent.nameStmt.text == "include"
-            is MapIncludeStmt, is TypesIncludeStmt -> true
+            is GeoIncludeStmt, is MapIncludeStmt, is TypesIncludeStmt -> true
             else -> false
         }
 

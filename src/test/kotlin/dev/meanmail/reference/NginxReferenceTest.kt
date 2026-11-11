@@ -7,6 +7,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import dev.meanmail.NginxFileType
+import dev.meanmail.psi.GeoIncludeStmt
 import dev.meanmail.psi.MapIncludeStmt
 import dev.meanmail.psi.ValueStmt
 
@@ -180,6 +181,27 @@ class NginxReferenceTest : BasePlatformTestCase() {
         }
 
         assertEquals("map \$host \$route { include maps/routes.conf; }", config.text)
+        assertEquals(original.virtualFile, (include.valueStmt?.reference?.resolve() as PsiFile).virtualFile)
+    }
+
+    fun testMovingGeoIncludeEscapesLiteralGlobCharacters() {
+        myFixture.addFileToProject("nginx.conf", "include conf.d/site.conf;")
+        val config = myFixture.addFileToProject(
+            "conf.d/site.conf",
+            "geo \$region { include codes/regions.conf; }",
+        )
+        val original = myFixture.addFileToProject("codes/regions.conf", "default local;")
+        val destination = myFixture.tempDirFixture.findOrCreateDir("regions [live]")
+        val include = requireNotNull(PsiTreeUtil.findChildOfType(config, GeoIncludeStmt::class.java))
+        val reference = requireNotNull(include.valueStmt?.reference)
+        assertEquals(original, reference.resolve())
+
+        runWriteCommandAction(project) {
+            original.virtualFile.move(this, destination)
+            reference.bindToElement(original)
+        }
+
+        assertEquals("geo \$region { include \"regions \\[live]/regions.conf\"; }", config.text)
         assertEquals(original.virtualFile, (include.valueStmt?.reference?.resolve() as PsiFile).virtualFile)
     }
 
